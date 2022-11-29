@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Od+YE54hsICMUPQ0mAOzKT2hn3ZkKpdVkS3Jm3vh8KJr4boADy7e4SPqPakkmpyuyNGE2m97ptd6Zpl/cVwQXQ==",
+  "dgSpecHash": "t43r7HNa7jw3o48O8dXTHKNeCHot/FxM2TJDbqU9oMKjsOeaGe/ypuBG+gCCxgngY7aZActCAO3r+QhuloRfZA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jgutierrez\\Documents\\dotnet\\MediatrValidationExample\\src\\MediatrValidationExample\\MediatrExample.WebApi.csproj",
+  "projectFilePath": "C:\\Users\\jgutierrez\\Documents\\dotnet\\Net7EF7CQRSMediatR\\src\\MediatrValidationExample\\MediatrExample.WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jgutierrez\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",

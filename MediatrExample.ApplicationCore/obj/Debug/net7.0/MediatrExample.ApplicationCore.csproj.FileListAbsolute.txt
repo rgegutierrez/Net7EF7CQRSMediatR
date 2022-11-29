@@ -12,3 +12,17 @@ C:\Users\jgutierrez\Documents\dotnet\MediatrValidationExample\MediatrExample.App
 C:\Users\jgutierrez\Documents\dotnet\MediatrValidationExample\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.pdb
 C:\Users\jgutierrez\Documents\dotnet\MediatrValidationExample\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.genruntimeconfig.cache
 C:\Users\jgutierrez\Documents\dotnet\MediatrValidationExample\MediatrExample.ApplicationCore\obj\Debug\net7.0\ref\MediatrExample.ApplicationCore.dll
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\bin\Debug\net7.0\MediatrExample.ApplicationCore.deps.json
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\bin\Debug\net7.0\MediatrExample.ApplicationCore.runtimeconfig.json
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\bin\Debug\net7.0\MediatrExample.ApplicationCore.dll
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\bin\Debug\net7.0\MediatrExample.ApplicationCore.pdb
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.csproj.AssemblyReference.cache
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.AssemblyInfoInputs.cache
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.AssemblyInfo.cs
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.csproj.CoreCompileInputs.cache
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.dll
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\refint\MediatrExample.ApplicationCore.dll
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.pdb
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\MediatrExample.ApplicationCore.genruntimeconfig.cache
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\obj\Debug\net7.0\ref\MediatrExample.ApplicationCore.dll
