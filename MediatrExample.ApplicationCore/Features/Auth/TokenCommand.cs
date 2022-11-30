@@ -45,7 +45,7 @@ public class TokenCommandHandler : IRequestHandler<TokenCommand, TokenCommandRes
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
 
-        return new TokenCommandResponse
+        return await new TokenCommandResponse
         {
             AccessToken = jwt
         };

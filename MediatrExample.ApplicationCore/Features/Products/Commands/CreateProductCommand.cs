@@ -11,7 +11,6 @@ public class CreateProductCommand : IRequest
     public double Price { get; set; }
 }
 
-
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
 {
     private readonly MyAppDbContext _context;
@@ -22,7 +21,6 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
         _context = context;
         _mapper = mapper;
     }
-
 
     public async Task<Unit> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
