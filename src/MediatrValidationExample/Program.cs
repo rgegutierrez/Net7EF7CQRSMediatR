@@ -1,3 +1,4 @@
+using BackgroundJob.Cron.Jobs;
 using MediatrExample.ApplicationCore;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
@@ -10,6 +11,12 @@ builder.Services.AddWebApi();
 builder.Services.AddApplicationCore();
 builder.Services.AddPersistence(builder.Configuration.GetConnectionString("Default"));
 builder.Services.AddSecurity(builder.Configuration);
+
+builder.Services.AddCronJob<MySchedulerJob>(options =>
+{
+    options.CronExpression = "*/5 * * * *";
+    options.TimeZone = TimeZoneInfo.Local;
+});
 
 var app = builder.Build();
 

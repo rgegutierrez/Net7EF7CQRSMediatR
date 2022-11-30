@@ -136,6 +136,7 @@ C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExa
 C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\bin\Debug\net7.0\Azure.Core.dll
 C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\bin\Debug\net7.0\Azure.Identity.dll
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\bin\Debug\net7.0\Cronos.dll
 C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\bin\Debug\net7.0\FluentValidation.dll
 C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\bin\Debug\net7.0\FluentValidation.AspNetCore.dll
 C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\bin\Debug\net7.0\FluentValidation.DependencyInjectionExtensions.dll

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "t43r7HNa7jw3o48O8dXTHKNeCHot/FxM2TJDbqU9oMKjsOeaGe/ypuBG+gCCxgngY7aZActCAO3r+QhuloRfZA==",
+  "dgSpecHash": "1nZbVcdcq3SQiJOikw5H+gJVEAC7CzaIu4ZwITSdBerD7CCbCN3qZ41JMDxD/gUVX0Kc3VPwvTKImboNS1/uaA==",
   "success": true,
   "projectFilePath": "C:\\Users\\jgutierrez\\Documents\\dotnet\\Net7EF7CQRSMediatR\\src\\MediatrValidationExample\\MediatrExample.WebApi.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\jgutierrez\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
+    "C:\\Users\\jgutierrez\\.nuget\\packages\\cronos\\0.7.1\\cronos.0.7.1.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\fluentvalidation\\11.2.1\\fluentvalidation.11.2.1.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.2.2\\fluentvalidation.aspnetcore.11.2.2.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.2.1\\fluentvalidation.dependencyinjectionextensions.11.2.1.nupkg.sha512",

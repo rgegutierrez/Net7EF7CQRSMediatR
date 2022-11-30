@@ -72,6 +72,14 @@
           }
         }
       },
+      "Cronos/0.7.1": {
+        "runtime": {
+          "lib/netstandard2.0/Cronos.dll": {
+            "assemblyVersion": "0.7.1.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "FluentValidation/11.2.1": {
         "runtime": {
           "lib/net6.0/FluentValidation.dll": {
@@ -1187,6 +1195,7 @@
       "MediatrExample.ApplicationCore/1.0.0": {
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.0",
+          "Cronos": "0.7.1",
           "FluentValidation.AspNetCore": "11.2.2",
           "Hashids.net": "1.6.1",
           "MediatR.Extensions.Microsoft.DependencyInjection": "10.0.1",
@@ -1236,6 +1245,13 @@
       "sha512": "sha512-EycyMsb6rD2PK9P0SyibFfEhvWWttdrYhyPF4f41uzdB/44yQlV+2Wehxyg489Rj6gbPvSPgbKq0xsHJBhipZA==",
       "path": "azure.identity/1.6.0",
       "hashPath": "azure.identity.1.6.0.nupkg.sha512"
+    },
+    "Cronos/0.7.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aa2DY3qGBnwX7/jW4c17PyRlIeAtc5nYTlAPekc0113jcbBuz9vQkQaQ9NG+TNGlAj4esFxh8OuKUv4vmAODbw==",
+      "path": "cronos/0.7.1",
+      "hashPath": "cronos.0.7.1.nupkg.sha512"
     },
     "FluentValidation/11.2.1": {
       "type": "package",
