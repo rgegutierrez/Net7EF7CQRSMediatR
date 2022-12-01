@@ -13,4 +13,5 @@ public class MyAppDbContext : DbContext
 
     public DbSet<Product> Products => Set<Product>();
     public DbSet<MateriaPrima> MateriasPrimas => Set<MateriaPrima>();
+    public DbSet<PreparacionPasta> PreparacionPastas => Set<PreparacionPasta>();
 }

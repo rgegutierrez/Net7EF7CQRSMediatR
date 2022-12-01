@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MediatrExample.ApplicationCore.Features.MateriaPrimaFeatures.Commands;
 using MediatrExample.ApplicationCore.Features.MateriaPrimaFeatures.Queries;
 using MediatrExample.ApplicationCore.Features.Products.Commands;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,27 +11,24 @@ public class MySchedulerJob : CronBackgroundJob
 {
     private readonly ILogger<MySchedulerJob> _log;
     private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IMediator _mediator;
 
     public MySchedulerJob(CronSettings<MySchedulerJob> settings, ILogger<MySchedulerJob> log, IServiceScopeFactory serviceScopeFactory)
         : base(settings.CronExpression, settings.TimeZone)
     {
         _log = log;
         _serviceScopeFactory = serviceScopeFactory;
+        var scope = _serviceScopeFactory.CreateScope();
+        _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
     }
 
     protected override Task DoWork(CancellationToken stoppingToken)
     {
-        _log.LogInformation("Running... at {0}", DateTime.UtcNow);
+        _log.LogInformation("Inicio... at {0}", DateTime.UtcNow);
 
-        using var scope = _serviceScopeFactory.CreateScope();
-
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-
-        CreateProductCommand command = new();
-        var ahora = DateTime.Now.ToString();
-        command.Description = $"Producto desde Job {ahora}";
-        command.Price = 555;
-        var aux = mediator.Send(command);
+        SyncMateriaPrimaCommand command = new();
+        var aux = _mediator.Send(command);
+        _log.LogInformation("Termino... at {0}", DateTime.UtcNow);
 
         return Task.CompletedTask;
     }

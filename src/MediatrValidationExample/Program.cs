@@ -14,7 +14,7 @@ builder.Services.AddSecurity(builder.Configuration);
 
 builder.Services.AddCronJob<MySchedulerJob>(options =>
 {
-    options.CronExpression = "*/5 * * * *";
+    options.CronExpression = "* * * * *";
     options.TimeZone = TimeZoneInfo.Local;
 });
 

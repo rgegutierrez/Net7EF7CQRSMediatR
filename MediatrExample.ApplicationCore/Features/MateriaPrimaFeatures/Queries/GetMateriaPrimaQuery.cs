@@ -8,12 +8,12 @@ using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 
 namespace MediatrExample.ApplicationCore.Features.MateriaPrimaFeatures.Queries;
 
-public class GetMateriaPrimaQuery : IRequest<GetMateriaPrimaQueryResponse>
+public class GetPreparacionPastaQuery : IRequest<GetMateriaPrimaQueryResponse>
 {
     public string MateriaPrimaId { get; set; }
 }
 
-public class GetMateriaPrimaQueryHandler : IRequestHandler<GetMateriaPrimaQuery, GetMateriaPrimaQueryResponse>
+public class GetMateriaPrimaQueryHandler : IRequestHandler<GetPreparacionPastaQuery, GetMateriaPrimaQueryResponse>
 {
     private readonly MyAppDbContext _context;
     private readonly IMapper _mapper;
@@ -23,13 +23,13 @@ public class GetMateriaPrimaQueryHandler : IRequestHandler<GetMateriaPrimaQuery,
         _context = context;
         _mapper = mapper;
     }
-    public async Task<GetMateriaPrimaQueryResponse> Handle(GetMateriaPrimaQuery request, CancellationToken cancellationToken)
+    public async Task<GetMateriaPrimaQueryResponse> Handle(GetPreparacionPastaQuery request, CancellationToken cancellationToken)
     {
         var materiaPrima = await _context.MateriasPrimas.FindAsync(request.MateriaPrimaId.FromHashId());
 
         if (materiaPrima is null)
         {
-            throw new NotFoundException(nameof(Domain.MateriaPrima), request.MateriaPrimaId);
+            throw new NotFoundException(nameof(MateriaPrima), request.MateriaPrimaId);
         }
 
         return _mapper.Map<GetMateriaPrimaQueryResponse>(materiaPrima);
