@@ -4,48 +4,63 @@ using MediatR;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 
-namespace MediatrExample.ApplicationCore.Features.PreparacionPastaFeatures.Commands;
-public class CreatePreparacionPastaCommand : IRequest
+namespace MediatrExample.ApplicationCore.Features.MaquinaPapeleraFeatures.Commands;
+public class CreateMaquinaPapeleraCommand : IRequest
 {
+    public int Orden { get; set; }
     public string NombreVariable { get; set; } = default!;
+    public int LineaProduccion { get; set; }
     public string UnidadMedida { get; set; } = default!;
     public int ValorMinimo { get; set; }
     public int ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
+    public bool ModoIngreso { get; set; }
+    public string FormulaCalculo { get; set; } = default!;
     public bool Estado { get; set; }
 }
 
-public class CreatePreparacionPastaCommandHandler : IRequestHandler<CreatePreparacionPastaCommand>
+public class CreateMaquinaPapeleraCommandHandler : IRequestHandler<CreateMaquinaPapeleraCommand>
 {
     private readonly MyAppDbContext _context;
     private readonly IMapper _mapper;
 
-    public CreatePreparacionPastaCommandHandler(MyAppDbContext context, IMapper mapper)
+    public CreateMaquinaPapeleraCommandHandler(MyAppDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
     }
 
-    public async Task<Unit> Handle(CreatePreparacionPastaCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(CreateMaquinaPapeleraCommand request, CancellationToken cancellationToken)
     {
-        var crtObj = _mapper.Map<PreparacionPasta>(request);
+        var crtObj = _mapper.Map<MaquinaPapelera>(request);
 
-        _context.PreparacionPastas.Add(crtObj);
+        try
+        {
+            crtObj.Orden = (from item in _context.MaquinasPapeleras select item.Orden).Max();
+        }
+        catch (Exception)
+        {
+
+        }
+
+        crtObj.Orden += 1;
+
+        _context.MaquinasPapeleras.Add(crtObj);
 
         await _context.SaveChangesAsync();
 
         return Unit.Value;
     }
 }
-public class CreatePreparacionPastaCommandMapper : Profile
+public class CreateMaquinaPapeleraCommandMapper : Profile
 {
-    public CreatePreparacionPastaCommandMapper() =>
-        CreateMap<CreatePreparacionPastaCommand, PreparacionPasta>();
+    public CreateMaquinaPapeleraCommandMapper() =>
+        CreateMap<CreateMaquinaPapeleraCommand, MaquinaPapelera>();
 }
 
-public class CreatePreparacionPastaValidator : AbstractValidator<CreatePreparacionPastaCommand>
+public class CreateMaquinaPapeleraValidator : AbstractValidator<CreateMaquinaPapeleraCommand>
 {
-    public CreatePreparacionPastaValidator()
+    public CreateMaquinaPapeleraValidator()
     {
         RuleFor(r => r.NombreVariable).NotNull().MaximumLength(100);
         RuleFor(r => r.UnidadMedida).NotNull();

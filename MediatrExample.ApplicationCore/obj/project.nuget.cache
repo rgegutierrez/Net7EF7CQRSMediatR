@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ENTmkYaWEFZJYU0y93g5Zn0gMR54HPA7SdLr6aUVxXP733Fr/E7LGceek0ZMw3+yT1SQPdMHokCjLQA2ITiYZQ==",
+  "dgSpecHash": "74pg+Ibb1JuQlyWeM2sNUh35jukuSL8f0+y0qkT88SitX0gBXH7cw19+BIrPXsQ2jHehX5t9i/x4ueUfHwRItg==",
   "success": true,
   "projectFilePath": "C:\\Users\\jgutierrez\\Documents\\dotnet\\Net7EF7CQRSMediatR\\MediatrExample.ApplicationCore\\MediatrExample.ApplicationCore.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\jgutierrez\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\cronos\\0.7.1\\cronos.0.7.1.nupkg.sha512",
+    "C:\\Users\\jgutierrez\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\fluentvalidation\\11.2.1\\fluentvalidation.11.2.1.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.2.2\\fluentvalidation.aspnetcore.11.2.2.nupkg.sha512",
     "C:\\Users\\jgutierrez\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.2.1\\fluentvalidation.dependencyinjectionextensions.11.2.1.nupkg.sha512",

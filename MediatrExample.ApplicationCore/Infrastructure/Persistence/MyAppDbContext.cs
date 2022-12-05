@@ -1,7 +1,5 @@
 ﻿using MediatrExample.ApplicationCore.Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MediatrExample.ApplicationCore.Infrastructure.Persistence;
 public class MyAppDbContext : DbContext
@@ -14,4 +12,5 @@ public class MyAppDbContext : DbContext
     public DbSet<Product> Products => Set<Product>();
     public DbSet<MateriaPrima> MateriasPrimas => Set<MateriaPrima>();
     public DbSet<PreparacionPasta> PreparacionPastas => Set<PreparacionPasta>();
+    public DbSet<MaquinaPapelera> MaquinasPapeleras => Set<MaquinaPapelera>();
 }

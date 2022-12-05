@@ -80,6 +80,14 @@
           }
         }
       },
+      "Dapper/2.0.123": {
+        "runtime": {
+          "lib/net5.0/Dapper.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.123.33578"
+          }
+        }
+      },
       "FluentValidation/11.2.1": {
         "runtime": {
           "lib/net6.0/FluentValidation.dll": {
@@ -1196,6 +1204,7 @@
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.0",
           "Cronos": "0.7.1",
+          "Dapper": "2.0.123",
           "FluentValidation.AspNetCore": "11.2.2",
           "Hashids.net": "1.6.1",
           "MediatR.Extensions.Microsoft.DependencyInjection": "10.0.1",
@@ -1252,6 +1261,13 @@
       "sha512": "sha512-aa2DY3qGBnwX7/jW4c17PyRlIeAtc5nYTlAPekc0113jcbBuz9vQkQaQ9NG+TNGlAj4esFxh8OuKUv4vmAODbw==",
       "path": "cronos/0.7.1",
       "hashPath": "cronos.0.7.1.nupkg.sha512"
+    },
+    "Dapper/2.0.123": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RDFF4rBLLmbpi6pwkY7q/M6UXHRJEOerplDGE5jwEkP/JGJnBauAClYavNKJPW1yOTWRPIyfj4is3EaJxQXILQ==",
+      "path": "dapper/2.0.123",
+      "hashPath": "dapper.2.0.123.nupkg.sha512"
     },
     "FluentValidation/11.2.1": {
       "type": "package",

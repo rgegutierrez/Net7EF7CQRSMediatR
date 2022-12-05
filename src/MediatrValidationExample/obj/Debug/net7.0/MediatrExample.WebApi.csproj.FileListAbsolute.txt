@@ -253,3 +253,4 @@ C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExa
 C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\obj\Debug\net7.0\MediatrExample.WebApi.pdb
 C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\obj\Debug\net7.0\MediatrExample.WebApi.genruntimeconfig.cache
 C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\obj\Debug\net7.0\ref\MediatrExample.WebApi.dll
+C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\src\MediatrValidationExample\bin\Debug\net7.0\Dapper.dll
