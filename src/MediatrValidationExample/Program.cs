@@ -5,12 +5,23 @@ using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using MediatrExample.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var policyName = "_myAllowSpecificOrigins";
 
 builder.Services.AddWebApi();
 builder.Services.AddApplicationCore();
 builder.Services.AddPersistence(builder.Configuration.GetConnectionString("Default"));
 builder.Services.AddSecurity(builder.Configuration);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: policyName,
+                      builder =>
+                      {
+                          builder
+                            .WithOrigins("http://localhost:8080") // specifying the allowed origin
+                            .WithMethods("GET", "POST", "PUT", "DELETE") // defining the allowed HTTP method
+                            .AllowAnyHeader(); // allowing any header to be sent
+                      });
+});
 
 builder.Services.AddCronJob<MySchedulerJob>(options =>
 {
@@ -28,6 +39,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(policyName);
 app.UseAuthentication();
 app.UseAuthorization();
 

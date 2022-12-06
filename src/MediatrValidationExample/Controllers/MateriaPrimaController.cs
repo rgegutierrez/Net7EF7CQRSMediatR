@@ -31,7 +31,7 @@ public class MateriaPrimaController : ControllerBase
     /// </summary>
     /// <param name="command"></param>
     /// <returns></returns>
-    [HttpPost]
+    [HttpPut]
     public async Task<IActionResult> UpdateMateriaPrima([FromBody] UpdateMateriaPrimaCommand command)
     {
         await _mediator.Send(command);
