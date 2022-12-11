@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediatrExample.ApplicationCore.Features.MateriaPrimaFeatures.Queries;
 
-public class GetListPreparacionPastaQuery : IRequest<List<GetListMateriaPrimaQueryResponse>>
+public class GetListMateriaPrimaQuery : IRequest<List<GetListMateriaPrimaQueryResponse>>
 {
 
 }
 
-public class GetListMateriaPrimaQueryHandler : IRequestHandler<GetListPreparacionPastaQuery, List<GetListMateriaPrimaQueryResponse>>
+public class GetListMateriaPrimaQueryHandler : IRequestHandler<GetListMateriaPrimaQuery, List<GetListMateriaPrimaQueryResponse>>
 {
     private readonly MyAppDbContext _context;
     private readonly IMapper _mapper;
@@ -24,7 +24,7 @@ public class GetListMateriaPrimaQueryHandler : IRequestHandler<GetListPreparacio
         _mapper = mapper;
     }
 
-    public Task<List<GetListMateriaPrimaQueryResponse>> Handle(GetListPreparacionPastaQuery request, CancellationToken cancellationToken) =>
+    public Task<List<GetListMateriaPrimaQueryResponse>> Handle(GetListMateriaPrimaQuery request, CancellationToken cancellationToken) =>
         _context.MateriasPrimas
             .AsNoTracking()
             .ProjectTo<GetListMateriaPrimaQueryResponse>(_mapper.ConfigurationProvider)

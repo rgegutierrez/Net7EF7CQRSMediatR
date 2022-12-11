@@ -24,7 +24,7 @@ public class MateriaPrimaController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public Task<List<GetListMateriaPrimaQueryResponse>> GetMateriaPrima() => _mediator.Send(new GetListPreparacionPastaQuery());
+    public Task<List<GetListMateriaPrimaQueryResponse>> GetMateriaPrima() => _mediator.Send(new GetListMateriaPrimaQuery());
 
     /// <summary>
     /// Crea un producto nuevo

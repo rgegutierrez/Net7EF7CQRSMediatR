@@ -60,4 +60,14 @@ public class PreparacionPastaController : ControllerBase
     [HttpGet("{PreparacionPastaId}")]
     public Task<GetPreparacionPastaQueryResponse> GetPreparacionPastaById([FromRoute] GetPreparacionPastaQuery query) =>
         _mediator.Send(query);
+
+
+    /// <summary>
+    /// nuevo registro preparacion pasta por su ID
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
+    [HttpGet("new")]
+    public Task<NewPreparacionPastaQueryResponse> NewPreparacionPasta([FromRoute] NewPreparacionPastaQuery query) => 
+        _mediator.Send(query);
 }

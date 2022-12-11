@@ -3,7 +3,9 @@ using FluentValidation;
 using MediatR;
 using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
+using MediatrExample.ApplicationCore.Features.PreparacionPastaFeatures.Queries;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MediatrExample.ApplicationCore.Features.PreparacionPastaFeatures.Commands;
 public class UpdatePreparacionPastaCommand : IRequest
@@ -55,8 +57,19 @@ public class UpdatePreparacionPastaCommandMapper : Profile
 
 public class UpdatePreparacionPastaValidator : AbstractValidator<UpdatePreparacionPastaCommand>
 {
-    public UpdatePreparacionPastaValidator()
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IMediator _mediator;
+    public UpdatePreparacionPastaValidator(IServiceScopeFactory serviceScopeFactory)
     {
+        _serviceScopeFactory = serviceScopeFactory;
+        var scope = _serviceScopeFactory.CreateScope();
+        _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+        RuleFor(t => new CheckPreparacionPasteByNombreVariable
+        {
+            NombreVariable = t.NombreVariable,
+            PreparacionPastaId = t.PreparacionPastaId
+        }).NotEmpty().Must(BeUnique).WithMessage("Ya existe un registro con el mismo Nombre de Variable");
         RuleFor(r => r.NombreVariable).NotNull().MaximumLength(100);
         RuleFor(r => r.UnidadMedida).NotNull();
         RuleFor(r => r.ValorMinimo)
@@ -74,5 +87,12 @@ public class UpdatePreparacionPastaValidator : AbstractValidator<UpdatePreparaci
             .WithMessage("Valor Mínimo debe ser menor que Valor Máximo");
         RuleFor(r => r.Obligatoria).NotNull();
         RuleFor(r => r.Estado).NotNull();
+    }
+
+    private bool BeUnique(CheckPreparacionPasteByNombreVariable command)
+    {
+        var aux = _mediator.Send(command);
+
+        return aux.Result.Check;
     }
 }
