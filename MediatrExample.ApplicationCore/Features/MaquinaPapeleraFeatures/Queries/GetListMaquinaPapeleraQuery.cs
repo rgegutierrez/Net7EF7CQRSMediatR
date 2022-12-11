@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Dapper;
 using MediatR;
 using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Data;
 
 namespace MediatrExample.ApplicationCore.Features.MaquinaPapeleraFeatures.Queries;
 
@@ -17,18 +21,41 @@ public class GetListMaquinaPapeleraQueryHandler : IRequestHandler<GetListMaquina
 {
     private readonly MyAppDbContext _context;
     private readonly IMapper _mapper;
+    readonly string _connectionString = "";
 
-    public GetListMaquinaPapeleraQueryHandler(MyAppDbContext context, IMapper mapper)
+    public GetListMaquinaPapeleraQueryHandler(MyAppDbContext context, IMapper mapper, IConfiguration configuration)
     {
         _context = context;
         _mapper = mapper;
+        _connectionString = configuration.GetConnectionString("Default");
     }
 
-    public Task<List<GetListMaquinaPapeleraQueryResponse>> Handle(GetListMaquinaPapeleraQuery request, CancellationToken cancellationToken) =>
-        _context.MaquinasPapeleras
+    public async Task<List<GetListMaquinaPapeleraQueryResponse>> Handle(GetListMaquinaPapeleraQuery request, CancellationToken cancellationToken)
+    {
+        var lst = _context.MaquinasPapeleras
             .AsNoTracking()
             .ProjectTo<GetListMaquinaPapeleraQueryResponse>(_mapper.ConfigurationProvider)
             .ToListAsync();
+
+        using IDbConnection con = new SqlConnection(_connectionString);
+        if (con.State == ConnectionState.Closed) con.Open();
+        var _lstLineaProduccion = await con.QueryAsync<LineaProduccion>(
+            "[trzreceta].[GetListLineaProduccion]",
+            new { },
+            commandType: CommandType.StoredProcedure
+            );
+
+        foreach (var item in lst.Result)
+        {
+            var lineaProduccion = _lstLineaProduccion.Where(
+                v => v.LineaProduccionId == item.LineaProduccion
+                ).FirstOrDefault();
+
+            if (lineaProduccion != null ) item.LineaProduccionStr = lineaProduccion.NombreVariable;
+        }
+
+        return lst.Result;
+    }
 }
 
 public class GetListMaquinaPapeleraQueryResponse
@@ -37,6 +64,7 @@ public class GetListMaquinaPapeleraQueryResponse
     public int Orden { get; set; }
     public string NombreVariable { get; set; } = default!;
     public int LineaProduccion { get; set; }
+    public string LineaProduccionStr { get; set; }
     public string UnidadMedida { get; set; } = default!;
     public int ValorMinimo { get; set; }
     public int ValorMaximo { get; set; }

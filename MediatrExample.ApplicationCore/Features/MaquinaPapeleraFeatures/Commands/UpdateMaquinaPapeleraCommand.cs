@@ -37,6 +37,7 @@ public class UpdateMaquinaPapeleraCommandHandler : IRequestHandler<UpdateMaquina
         var updObj = _mapper.Map<MaquinaPapelera>(request);
 
         var oObj = _context.MaquinasPapeleras.Find(updObj.MaquinaPapeleraId);
+        oObj.NombreVariable = updObj.NombreVariable;
         oObj.LineaProduccion = updObj.LineaProduccion;
         oObj.UnidadMedida = updObj.UnidadMedida;
         oObj.ValorMinimo = updObj.ValorMinimo;

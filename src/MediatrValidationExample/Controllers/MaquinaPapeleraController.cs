@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MediatrExample.ApplicationCore.Features.MaquinaPapeleraFeatures.Commands;
 using MediatrExample.ApplicationCore.Features.MaquinaPapeleraFeatures.Queries;
+using MediatrExample.ApplicationCore.Features.PreparacionPastaFeatures.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -72,5 +73,15 @@ public class MaquinaPapeleraController : ControllerBase
     /// <returns></returns>
     [HttpGet("{MaquinaPapeleraId}")]
     public Task<GetMaquinaPapeleraQueryResponse> GetMaquinaPapeleraById([FromRoute] GetMaquinaPapeleraQuery query) =>
+        _mediator.Send(query);
+
+
+    /// <summary>
+    /// nuevo registro maquina papelera por su ID
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
+    [HttpGet("new")]
+    public Task<NewMaquinaPapeleraQueryResponse> NewMaquinaPapelera([FromRoute] NewMaquinaPapeleraQuery query) =>
         _mediator.Send(query);
 }
