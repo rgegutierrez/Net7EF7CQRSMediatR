@@ -32,7 +32,7 @@ public class GetListMaquinaPapeleraQueryHandler : IRequestHandler<GetListMaquina
 
     public async Task<List<GetListMaquinaPapeleraQueryResponse>> Handle(GetListMaquinaPapeleraQuery request, CancellationToken cancellationToken)
     {
-        var lst = _context.MaquinasPapeleras
+        var lst = _context.MaquinasPapeleras.OrderBy(o => o.Orden)
             .AsNoTracking()
             .ProjectTo<GetListMaquinaPapeleraQueryResponse>(_mapper.ConfigurationProvider)
             .ToListAsync();

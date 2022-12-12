@@ -25,11 +25,12 @@ public class UpdateOrdenCommandHandler : IRequestHandler<UpdateOrdenCommand>
 
     public async Task<Unit> Handle(UpdateOrdenCommand request, CancellationToken cancellationToken)
     {
+        var index = 1;
         foreach (var item in request.OrdenLista)
         {
             var maquinaPapelera = _mapper.Map<MaquinaPapelera>(item);
             var oObj = _context.MaquinasPapeleras.Find(maquinaPapelera.MaquinaPapeleraId);
-            oObj.Orden = item.Orden;
+            oObj.Orden = index++;
         }
 
         await _context.SaveChangesAsync();
