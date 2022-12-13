@@ -64,6 +64,8 @@ public class GetMaquinaPapeleraQueryHandler : IRequestHandler<GetMaquinaPapelera
             responseMaquinaPapelera.LineasProduccion = _lstLineaProduccion.ToList();
         }
 
+        responseMaquinaPapelera.Variables = _context.MaquinasPapeleras.Where(v => v.Estado == true).ToList();
+
         return responseMaquinaPapelera;
     }
 }
@@ -83,6 +85,7 @@ public class GetMaquinaPapeleraQueryResponse
     public bool Estado { get; set; }
     public List<UnidadMedida>? Unidades { get; set; }
     public List<LineaProduccion>? LineasProduccion { get; set; }
+    public List<MaquinaPapelera>? Variables { get; set; }
 }
 
 public class GetMaquinaPapeleraQueryProfile : Profile
