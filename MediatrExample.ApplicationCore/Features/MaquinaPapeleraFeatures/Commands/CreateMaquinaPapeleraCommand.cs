@@ -17,6 +17,7 @@ public class CreateMaquinaPapeleraCommand : IRequest
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
     public bool Estado { get; set; }
+    public List<VariableFormula>? Variables { get; set; }
 }
 
 public class CreateMaquinaPapeleraCommandHandler : IRequestHandler<CreateMaquinaPapeleraCommand>
@@ -44,9 +45,21 @@ public class CreateMaquinaPapeleraCommandHandler : IRequestHandler<CreateMaquina
         }
 
         crtObj.Orden += 1;
+        List<VariableFormula> aux = new List<VariableFormula>();
+
+        foreach (var item in crtObj.Variables)
+        {
+            aux.Add(new VariableFormula { Letra = item.Letra, VariableId = item.VariableId});
+        }
 
         _context.MaquinasPapeleras.Add(crtObj);
+        await _context.SaveChangesAsync();
 
+        foreach (VariableFormula item in crtObj.Variables)
+        {
+            item.MaquinaPapeleraId = crtObj.MaquinaPapeleraId;
+            item.VariableId = aux.Where(o => o.Letra == item.Letra).First().VariableId;
+        }
         await _context.SaveChangesAsync();
 
         return Unit.Value;

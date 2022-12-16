@@ -9,6 +9,8 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace MediatrExample.ApplicationCore.Features.MaquinaPapeleraFeatures.Queries;
 
@@ -31,14 +33,16 @@ public class GetMaquinaPapeleraQueryHandler : IRequestHandler<GetMaquinaPapelera
     }
     public async Task<GetMaquinaPapeleraQueryResponse> Handle(GetMaquinaPapeleraQuery request, CancellationToken cancellationToken)
     {
-        var materiaPrima = await _context.MaquinasPapeleras.FindAsync(request.MaquinaPapeleraId.FromHashId());
+        var obj = await _context.MaquinasPapeleras.FindAsync(request.MaquinaPapeleraId.FromHashId());
 
-        if (materiaPrima is null)
+        if (obj is null)
         {
             throw new NotFoundException(nameof(MaquinaPapelera), request.MaquinaPapeleraId);
         }
 
-        var responseMaquinaPapelera = _mapper.Map<GetMaquinaPapeleraQueryResponse>(materiaPrima);
+        //_context.Entry(obj).Collection(p => p.Variables).Load();
+        //obj.Variables = _context.VariablesFormula.Where(o => o.MaquinaPapeleraId == obj.MaquinaPapeleraId).ToList();
+        var responseMaquinaPapelera = _mapper.Map<GetMaquinaPapeleraQueryResponse>(obj);
 
         using IDbConnection con = new SqlConnection(_connectionString);
         if (con.State == ConnectionState.Closed) con.Open();
@@ -64,7 +68,8 @@ public class GetMaquinaPapeleraQueryHandler : IRequestHandler<GetMaquinaPapelera
             responseMaquinaPapelera.LineasProduccion = _lstLineaProduccion.ToList();
         }
 
-        responseMaquinaPapelera.Variables = _context.MaquinasPapeleras.Where(v => v.Estado == true).ToList();
+        responseMaquinaPapelera.VariablesDisponibles = _context.MaquinasPapeleras.Where(v => v.Estado == true && v.ModoIngreso == false).ToList();
+        responseMaquinaPapelera.Variables = _context.VariablesFormula.Where(o => o.MaquinaPapeleraId == obj.MaquinaPapeleraId).ToList();
 
         return responseMaquinaPapelera;
     }
@@ -85,7 +90,8 @@ public class GetMaquinaPapeleraQueryResponse
     public bool Estado { get; set; }
     public List<UnidadMedida>? Unidades { get; set; }
     public List<LineaProduccion>? LineasProduccion { get; set; }
-    public List<MaquinaPapelera>? Variables { get; set; }
+    public List<MaquinaPapelera>? VariablesDisponibles { get; set; }
+    public List<VariableFormula>? Variables { get; set; }
 }
 
 public class GetMaquinaPapeleraQueryProfile : Profile

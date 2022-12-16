@@ -19,6 +19,7 @@ public class UpdateMaquinaPapeleraCommand : IRequest
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
     public bool Estado { get; set; }
+    public List<VariableFormula>? Variables { get; set; }
 }
 
 public class UpdateMaquinaPapeleraCommandHandler : IRequestHandler<UpdateMaquinaPapeleraCommand>
@@ -47,6 +48,25 @@ public class UpdateMaquinaPapeleraCommandHandler : IRequestHandler<UpdateMaquina
         oObj.FormulaCalculo = updObj.FormulaCalculo;
         oObj.Estado = updObj.Estado;
 
+        foreach (var item in _context.VariablesFormula.Where(o => o.MaquinaPapeleraId == updObj.MaquinaPapeleraId).ToList())
+        {
+            _context.VariablesFormula.Remove(item);
+        }
+
+        List<VariableFormula> aux = new List<VariableFormula>();
+
+        foreach (var item in updObj.Variables)
+        {
+            aux.Add(new VariableFormula { Letra = item.Letra, VariableId = item.VariableId });
+        }
+         
+        await _context.SaveChangesAsync();
+
+        foreach (VariableFormula item in updObj.Variables)
+        {
+            item.MaquinaPapeleraId = updObj.MaquinaPapeleraId;
+            item.VariableId = aux.Where(o => o.Letra == item.Letra).First().VariableId;
+        }
         await _context.SaveChangesAsync();
 
         return Unit.Value;

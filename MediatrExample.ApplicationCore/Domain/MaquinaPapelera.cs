@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.Extensions.Hosting;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MediatrExample.ApplicationCore.Domain;
 
@@ -16,5 +17,11 @@ public class MaquinaPapelera
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
     public bool Estado { get; set; }
+
+    [InverseProperty(nameof(VariableFormula.MaquinaPapelera))]
+    public IList<VariableFormula> MaquinasPapeleras { get; } = new List<VariableFormula>();
+
+    [InverseProperty(nameof(VariableFormula.Variable))]
+    public IList<VariableFormula> Variables { get; } = new List<VariableFormula>();
 }
 

@@ -4,6 +4,7 @@ using MediatrExample.WebApi.Filters;
 using MediatrExample.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 namespace MediatrExample.WebApi;
 
@@ -46,7 +47,8 @@ public static class DependencyInjection
 
         services.AddControllers(options =>
             options.Filters.Add<ApiExceptionFilterAttribute>())
-                .AddFluentValidation();
+                .AddFluentValidation().AddJsonOptions(x => 
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
         services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
 
