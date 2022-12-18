@@ -13,8 +13,8 @@ public class UpdateMaquinaPapeleraCommand : IRequest
     public string NombreVariable { get; set; } = default!;
     public int LineaProduccion { get; set; }
     public string UnidadMedida { get; set; } = default!;
-    public int ValorMinimo { get; set; }
-    public int ValorMaximo { get; set; }
+    public decimal ValorMinimo { get; set; }
+    public decimal ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
@@ -46,7 +46,27 @@ public class UpdateMaquinaPapeleraCommandHandler : IRequestHandler<UpdateMaquina
         oObj.Obligatoria = updObj.Obligatoria;
         oObj.ModoIngreso = updObj.ModoIngreso;
         oObj.FormulaCalculo = updObj.FormulaCalculo;
-        oObj.Estado = updObj.Estado;
+
+        if (updObj.Estado != oObj.Estado)
+        {
+            if (updObj.Estado == false)
+            {
+                oObj.Orden = 0;
+            }
+            else
+            {
+                try
+                {
+                    oObj.Orden = (from item in _context.MaquinasPapeleras select item.Orden).Max();
+                    oObj.Orden += 1;
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            oObj.Estado = updObj.Estado;
+        }
 
         foreach (var item in _context.VariablesFormula.Where(o => o.MaquinaPapeleraId == updObj.MaquinaPapeleraId).ToList())
         {
@@ -66,6 +86,7 @@ public class UpdateMaquinaPapeleraCommandHandler : IRequestHandler<UpdateMaquina
         {
             item.MaquinaPapeleraId = updObj.MaquinaPapeleraId;
             item.VariableId = aux.Where(o => o.Letra == item.Letra).First().VariableId;
+            _context.VariablesFormula.Add(item);
         }
         await _context.SaveChangesAsync();
 

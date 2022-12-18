@@ -24,11 +24,16 @@ public class GetListMateriaPrimaQueryHandler : IRequestHandler<GetListMateriaPri
         _mapper = mapper;
     }
 
-    public Task<List<GetListMateriaPrimaQueryResponse>> Handle(GetListMateriaPrimaQuery request, CancellationToken cancellationToken) =>
-        _context.MateriasPrimas
+    public Task<List<GetListMateriaPrimaQueryResponse>> Handle(GetListMateriaPrimaQuery request, CancellationToken cancellationToken)
+    {
+        string sql = "EXEC [trzreceta].[SyncMateriaPrima]";
+        _context.MateriasPrimas.FromSqlRaw<MateriaPrima>(sql).ToList();
+
+        return _context.MateriasPrimas
             .AsNoTracking()
             .ProjectTo<GetListMateriaPrimaQueryResponse>(_mapper.ConfigurationProvider)
             .ToListAsync();
+    }
 }
 
 public class GetListMateriaPrimaQueryResponse
@@ -37,8 +42,8 @@ public class GetListMateriaPrimaQueryResponse
     public string CodigoSap { get; set; } = default!;
     public string NombreVariable { get; set; } = default!;
     public string UnidadMedida { get; set; } = default!;
-    public int ValorMinimo { get; set; }
-    public int ValorMaximo { get; set; }
+    public decimal ValorMinimo { get; set; }
+    public decimal ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; }
     public string StrValorMinimo { get; set; } = default!;

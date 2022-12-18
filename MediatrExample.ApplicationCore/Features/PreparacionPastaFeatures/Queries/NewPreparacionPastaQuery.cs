@@ -53,8 +53,8 @@ public class NewPreparacionPastaQueryResponse
 {
     public string NombreVariable { get; set; } = "";
     public string UnidadMedida { get; set; } = "";
-    public int ValorMinimo { get; set; } = 0;
-    public int ValorMaximo { get; set; } = 100;
+    public decimal ValorMinimo { get; set; } = 0;
+    public decimal ValorMaximo { get; set; } = 100;
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; } = true;
     public List<UnidadMedida>? Unidades { get; set; }

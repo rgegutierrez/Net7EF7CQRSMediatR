@@ -68,8 +68,21 @@ public class GetMaquinaPapeleraQueryHandler : IRequestHandler<GetMaquinaPapelera
             responseMaquinaPapelera.LineasProduccion = _lstLineaProduccion.ToList();
         }
 
-        responseMaquinaPapelera.VariablesDisponibles = _context.MaquinasPapeleras.Where(v => v.Estado == true && v.ModoIngreso == false).ToList();
-        responseMaquinaPapelera.Variables = _context.VariablesFormula.Where(o => o.MaquinaPapeleraId == obj.MaquinaPapeleraId).ToList();
+        responseMaquinaPapelera.VariablesDisponibles = _context.MaquinasPapeleras.Where(
+            v => v.Estado == true && v.ModoIngreso == false
+            ).ToList();
+        responseMaquinaPapelera.Variables = _context.VariablesFormula.Where(
+            o => o.MaquinaPapeleraId == obj.MaquinaPapeleraId
+            ).ToList();
+
+        var existsVariableAsignada = _context.VariablesFormula.Where(
+            o => o.VariableId == obj.MaquinaPapeleraId
+            ).ToList();
+
+        if (existsVariableAsignada.Count() > 0)
+        {
+            responseMaquinaPapelera.EstadoReadonly = true;
+        }
 
         return responseMaquinaPapelera;
     }
@@ -82,8 +95,8 @@ public class GetMaquinaPapeleraQueryResponse
     public string NombreVariable { get; set; } = default!;
     public int LineaProduccion { get; set; }
     public string UnidadMedida { get; set; } = default!;
-    public int ValorMinimo { get; set; }
-    public int ValorMaximo { get; set; }
+    public decimal ValorMinimo { get; set; }
+    public decimal ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
@@ -92,6 +105,7 @@ public class GetMaquinaPapeleraQueryResponse
     public List<LineaProduccion>? LineasProduccion { get; set; }
     public List<MaquinaPapelera>? VariablesDisponibles { get; set; }
     public List<VariableFormula>? Variables { get; set; }
+    public bool EstadoReadonly { get; set; } = false;
 }
 
 public class GetMaquinaPapeleraQueryProfile : Profile

@@ -67,8 +67,8 @@ public class NewMaquinaPapeleraQueryResponse
     public string NombreVariable { get; set; } = "";
     public int LineaProduccion { get; set; }
     public string UnidadMedida { get; set; } = "";
-    public int ValorMinimo { get; set; } = 0;
-    public int ValorMaximo { get; set; } = 100;
+    public decimal ValorMinimo { get; set; } = 0;
+    public decimal ValorMaximo { get; set; } = 100;
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
     public bool Obligatoria { get; set; }

@@ -11,8 +11,8 @@ public class MaquinaPapelera
     public string NombreVariable { get; set; } = default!;
     public int LineaProduccion { get; set; }
     public string UnidadMedida { get; set; } = default!;
-    public int ValorMinimo { get; set; }
-    public int ValorMaximo { get; set; }
+    public decimal ValorMinimo { get; set; }
+    public decimal ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;

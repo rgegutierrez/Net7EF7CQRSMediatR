@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MediatrExample.ApplicationCore
-build_property.ProjectDir = C:\Users\jgutierrez\Documents\dotnet\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\
+build_property.ProjectDir = C:\Users\rgegu\source\repos\Net7EF7CQRSMediatR\MediatrExample.ApplicationCore\
