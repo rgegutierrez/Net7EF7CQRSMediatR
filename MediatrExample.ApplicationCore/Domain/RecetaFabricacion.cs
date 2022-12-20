@@ -11,10 +11,10 @@ public class RecetaFabricacion
     public string CodigoReceta { get; set; } = default!;
     public int Version { get; set; }
     public int Estado { get; set; }
-    public bool? AprobacionGerencia { get; set; }
-    public bool? AprobacionJefatura { get; set; }
+    public string? AprobacionGerencia { get; set; }
+    public string? AprobacionJefatura { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime InicioVigencia { get; set; }
-    public DateTime TerminoVigencia { get; set; }
+    public DateTime? InicioVigencia { get; set; }
+    public DateTime? TerminoVigencia { get; set; }
 }
 

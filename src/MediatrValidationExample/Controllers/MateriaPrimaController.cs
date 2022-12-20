@@ -45,6 +45,6 @@ public class MateriaPrimaController : ControllerBase
     /// <param name="query"></param>
     /// <returns></returns>
     [HttpGet("{MateriaPrimaId}")]
-    public Task<GetMateriaPrimaQueryResponse> GetMateriaPrimaById([FromRoute] GetPreparacionPastaQuery query) =>
+    public Task<GetMateriaPrimaQueryResponse> GetMateriaPrimaById([FromRoute] GetMateriaPrimaQuery query) =>
         _mediator.Send(query);
 }

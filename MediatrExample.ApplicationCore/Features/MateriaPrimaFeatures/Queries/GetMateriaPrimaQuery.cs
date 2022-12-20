@@ -11,12 +11,12 @@ using System.Data;
 
 namespace MediatrExample.ApplicationCore.Features.MateriaPrimaFeatures.Queries;
 
-public class GetPreparacionPastaQuery : IRequest<GetMateriaPrimaQueryResponse>
+public class GetMateriaPrimaQuery : IRequest<GetMateriaPrimaQueryResponse>
 {
     public string MateriaPrimaId { get; set; }
 }
 
-public class GetMateriaPrimaQueryHandler : IRequestHandler<GetPreparacionPastaQuery, GetMateriaPrimaQueryResponse>
+public class GetMateriaPrimaQueryHandler : IRequestHandler<GetMateriaPrimaQuery, GetMateriaPrimaQueryResponse>
 {
     private readonly MyAppDbContext _context;
     private readonly IMapper _mapper;
@@ -28,7 +28,7 @@ public class GetMateriaPrimaQueryHandler : IRequestHandler<GetPreparacionPastaQu
         _mapper = mapper;
         _connectionString = configuration.GetConnectionString("Default");
     }
-    public async Task<GetMateriaPrimaQueryResponse> Handle(GetPreparacionPastaQuery request, CancellationToken cancellationToken)
+    public async Task<GetMateriaPrimaQueryResponse> Handle(GetMateriaPrimaQuery request, CancellationToken cancellationToken)
     {
         var materiaPrima = await _context.MateriasPrimas.FindAsync(request.MateriaPrimaId.FromHashId());
 

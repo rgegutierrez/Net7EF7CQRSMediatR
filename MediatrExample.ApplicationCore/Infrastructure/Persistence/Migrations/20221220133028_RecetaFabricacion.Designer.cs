@@ -4,6 +4,7 @@ using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    partial class MyAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221220133028_RecetaFabricacion")]
+    partial class RecetaFabricacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,11 +169,11 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaFabricacionId"));
 
-                    b.Property<string>("AprobacionGerencia")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool?>("AprobacionGerencia")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("AprobacionJefatura")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool?>("AprobacionJefatura")
+                        .HasColumnType("bit");
 
                     b.Property<string>("CodigoReceta")
                         .IsRequired()
@@ -185,10 +188,10 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Property<int>("Estado")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("InicioVigencia")
+                    b.Property<DateTime>("InicioVigencia")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("TerminoVigencia")
+                    b.Property<DateTime>("TerminoVigencia")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Version")
@@ -224,90 +227,6 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.HasIndex("VariableId");
 
                     b.ToTable("VariableFormula", "trzreceta");
-                });
-
-            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.View.RecetaFabricacionVW", b =>
-                {
-                    b.Property<int>("RecetaFabricacionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AprobacionGerencia")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AprobacionJefatura")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClienteCodigo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClienteId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClienteNombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CodigoReceta")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Diametro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EspecificacionTecnicaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Estado")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Gramaje")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("InicioVigencia")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("TerminoVigencia")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TipoEspecificacionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TipoPapelCodigo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TipoPapelId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TipoPapelNombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Tolerancia")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Tubete")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Version")
-                        .HasColumnType("int");
-
-                    b.HasKey("RecetaFabricacionId");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("RecetaFabricacionVW", (string)null);
                 });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.VariableFormula", b =>
