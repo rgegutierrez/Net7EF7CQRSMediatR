@@ -64,6 +64,9 @@ public class GetListRecetaFabricacionVWQueryProfile : Profile
         CreateMap<RecetaFabricacionVW, GetListRecetaFabricacionVWQueryResponse>()
             .ForMember(dest =>
                 dest.RecetaFabricacionId,
-                opt => opt.MapFrom(mf => mf.RecetaFabricacionId.ToHashId()));
+                opt => opt.MapFrom(mf => mf.RecetaFabricacionId.ToHashId()))
+            .ForMember(dest =>
+                dest.CodigoReceta,
+                opt => opt.MapFrom(mf => $"{mf.TipoPapelCodigo}.{mf.Gramaje}.{mf.ClienteCodigo}.{mf.Version.ToString("D3")}"));
 
 }
