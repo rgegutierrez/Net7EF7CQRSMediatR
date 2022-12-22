@@ -12,6 +12,8 @@ public static class AppHelpers
     public static int FromHashId(this string encoded) =>
         GetHasher().Decode(encoded).FirstOrDefault();
 
-
     private static Hashids GetHasher() => new(HashIdsSalt, 8);
+
+    public static string DatetimeToString(this DateTime? dt, string format) => 
+        dt == null ? null : ((DateTime)dt).ToString(format);
 }

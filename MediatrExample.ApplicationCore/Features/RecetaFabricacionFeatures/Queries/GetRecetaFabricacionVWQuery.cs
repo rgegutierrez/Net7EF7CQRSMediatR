@@ -64,8 +64,11 @@ public class GetRecetaFabricacionVWQueryResponse
     public string? AprobacionGerencia { get; set; }
     public string? AprobacionJefatura { get; set; }
     public DateTime CreatedAt { get; set; }
+    public string? CreatedAtStr { get; set; }
     public DateTime? InicioVigencia { get; set; }
+    public string? InicioVigenciaStr { get; set; }
     public DateTime? TerminoVigencia { get; set; }
+    public string? TerminoVigenciaStr { get; set; }
 }
 
 public class GetRecetaFabricacionVWQueryProfile : Profile
@@ -74,6 +77,18 @@ public class GetRecetaFabricacionVWQueryProfile : Profile
         CreateMap<RecetaFabricacionVW, GetRecetaFabricacionVWQueryResponse>()
             .ForMember(dest =>
                 dest.RecetaFabricacionId,
-                opt => opt.MapFrom(mf => mf.RecetaFabricacionId.ToHashId()));
+                opt => opt.MapFrom(mf => mf.RecetaFabricacionId.ToHashId()))
+            .ForMember(dest =>
+                dest.CodigoReceta,
+                opt => opt.MapFrom(mf => $"{mf.TipoPapelCodigo}.{mf.Gramaje}.{mf.ClienteCodigo}.{mf.Version.ToString("D3")}"))
+            .ForMember(dest =>
+                dest.CreatedAtStr,
+                opt => opt.MapFrom(mf => AppHelpers.DatetimeToString(mf.CreatedAt, "dd/MM/yyyy HH:mm:ss")))
+            .ForMember(dest =>
+                dest.InicioVigenciaStr,
+                opt => opt.MapFrom(mf => AppHelpers.DatetimeToString(mf.InicioVigencia, "dd/MM/yyyy HH:mm:ss")))
+            .ForMember(dest =>
+                dest.TerminoVigenciaStr,
+                opt => opt.MapFrom(mf => AppHelpers.DatetimeToString(mf.TerminoVigencia, "dd/MM/yyyy HH:mm:ss")));
 
 }
