@@ -22,6 +22,30 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.LineaProduccion", b =>
+                {
+                    b.Property<int>("LineaProduccionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LineaProduccionId"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LineaProduccionId");
+
+                    b.ToTable("LineaProduccion", "trzreceta");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.MaquinaPapelera", b =>
                 {
                     b.Property<int>("MaquinaPapeleraId")
@@ -276,7 +300,14 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("TerminoVigencia")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TipoEspecificacionId")
+                    b.Property<string>("TipoEspecificacionDsc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TipoEspecificacionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TipoEspecificacionNombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

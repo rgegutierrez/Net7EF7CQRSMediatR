@@ -11,6 +11,8 @@ public class RecetaFabricacionVW
     public string ClienteCodigo { get; set; } = default!;
     public string ClienteNombre { get; set; } = default!;
     public int TipoEspecificacionId { get; set; } = default!;
+    public string TipoEspecificacionNombre { get; set; } = default!;
+    public string TipoEspecificacionDsc { get; set; } = default!;
     public string Tubete { get; set; } = default!;
     public string Diametro { get; set; } = default!;
     public string Tolerancia { get; set; } = default!;

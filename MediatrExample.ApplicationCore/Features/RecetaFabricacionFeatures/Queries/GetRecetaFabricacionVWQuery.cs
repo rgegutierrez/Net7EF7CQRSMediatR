@@ -3,6 +3,7 @@ using Dapper;
 using MediatR;
 using MediatrExample.ApplicationCore.Common.Exceptions;
 using MediatrExample.ApplicationCore.Common.Helpers;
+using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.View;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.Data.SqlClient;
@@ -39,6 +40,9 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
 
         var response = _mapper.Map<GetRecetaFabricacionVWQueryResponse>(obj);
 
+        response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).ToList();
+        response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).ToList();
+
         return response;
     }
 }
@@ -54,6 +58,8 @@ public class GetRecetaFabricacionVWQueryResponse
     public string ClienteCodigo { get; set; } = default!;
     public string ClienteNombre { get; set; } = default!;
     public int TipoEspecificacionId { get; set; } = default!;
+    public string TipoEspecificacionNombre { get; set; } = default!;
+    public string TipoEspecificacionDsc { get; set; } = default!;
     public string Tubete { get; set; } = default!;
     public string Diametro { get; set; } = default!;
     public string Tolerancia { get; set; } = default!;
@@ -69,6 +75,8 @@ public class GetRecetaFabricacionVWQueryResponse
     public string? InicioVigenciaStr { get; set; }
     public DateTime? TerminoVigencia { get; set; }
     public string? TerminoVigenciaStr { get; set; }
+    public List<LineaProduccion> LstLineaProduccion { get;set; }
+    public List<MateriaPrima> LstMateriaPrima { get; set; }
 }
 
 public class GetRecetaFabricacionVWQueryProfile : Profile
