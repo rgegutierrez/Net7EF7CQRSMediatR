@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MediatrExample.ApplicationCore.Features.Products.Commands;
 using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Queries;
 using MediatrExample.ApplicationCore.Features.RecetaFabricacionVWFeatures.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -35,4 +36,17 @@ public class RecetaFabricacionVWController : ControllerBase
     [HttpGet("{RecetaFabricacionId}")]
     public Task<GetRecetaFabricacionVWQueryResponse> GetRecetaFabricacionVWById([FromRoute] GetRecetaFabricacionVWQuery query) =>
         _mediator.Send(query);
+
+    /// <summary>
+    /// Crea una receta de fabricación nueva
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> CreateRecetaFabricacion([FromBody] CreateRecetaFabricacionCommand command)
+    {
+        await _mediator.Send(command);
+
+        return Ok();
+    }
 }

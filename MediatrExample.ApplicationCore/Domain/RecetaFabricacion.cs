@@ -3,7 +3,6 @@
 namespace MediatrExample.ApplicationCore.Domain;
 
 [Table("RecetaFabricacion", Schema = "trzreceta")]
-
 public class RecetaFabricacion
 {
     public int RecetaFabricacionId { get; set; }

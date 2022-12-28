@@ -223,6 +223,57 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.ToTable("RecetaFabricacion", "trzreceta");
                 });
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.RecetaMateriaPrima", b =>
+                {
+                    b.Property<int>("RecetaMateriaPrimaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaMateriaPrimaId"));
+
+                    b.Property<string>("CodigoSap")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LineaProduccionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LineaProduccionNombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MateriaPrimaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecetaFabricacionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedida")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMaximo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMinimo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("RecetaMateriaPrimaId");
+
+                    b.HasIndex("LineaProduccionId");
+
+                    b.HasIndex("RecetaFabricacionId");
+
+                    b.ToTable("RecetaMateriaPrima", "trzreceta");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.VariableFormula", b =>
                 {
                     b.Property<int>("VariableFormulaId")
@@ -339,6 +390,25 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("RecetaFabricacionVW", (string)null);
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.RecetaMateriaPrima", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.LineaProduccion", "LineaProduccion")
+                        .WithMany()
+                        .HasForeignKey("LineaProduccionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.RecetaFabricacion", "RecetaFabricacion")
+                        .WithMany()
+                        .HasForeignKey("RecetaFabricacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LineaProduccion");
+
+                    b.Navigation("RecetaFabricacion");
                 });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.VariableFormula", b =>
