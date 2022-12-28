@@ -23,11 +23,11 @@ builder.Services.AddCors(options =>
                       });
 });
 
-builder.Services.AddCronJob<MySchedulerJob>(options =>
-{
-    options.CronExpression = "* * * * *";
-    options.TimeZone = TimeZoneInfo.Local;
-});
+//builder.Services.AddCronJob<MySchedulerJob>(options =>
+//{
+//    options.CronExpression = "* * * * *";
+//    options.TimeZone = TimeZoneInfo.Local;
+//});
 
 var app = builder.Build();
 

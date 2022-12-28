@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Dapper;
 using MediatR;
 using MediatrExample.ApplicationCore.Common.Exceptions;
 using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.View;
+using MediatrExample.ApplicationCore.Features.PreparacionPastaFeatures.Queries;
+using MediatrExample.ApplicationCore.Features.Products.Commands;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
@@ -41,7 +45,21 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         var response = _mapper.Map<GetRecetaFabricacionVWQueryResponse>(obj);
 
         response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).ToList();
+
         response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).ToList();
+
+        var recetaLineaProduccion = _context.RecetasLineaProduccion.Where(o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()).ToList();
+        List<RecetaLineaProduccionExt2> recetaLineaProduccionExt = new();
+        foreach (var itemLinea in recetaLineaProduccion)
+        {
+            var linea = _mapper.Map<RecetaLineaProduccionExt2>(itemLinea);
+            linea.Variables = _context.RecetasMateriaPrima.Where(o => o.RecetaLineaProduccionId == linea.RecetaLineaProduccionId)
+                .AsNoTracking()
+                .ProjectTo<RecetaMateriaPrimaExt2>(_mapper.ConfigurationProvider)
+                .ToList();
+            recetaLineaProduccionExt.Add(linea);
+        }
+        response.RecetaLineaProduccion = recetaLineaProduccionExt;
 
         return response;
     }
@@ -77,6 +95,42 @@ public class GetRecetaFabricacionVWQueryResponse
     public string? TerminoVigenciaStr { get; set; }
     public List<LineaProduccion> LstLineaProduccion { get;set; }
     public List<MateriaPrima> LstMateriaPrima { get; set; }
+    public List<RecetaLineaProduccionExt2> RecetaLineaProduccion { get; set; }
+}
+
+public class RecetaLineaProduccionExt2
+{
+    public int RecetaLineaProduccionId { get; set; }
+    public int RecetaFabricacionId { get; set; }
+    public int LineaProduccionId { get; set; }
+    public string LineaProduccionNombre { get; set; } = default!;
+    public List<RecetaMateriaPrimaExt2> Variables { get; set; }
+}
+
+public class RecetaMateriaPrimaExt2
+{
+    public int RecetaMateriaPrimaId { get; set; }
+    public int RecetaLineaProduccionId { get; set; }
+    public int MateriaPrimaId { get; set; }
+    public string CodigoSap { get; set; } = default!;
+    public string NombreVariable { get; set; } = default!;
+    public string UnidadMedida { get; set; } = default!;
+    public decimal ValorMinimo { get; set; }
+    public decimal ValorMaximo { get; set; }
+    public bool Obligatoria { get; set; }
+    public decimal Valor { get; set; }
+}
+
+public class RecetaLineaProduccionExt2Mapper : Profile
+{
+    public RecetaLineaProduccionExt2Mapper() =>
+        CreateMap<RecetaLineaProduccion, RecetaLineaProduccionExt2>();
+}
+
+public class RecetaMateriaPrimaExt2Mapper : Profile
+{
+    public RecetaMateriaPrimaExt2Mapper() =>
+        CreateMap<RecetaMateriaPrima, RecetaMateriaPrimaExt2>();
 }
 
 public class GetRecetaFabricacionVWQueryProfile : Profile

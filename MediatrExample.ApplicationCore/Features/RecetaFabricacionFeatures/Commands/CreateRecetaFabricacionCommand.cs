@@ -9,7 +9,12 @@ namespace MediatrExample.ApplicationCore.Features.Products.Commands;
 public class CreateRecetaFabricacionCommand : IRequest
 {
     public string RecetaFabricacionId { get; set; }
-    public List<RecetaMateriaPrima> RecetaMateriaPrima { get; set; }
+    public List<RecetaLineaProduccionExt> RecetaLineaProduccion { get; set; } 
+}
+
+public class RecetaLineaProduccionExt : RecetaLineaProduccion
+{
+    public List<RecetaMateriaPrima> Variables { get; set; }
 }
 
 public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecetaFabricacionCommand>
@@ -25,13 +30,27 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
 
     public async Task<Unit> Handle(CreateRecetaFabricacionCommand request, CancellationToken cancellationToken)
     {
-        foreach (var item in request.RecetaMateriaPrima)
+        foreach (var itemLinea in _context.RecetasLineaProduccion.Where(o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()).ToList())
         {
-            item.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
-            _context.RecetasMateriaPrima.Add(item);
+            _context.RecetasLineaProduccion.Remove(itemLinea);
         }
-
         await _context.SaveChangesAsync();
+
+        foreach (var itemLinea in request.RecetaLineaProduccion)
+        {
+            itemLinea.RecetaLineaProduccionId = 0;
+            itemLinea.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasLineaProduccion.Add(itemLinea);
+            await _context.SaveChangesAsync();
+
+            foreach (var itemMateriaPrima in itemLinea.Variables)
+            {
+                itemMateriaPrima.RecetaMateriaPrimaId = 0;
+                itemMateriaPrima.RecetaLineaProduccionId = itemLinea.RecetaLineaProduccionId;
+                _context.RecetasMateriaPrima.Add(itemMateriaPrima);
+                await _context.SaveChangesAsync();
+            }
+        }
 
         return Unit.Value;
     }
