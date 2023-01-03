@@ -63,7 +63,7 @@ public class LineaProduccionController : ControllerBase
         _mediator.Send(query);
 
     /// <summary>
-    /// nuevo registro linea producción por su ID
+    /// nuevo registro linea producción
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>

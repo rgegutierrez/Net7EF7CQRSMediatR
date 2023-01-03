@@ -22,6 +22,49 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Formacion", b =>
+                {
+                    b.Property<int>("FormacionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FormacionId"));
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Obligatoria")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("RangoAlturaMaximo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("RangoAlturaMinimo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("RangoAnguloMaximo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("RangoAnguloMinimo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UnidadMedidaAltura")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UnidadMedidaAngulo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FormacionId");
+
+                    b.ToTable("Formacion", "trzreceta");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.LineaProduccion", b =>
                 {
                     b.Property<int>("LineaProduccionId")
