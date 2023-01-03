@@ -50,14 +50,14 @@ public class NewFormacionQueryHandler : IRequestHandler<NewFormacionQuery, NewFo
 public class NewFormacionQueryResponse
 {
     public string NombreVariable { get; set; } = default!;
-    public string UnidadMedidaAngulo { get; set; } = default!;
+    public string UnidadMedidaAngulo { get; set; } = "º";
     public decimal RangoAnguloMinimo { get; set; }
     public decimal RangoAnguloMaximo { get; set; }
-    public string UnidadMedidaAltura { get; set; } = default!;
+    public string UnidadMedidaAltura { get; set; } = "ml";
     public decimal RangoAlturaMinimo { get; set; }
     public decimal RangoAlturaMaximo { get; set; }
     public bool Obligatoria { get; set; }
-    public bool Estado { get; set; }
+    public bool Estado { get; set; } = true;
     public List<UnidadMedida>? Unidades { get; set; }
 }
 
