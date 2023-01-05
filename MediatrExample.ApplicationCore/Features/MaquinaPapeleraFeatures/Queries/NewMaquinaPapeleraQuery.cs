@@ -45,18 +45,13 @@ public class NewMaquinaPapeleraQueryHandler : IRequestHandler<NewMaquinaPapelera
             responseMaquinaPapelera.Unidades = _lstUnidadMedida.ToList();
         }
 
-        var _lstLineaProduccion = await con.QueryAsync<LineaProduccion>(
-            "[trzreceta].[GetListLineaProduccion]",
-            new { },
-            commandType: CommandType.StoredProcedure
-            );
+        responseMaquinaPapelera.LineasProduccion = _context.LineasProduccion.Where(
+            v => v.Estado == true
+            ).ToList();
 
-        if (_lstLineaProduccion != null && _lstLineaProduccion.Any())
-        {
-            responseMaquinaPapelera.LineasProduccion = _lstLineaProduccion.ToList();
-        }
-
-        responseMaquinaPapelera.VariablesDisponibles = _context.MaquinasPapeleras.Where(v => v.Estado == true && v.ModoIngreso == false).ToList();
+        responseMaquinaPapelera.VariablesDisponibles = _context.MaquinasPapeleras.Where(
+            v => v.Estado == true && v.ModoIngreso == false
+            ).ToList();
 
         return responseMaquinaPapelera;
     }

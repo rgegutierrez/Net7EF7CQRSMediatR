@@ -3,18 +3,24 @@ using FluentValidation;
 using MediatR;
 using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
+using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 
 namespace MediatrExample.ApplicationCore.Features.Products.Commands;
 public class CreateRecetaFabricacionCommand : IRequest
 {
     public string RecetaFabricacionId { get; set; }
-    public List<RecetaLineaProduccionExt> RecetaLineaProduccion { get; set; } 
+    public List<RecetaLineaProduccionRequest> RecetaLineaProduccion { get; set; }
+    public List<RecetaLineaMaquinaRequest> RecetaLineaMaquina { get; set; }
 }
 
-public class RecetaLineaProduccionExt : RecetaLineaProduccion
+public class RecetaLineaProduccionRequest : RecetaLineaProduccion
 {
     public List<RecetaMateriaPrima> Variables { get; set; }
+}
+public class RecetaLineaMaquinaRequest : RecetaLineaMaquina
+{
+    public List<RecetaMaquinaPapelera> Parametros { get; set; }
 }
 
 public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecetaFabricacionCommand>
@@ -30,24 +36,44 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
 
     public async Task<Unit> Handle(CreateRecetaFabricacionCommand request, CancellationToken cancellationToken)
     {
-        foreach (var itemLinea in _context.RecetasLineaProduccion.Where(o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()).ToList())
-        {
-            _context.RecetasLineaProduccion.Remove(itemLinea);
-        }
+        _context.RecetasLineaProduccion.RemoveRange(
+            _context.RecetasLineaProduccion.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
+        _context.RecetasLineaMaquina.RemoveRange(
+            _context.RecetasLineaMaquina.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
         await _context.SaveChangesAsync();
 
+        // LINEA PRODUCCIÓN - MATERIA PRIMA
         foreach (var itemLinea in request.RecetaLineaProduccion)
         {
-            itemLinea.RecetaLineaProduccionId = 0;
             itemLinea.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
             _context.RecetasLineaProduccion.Add(itemLinea);
             await _context.SaveChangesAsync();
 
             foreach (var itemMateriaPrima in itemLinea.Variables)
             {
-                itemMateriaPrima.RecetaMateriaPrimaId = 0;
                 itemMateriaPrima.RecetaLineaProduccionId = itemLinea.RecetaLineaProduccionId;
                 _context.RecetasMateriaPrima.Add(itemMateriaPrima);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        // LINEA PRODUCCIÓN - MAQUINA PAPELERA
+        foreach (var itemLinea in request.RecetaLineaMaquina)
+        {
+            itemLinea.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasLineaMaquina.Add(itemLinea);
+            await _context.SaveChangesAsync();
+
+            foreach (var itemMaquina in itemLinea.Parametros)
+            {
+                itemMaquina.RecetaLineaMaquinaId = itemLinea.RecetaLineaMaquinaId;
+                _context.RecetasMaquinaPapelera.Add(itemMaquina);
                 await _context.SaveChangesAsync();
             }
         }

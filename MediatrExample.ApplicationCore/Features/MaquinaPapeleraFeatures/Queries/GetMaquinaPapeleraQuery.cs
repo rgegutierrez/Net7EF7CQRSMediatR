@@ -57,20 +57,14 @@ public class GetMaquinaPapeleraQueryHandler : IRequestHandler<GetMaquinaPapelera
             responseMaquinaPapelera.Unidades = _lstUnidadMedida.ToList();
         }
 
-        var _lstLineaProduccion = await con.QueryAsync<LineaProduccion>(
-            "[trzreceta].[GetListLineaProduccion]",
-            new { },
-            commandType: CommandType.StoredProcedure
-            );
-
-        if (_lstLineaProduccion != null && _lstLineaProduccion.Any())
-        {
-            responseMaquinaPapelera.LineasProduccion = _lstLineaProduccion.ToList();
-        }
+        responseMaquinaPapelera.LineasProduccion = _context.LineasProduccion.Where(
+            v => v.Estado == true
+            ).ToList();
 
         responseMaquinaPapelera.VariablesDisponibles = _context.MaquinasPapeleras.Where(
             v => v.Estado == true && v.ModoIngreso == false
             ).ToList();
+
         responseMaquinaPapelera.Variables = _context.VariablesFormula.Where(
             o => o.MaquinaPapeleraId == obj.MaquinaPapeleraId
             ).ToList();

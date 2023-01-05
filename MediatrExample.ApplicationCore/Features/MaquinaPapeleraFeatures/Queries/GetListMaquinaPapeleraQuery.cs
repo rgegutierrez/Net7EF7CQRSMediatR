@@ -32,18 +32,14 @@ public class GetListMaquinaPapeleraQueryHandler : IRequestHandler<GetListMaquina
 
     public async Task<List<GetListMaquinaPapeleraQueryResponse>> Handle(GetListMaquinaPapeleraQuery request, CancellationToken cancellationToken)
     {
+        var _lstLineaProduccion = _context.LineasProduccion.Where(
+            v => v.Estado == true
+            ).ToList();
+
         var lst = _context.MaquinasPapeleras.OrderBy(o => o.Orden)
             .AsNoTracking()
             .ProjectTo<GetListMaquinaPapeleraQueryResponse>(_mapper.ConfigurationProvider)
             .ToListAsync();
-
-        using IDbConnection con = new SqlConnection(_connectionString);
-        if (con.State == ConnectionState.Closed) con.Open();
-        var _lstLineaProduccion = await con.QueryAsync<LineaProduccion>(
-            "[trzreceta].[GetListLineaProduccion]",
-            new { },
-            commandType: CommandType.StoredProcedure
-            );
 
         foreach (var item in lst.Result)
         {
@@ -51,7 +47,7 @@ public class GetListMaquinaPapeleraQueryHandler : IRequestHandler<GetListMaquina
                 v => v.LineaProduccionId == item.LineaProduccion
                 ).FirstOrDefault();
 
-            if (lineaProduccion != null ) item.LineaProduccionStr = lineaProduccion.NombreVariable;
+            if (lineaProduccion != null) item.LineaProduccionStr = lineaProduccion.NombreVariable;
         }
 
         return lst.Result;

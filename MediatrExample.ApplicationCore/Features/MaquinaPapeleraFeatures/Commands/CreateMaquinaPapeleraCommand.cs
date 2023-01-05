@@ -45,7 +45,7 @@ public class CreateMaquinaPapeleraCommandHandler : IRequestHandler<CreateMaquina
         }
 
         crtObj.Orden += 1;
-        List<VariableFormula> aux = new List<VariableFormula>();
+        List<VariableFormula> aux = new();
 
         foreach (var item in crtObj.Variables)
         {

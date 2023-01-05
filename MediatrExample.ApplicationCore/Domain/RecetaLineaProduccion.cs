@@ -7,8 +7,8 @@ public class RecetaLineaProduccion
 {
     public int RecetaLineaProduccionId { get; set; }
     public int RecetaFabricacionId { get; set; }
-    public RecetaFabricacion RecetaFabricacion { get; set; }
+    public RecetaFabricacion? RecetaFabricacion { get; set; }
     public int LineaProduccionId { get; set; }
     public string LineaProduccionNombre { get; set; } = default!;
-    public LineaProduccion LineaProduccion { get; set; }
+    public LineaProduccion? LineaProduccion { get; set; }
 }
