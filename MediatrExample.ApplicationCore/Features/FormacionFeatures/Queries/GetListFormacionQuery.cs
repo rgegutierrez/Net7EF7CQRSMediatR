@@ -64,9 +64,9 @@ public class GetListFormacionQueryProfile : Profile
                 opt => opt.MapFrom(mf => $"{mf.RangoAnguloMaximo}{mf.UnidadMedidaAngulo}"))
             .ForMember(dest =>
                 dest.AlturaMinimoUnidad,
-                opt => opt.MapFrom(mf => $"{mf.RangoAlturaMinimo}{mf.UnidadMedidaAngulo}"))
+                opt => opt.MapFrom(mf => $"{mf.RangoAlturaMinimo}{mf.UnidadMedidaAltura}"))
             .ForMember(dest =>
                 dest.AlturaMaximoUnidad,
-                opt => opt.MapFrom(mf => $"{mf.RangoAlturaMaximo}{mf.UnidadMedidaAngulo}"));
+                opt => opt.MapFrom(mf => $"{mf.RangoAlturaMaximo}{mf.UnidadMedidaAltura}"));
 
 }

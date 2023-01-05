@@ -53,7 +53,7 @@ public class NewFormacionQueryResponse
     public string UnidadMedidaAngulo { get; set; } = "º";
     public decimal RangoAnguloMinimo { get; set; }
     public decimal RangoAnguloMaximo { get; set; }
-    public string UnidadMedidaAltura { get; set; } = "ml";
+    public string UnidadMedidaAltura { get; set; } = "mm";
     public decimal RangoAlturaMinimo { get; set; }
     public decimal RangoAlturaMaximo { get; set; }
     public bool Obligatoria { get; set; }

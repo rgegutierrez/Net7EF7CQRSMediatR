@@ -1,4 +1,5 @@
 ﻿using MediatrExample.ApplicationCore.Domain;
+using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Domain.View;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,8 @@ public class MyAppDbContext : DbContext
     public DbSet<RecetaFabricacionVW> RecetasVW => Set<RecetaFabricacionVW>();
     public DbSet<RecetaLineaProduccion> RecetasLineaProduccion => Set<RecetaLineaProduccion>();
     public DbSet<RecetaMateriaPrima> RecetasMateriaPrima => Set<RecetaMateriaPrima>();
+    public DbSet<RecetaLineaMaquina> RecetasLineaMaquina => Set<RecetaLineaMaquina>();
+    public DbSet<RecetaMaquinaPapelera> RecetasMaquinaPapelera => Set<RecetaMaquinaPapelera>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

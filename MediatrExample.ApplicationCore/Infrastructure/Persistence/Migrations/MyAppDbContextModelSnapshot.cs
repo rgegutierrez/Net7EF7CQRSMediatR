@@ -269,6 +269,86 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.ToTable("ProductoQuimico", "trzreceta");
                 });
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaLineaMaquina", b =>
+                {
+                    b.Property<int>("RecetaLineaMaquinaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaLineaMaquinaId"));
+
+                    b.Property<int>("LineaProduccionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LineaProduccionNombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecetaFabricacionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RecetaLineaMaquinaId");
+
+                    b.HasIndex("LineaProduccionId");
+
+                    b.HasIndex("RecetaFabricacionId");
+
+                    b.ToTable("RecetaLineaMaquina", "trzreceta");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaMaquinaPapelera", b =>
+                {
+                    b.Property<int>("RecetaMaquinaPapeleraId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaMaquinaPapeleraId"));
+
+                    b.Property<string>("FormulaCalculo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaquinaPapeleraId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ModoIngreso")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Obligatoria")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Orden")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecetaLineaMaquinaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedida")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMaximo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMinimo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("RecetaMaquinaPapeleraId");
+
+                    b.HasIndex("MaquinaPapeleraId");
+
+                    b.HasIndex("RecetaLineaMaquinaId");
+
+                    b.ToTable("RecetaMaquinaPapelera", "trzreceta");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.RecetaFabricacion", b =>
                 {
                     b.Property<int>("RecetaFabricacionId")
@@ -557,6 +637,44 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("RecetaFabricacionVW", (string)null);
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaLineaMaquina", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.LineaProduccion", "LineaProduccion")
+                        .WithMany()
+                        .HasForeignKey("LineaProduccionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.RecetaFabricacion", "RecetaFabricacion")
+                        .WithMany()
+                        .HasForeignKey("RecetaFabricacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LineaProduccion");
+
+                    b.Navigation("RecetaFabricacion");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaMaquinaPapelera", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.MaquinaPapelera", "MaquinaPapelera")
+                        .WithMany()
+                        .HasForeignKey("MaquinaPapeleraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.Receta.RecetaLineaMaquina", "RecetaLineaMaquina")
+                        .WithMany()
+                        .HasForeignKey("RecetaLineaMaquinaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MaquinaPapelera");
+
+                    b.Navigation("RecetaLineaMaquina");
                 });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.RecetaLineaProduccion", b =>
