@@ -19,5 +19,5 @@ public class RecetaMaquinaPapelera
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
     public decimal Valor { get; set; }
-    public string Comentario { get; set; } = default!;
+    public string? Comentario { get; set; } = default!;
 }

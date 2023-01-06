@@ -305,7 +305,6 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaMaquinaPapeleraId"));
 
                     b.Property<string>("Comentario")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormulaCalculo")

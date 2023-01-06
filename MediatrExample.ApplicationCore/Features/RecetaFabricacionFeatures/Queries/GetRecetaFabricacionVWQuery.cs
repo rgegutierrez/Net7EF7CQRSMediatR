@@ -192,7 +192,7 @@ public class RecetaLineaMaquinaResponseMapper : Profile
 public class RecetaMaquinaPapeleraResponseMapper : Profile
 {
     public RecetaMaquinaPapeleraResponseMapper() =>
-        CreateMap<RecetaMateriaPrima, RecetaMaquinaPapeleraResponse>()
+        CreateMap<RecetaMaquinaPapelera, RecetaMaquinaPapeleraResponse>()
             .ForMember(dest => dest.RecetaMaquinaPapeleraId, act => act.Ignore())
             .ForMember(dest => dest.RecetaLineaMaquina, act => act.Ignore())
             .ForMember(dest => dest.MaquinaPapelera, act => act.Ignore());
