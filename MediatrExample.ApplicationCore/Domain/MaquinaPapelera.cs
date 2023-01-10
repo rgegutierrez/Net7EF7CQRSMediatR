@@ -19,9 +19,9 @@ public class MaquinaPapelera
     public bool Estado { get; set; }
 
     [InverseProperty(nameof(VariableFormula.MaquinaPapelera))]
-    public IList<VariableFormula> MaquinasPapeleras { get; } = new List<VariableFormula>();
+    public IList<VariableFormula> MaquinasPapeleras { get; set; } = new List<VariableFormula>();
 
     [InverseProperty(nameof(VariableFormula.Variable))]
-    public IList<VariableFormula> Variables { get; } = new List<VariableFormula>();
+    public IList<VariableFormula> Variables { get; set; } = new List<VariableFormula>();
 }
 

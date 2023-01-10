@@ -27,6 +27,7 @@ public class MyAppDbContext : DbContext
     public DbSet<RecetaMateriaPrima> RecetasMateriaPrima => Set<RecetaMateriaPrima>();
     public DbSet<RecetaLineaMaquina> RecetasLineaMaquina => Set<RecetaLineaMaquina>();
     public DbSet<RecetaMaquinaPapelera> RecetasMaquinaPapelera => Set<RecetaMaquinaPapelera>();
+    public DbSet<RecetaVariableFormula> RecetasVariableFormula => Set<RecetaVariableFormula>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

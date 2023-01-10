@@ -50,6 +50,11 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).ToList();
         response.LstMaquinaPapelera = _context.MaquinasPapeleras.Where(o => o.Estado == true).ToList();
 
+        foreach (var item in response.LstMaquinaPapelera)
+        {
+            item.Variables = _context.VariablesFormula.Where(o => o.MaquinaPapeleraId == item.MaquinaPapeleraId).ToList();
+        }
+
         // LINEA PRODUCCIÓN - MATERIA PRIMA
         var recetaLineaProduccion = _context.RecetasLineaProduccion.Where(
             o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
@@ -78,6 +83,15 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
                 .AsNoTracking()
                 .ProjectTo<RecetaMaquinaPapeleraResponse>(_mapper.ConfigurationProvider)
                 .ToList();
+
+            foreach (var item in linea.Parametros)
+            {
+                item.Variables = _context.RecetasVariableFormula.Where(o => o.RecetaMaquinaPapeleraId == item.RecetaMaquinaPapeleraId)
+                    .AsNoTracking()
+                    .ProjectTo<RecetaVariableFormulaResponse>(_mapper.ConfigurationProvider)
+                    .ToList();
+                item.RecetaLineaMaquinaId = 0;
+            }
             recetaLineaMaquinaExt.Add(linea);
         }
         response.RecetaLineaMaquina = recetaLineaMaquinaExt;
@@ -138,6 +152,11 @@ public class RecetaLineaMaquinaResponse : RecetaLineaMaquina
 
 public class RecetaMaquinaPapeleraResponse : RecetaMaquinaPapelera 
 { 
+    public List<RecetaVariableFormulaResponse> Variables { get; set; }
+}
+
+public class RecetaVariableFormulaResponse : RecetaVariableFormula
+{
 
 }
 
@@ -193,7 +212,14 @@ public class RecetaMaquinaPapeleraResponseMapper : Profile
 {
     public RecetaMaquinaPapeleraResponseMapper() =>
         CreateMap<RecetaMaquinaPapelera, RecetaMaquinaPapeleraResponse>()
-            .ForMember(dest => dest.RecetaMaquinaPapeleraId, act => act.Ignore())
             .ForMember(dest => dest.RecetaLineaMaquina, act => act.Ignore())
             .ForMember(dest => dest.MaquinaPapelera, act => act.Ignore());
+}
+
+public class RecetaVariableFormulaResponseMapper : Profile
+{
+    public RecetaVariableFormulaResponseMapper() =>
+        CreateMap<RecetaVariableFormula, RecetaVariableFormulaResponse>()
+            .ForMember(dest => dest.RecetaVariableFormulaId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaMaquinaPapelera, act => act.Ignore());
 }

@@ -467,6 +467,32 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.ToTable("RecetaMateriaPrima", "trzreceta");
                 });
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.RecetaVariableFormula", b =>
+                {
+                    b.Property<int>("RecetaVariableFormulaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaVariableFormulaId"));
+
+                    b.Property<string>("Letra")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RecetaMaquinaPapeleraId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RecetaVariableFormulaId");
+
+                    b.HasIndex("RecetaMaquinaPapeleraId");
+
+                    b.ToTable("RecetaVariableFormula", "trzreceta");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.TipoReceta", b =>
                 {
                     b.Property<int>("TipoRecetaId")
@@ -716,6 +742,15 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Navigation("MateriaPrima");
 
                     b.Navigation("RecetaLineaProduccion");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.RecetaVariableFormula", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.Receta.RecetaMaquinaPapelera", "RecetaMaquinaPapelera")
+                        .WithMany()
+                        .HasForeignKey("RecetaMaquinaPapeleraId");
+
+                    b.Navigation("RecetaMaquinaPapelera");
                 });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.VariableFormula", b =>

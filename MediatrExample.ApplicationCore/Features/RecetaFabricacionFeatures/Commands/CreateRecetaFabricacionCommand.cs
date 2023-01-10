@@ -20,7 +20,17 @@ public class RecetaLineaProduccionRequest : RecetaLineaProduccion
 }
 public class RecetaLineaMaquinaRequest : RecetaLineaMaquina
 {
-    public List<RecetaMaquinaPapelera> Parametros { get; set; }
+    public List<RecetaMaquinaPapeleraRequest> Parametros { get; set; }
+}
+
+public class RecetaMaquinaPapeleraRequest : RecetaMaquinaPapelera
+{
+    public List<RecetaVariableFormulaRequest> Variables { get; set; }
+}
+
+public class RecetaVariableFormulaRequest : RecetaVariableFormula
+{
+
 }
 
 public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecetaFabricacionCommand>
@@ -48,21 +58,6 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             );
         await _context.SaveChangesAsync();
 
-        // LINEA PRODUCCIÓN - MATERIA PRIMA
-        foreach (var itemLinea in request.RecetaLineaProduccion)
-        {
-            itemLinea.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
-            _context.RecetasLineaProduccion.Add(itemLinea);
-            await _context.SaveChangesAsync();
-
-            foreach (var itemMateriaPrima in itemLinea.Variables)
-            {
-                itemMateriaPrima.RecetaLineaProduccionId = itemLinea.RecetaLineaProduccionId;
-                _context.RecetasMateriaPrima.Add(itemMateriaPrima);
-                await _context.SaveChangesAsync();
-            }
-        }
-
         // LINEA PRODUCCIÓN - MAQUINA PAPELERA
         foreach (var itemLinea in request.RecetaLineaMaquina)
         {
@@ -74,6 +69,32 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             {
                 itemMaquina.RecetaLineaMaquinaId = itemLinea.RecetaLineaMaquinaId;
                 _context.RecetasMaquinaPapelera.Add(itemMaquina);
+                await _context.SaveChangesAsync();
+
+                if (itemMaquina.ModoIngreso)
+                {
+                    foreach (var itemVariableFormula in itemMaquina.Variables)
+                    {
+                        itemVariableFormula.RecetaMaquinaPapeleraId = itemMaquina.RecetaMaquinaPapeleraId;
+                        _context.RecetasVariableFormula.Add(itemVariableFormula);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+            }
+        }
+
+        // LINEA PRODUCCIÓN - MATERIA PRIMA
+        foreach (var itemLinea in request.RecetaLineaProduccion)
+        {
+            itemLinea.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasLineaProduccion.Add(itemLinea);
+            await _context.SaveChangesAsync();
+
+            foreach (var itemMateriaPrima in itemLinea.Variables)
+            {
+                itemMateriaPrima.RecetaLineaProduccionId = itemLinea.RecetaLineaProduccionId;
+                _context.RecetasMateriaPrima.Add(itemMateriaPrima);
                 await _context.SaveChangesAsync();
             }
         }
