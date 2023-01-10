@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20221220184550_RecetaFabricacionVW")]
-    partial class RecetaFabricacionVW
+    [Migration("20221220184550_MigrationRecetaFabricacionVW")]
+    partial class MigrationRecetaFabricacionVW
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

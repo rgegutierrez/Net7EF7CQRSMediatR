@@ -7,10 +7,14 @@ using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Domain.View;
+using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Commands;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
+using MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Drawing.Drawing2D;
+using System.Runtime.Intrinsics.X86;
 
 namespace MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Queries;
 
@@ -45,11 +49,26 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         // PARAMETROS
         response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).ToList();
         response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).ToList();
-        response.LstMaquinaPapelera = _context.MaquinasPapeleras.Where(o => o.Estado == true).ToList();
+        response.LstMaquinaPapelera = _context.MaquinasPapeleras.Where(o => o.Estado == true)
+            .AsNoTracking()
+            .ProjectTo<MaquinaPapeleraResponse>(_mapper.ConfigurationProvider)
+            .ToList();
 
         foreach (var item in response.LstMaquinaPapelera)
         {
-            item.Variables = _context.VariablesFormula.Where(o => o.MaquinaPapeleraId == item.MaquinaPapeleraId).ToList();
+            item.Variables = _context.VariablesFormula.Where(o => o.MaquinaPapeleraId == item.MaquinaPapeleraId)
+                .AsNoTracking()
+                .ProjectTo<VariableFormulaResponse>(_mapper.ConfigurationProvider)
+                .ToList();
+
+            //VariableFormulaResponse
+            //foreach (var itemVar in variables)
+            //{
+            //    var aux = _mapper.Map<VariableFormulaResponse>(itemVar);
+            //    aux.NombreVariable = itemVar.Variable.NombreVariable;
+            //    item.Variables.Add(aux);
+            //}
+            
         }
 
         // LINEA PRODUCCIÓN - MATERIA PRIMA
@@ -127,7 +146,7 @@ public class GetRecetaFabricacionVWQueryResponse
     public string? TerminoVigenciaStr { get; set; }
     public List<LineaProduccion> LstLineaProduccion { get;set; }
     public List<MateriaPrima> LstMateriaPrima { get; set; }
-    public List<MaquinaPapelera> LstMaquinaPapelera { get; set; }
+    public List<MaquinaPapeleraResponse> LstMaquinaPapelera { get; set; }
     public List<RecetaLineaProduccionResponse> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaMaquinaResponse> RecetaLineaMaquina { get; set; }
 }
@@ -155,6 +174,16 @@ public class RecetaMaquinaPapeleraResponse : RecetaMaquinaPapelera
 public class RecetaVariableFormulaResponse : RecetaVariableFormula
 {
 
+}
+
+public class MaquinaPapeleraResponse : MaquinaPapelera
+{
+    public List<VariableFormulaResponse> Variables { get; set; }
+}
+
+public class VariableFormulaResponse : VariableFormula
+{
+    public string NombreVariable { get; set; } = default!;
 }
 
 public class GetRecetaFabricacionVWQueryProfile : Profile
@@ -219,4 +248,19 @@ public class RecetaVariableFormulaResponseMapper : Profile
         CreateMap<RecetaVariableFormula, RecetaVariableFormulaResponse>()
             .ForMember(dest => dest.RecetaVariableFormulaId, act => act.Ignore())
             .ForMember(dest => dest.RecetaMaquinaPapelera, act => act.Ignore());
+}
+
+public class MaquinaPapeleraResponseMapper : Profile
+{
+    public MaquinaPapeleraResponseMapper() =>
+        CreateMap<MaquinaPapelera, MaquinaPapeleraResponse>();
+}
+
+public class VariableFormulaResponseMapper : Profile
+{
+    public VariableFormulaResponseMapper() =>
+        CreateMap<VariableFormula, VariableFormulaResponse>()
+            .ForMember(dest => dest.NombreVariable, act => act.MapFrom(mf => mf.Variable.NombreVariable))
+            .ForMember(dest => dest.VariableFormulaId, act => act.Ignore())
+            .ForMember(dest => dest.MaquinaPapelera, act => act.Ignore());
 }

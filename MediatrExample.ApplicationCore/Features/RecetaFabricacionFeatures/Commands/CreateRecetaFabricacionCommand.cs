@@ -175,6 +175,7 @@ public class RecetaMaquinaPapeleraRequestMapper : Profile
 {
     public RecetaMaquinaPapeleraRequestMapper() =>
         CreateMap<RecetaMaquinaPapeleraRequest, RecetaMaquinaPapelera>()
+            .ForMember(dest => dest.RecetaMaquinaPapeleraId, act => act.Ignore())
             .ForMember(dest => dest.RecetaLineaMaquina, act => act.Ignore())
             .ForMember(dest => dest.MaquinaPapelera, act => act.Ignore());
 }

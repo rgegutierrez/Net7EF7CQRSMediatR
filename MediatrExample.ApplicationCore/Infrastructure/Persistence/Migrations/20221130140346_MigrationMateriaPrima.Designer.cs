@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MyAppDbContext))]
-    [Migration("20221205132054_MaquinaPapelera")]
-    partial class MaquinaPapelera
+    [Migration("20221130140346_MigrationMateriaPrima")]
+    partial class MigrationMateriaPrima
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,49 +23,6 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.MaquinaPapelera", b =>
-                {
-                    b.Property<int>("MaquinaPapeleraId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaquinaPapeleraId"));
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FormulaCalculo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ModoIngreso")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("NombreVariable")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Obligatoria")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Orden")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UnidadMedida")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ValorMaximo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ValorMinimo")
-                        .HasColumnType("int");
-
-                    b.HasKey("MaquinaPapeleraId");
-
-                    b.ToTable("MaquinaPapelera", "trzreceta");
-                });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.MateriaPrima", b =>
                 {
@@ -102,39 +59,6 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.HasKey("MateriaPrimaId");
 
                     b.ToTable("MateriaPrima", "trzreceta");
-                });
-
-            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.PreparacionPasta", b =>
-                {
-                    b.Property<int>("PreparacionPastaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PreparacionPastaId"));
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("NombreVariable")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Obligatoria")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UnidadMedida")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ValorMaximo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ValorMinimo")
-                        .HasColumnType("int");
-
-                    b.HasKey("PreparacionPastaId");
-
-                    b.ToTable("PreparacionPasta", "trzreceta");
                 });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Product", b =>

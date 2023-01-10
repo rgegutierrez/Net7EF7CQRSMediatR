@@ -5,31 +5,29 @@
 namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class MaquinaPapelera : Migration
+    public partial class MigrationMateriaPrima : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "MaquinaPapelera",
+                name: "MateriaPrima",
                 schema: "trzreceta",
                 columns: table => new
                 {
-                    MaquinaPapeleraId = table.Column<int>(type: "int", nullable: false)
+                    MateriaPrimaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Orden = table.Column<int>(type: "int", nullable: false),
+                    CodigoSap = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NombreVariable = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UnidadMedida = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ValorMinimo = table.Column<int>(type: "int", nullable: false),
                     ValorMaximo = table.Column<int>(type: "int", nullable: false),
                     Obligatoria = table.Column<bool>(type: "bit", nullable: false),
-                    ModoIngreso = table.Column<bool>(type: "bit", nullable: false),
-                    FormulaCalculo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MaquinaPapelera", x => x.MaquinaPapeleraId);
+                    table.PrimaryKey("PK_MateriaPrima", x => x.MateriaPrimaId);
                 });
         }
 
@@ -37,7 +35,7 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MaquinaPapelera",
+                name: "MateriaPrima",
                 schema: "trzreceta");
         }
     }
