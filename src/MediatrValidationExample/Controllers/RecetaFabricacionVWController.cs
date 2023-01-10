@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using MediatrExample.ApplicationCore.Features.Products.Commands;
+using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Commands;
 using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Queries;
-using MediatrExample.ApplicationCore.Features.RecetaFabricacionVWFeatures.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

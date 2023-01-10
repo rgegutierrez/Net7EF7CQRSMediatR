@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class RecetaFabricacion : Migration
+    public partial class MigrationRecetaFabricacion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

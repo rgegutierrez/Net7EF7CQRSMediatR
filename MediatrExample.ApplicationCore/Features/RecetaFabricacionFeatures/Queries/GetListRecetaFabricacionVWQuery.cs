@@ -6,7 +6,7 @@ using MediatrExample.ApplicationCore.Domain.View;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediatrExample.ApplicationCore.Features.RecetaFabricacionVWFeatures.Queries;
+namespace MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Queries;
 
 public class GetListRecetaFabricacionVWQuery : IRequest<List<GetListRecetaFabricacionVWQueryResponse>>
 {

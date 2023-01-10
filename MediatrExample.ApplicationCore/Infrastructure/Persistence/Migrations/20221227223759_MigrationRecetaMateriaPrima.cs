@@ -5,7 +5,7 @@
 namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class RecetaMateriaPrima : Migration
+    public partial class MigrationRecetaMateriaPrima : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
