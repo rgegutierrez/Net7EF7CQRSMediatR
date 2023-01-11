@@ -2,18 +2,15 @@
 using FluentValidation;
 using MediatR;
 using MediatrExample.ApplicationCore.Common.Helpers;
-using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.Receta;
-using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Queries;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
-using MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations;
-using Microsoft.EntityFrameworkCore;
 
 namespace MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Commands;
 public class CreateRecetaFabricacionCommand : IRequest
 {
-    public string RecetaFabricacionId { get; set; }
+    public string RecetaFabricacionId { get; set; } = default!;
     public List<RecetaLineaProduccionRequest> RecetaLineaProduccion { get; set; }
+    public List<RecetaLineaPreparacionRequest> RecetaLineaPreparacion { get; set; }
     public List<RecetaLineaMaquinaRequest> RecetaLineaMaquina { get; set; }
 }
 
@@ -23,6 +20,16 @@ public class RecetaLineaProduccionRequest : RecetaLineaProduccion
 }
 
 public class RecetaMateriaPrimaRequest : RecetaMateriaPrima
+{
+
+}
+
+public class RecetaLineaPreparacionRequest : RecetaLineaPreparacion
+{
+    public List<RecetaPreparacionPastaRequest> Parametros { get; set; }
+}
+
+public class RecetaPreparacionPastaRequest : RecetaPreparacionPasta
 {
 
 }
@@ -55,6 +62,7 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
 
     public async Task<Unit> Handle(CreateRecetaFabricacionCommand request, CancellationToken cancellationToken)
     {
+        // LINEA PRODUCCIÓN - MATERIA PRIMA
         _context.RecetasLineaProduccion.RemoveRange(
             _context.RecetasLineaProduccion.Where(
                 o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
@@ -62,6 +70,15 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             );
         await _context.SaveChangesAsync();
 
+        // LINEA PRODUCCIÓN - PREPARACION PASTA
+        _context.RecetasLineaPreparacion.RemoveRange(
+            _context.RecetasLineaPreparacion.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
+        await _context.SaveChangesAsync();
+
+        // LINEA PRODUCCIÓN - MAQUINA PAPELERA
         var aux = _context.RecetasLineaMaquina.Where(
                     o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
                     ).ToList();
@@ -88,6 +105,40 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             aux
             );
         await _context.SaveChangesAsync();
+
+        // LINEA PRODUCCIÓN - MATERIA PRIMA
+        foreach (var itemLinea in request.RecetaLineaProduccion)
+        {
+            var rLineaProduccion = _mapper.Map<RecetaLineaProduccion>(itemLinea);
+            rLineaProduccion.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasLineaProduccion.Add(rLineaProduccion);
+            await _context.SaveChangesAsync();
+
+            foreach (var itemMateriaPrima in itemLinea.Variables)
+            {
+                var rMateriaPrima = _mapper.Map<RecetaMateriaPrima>(itemMateriaPrima);
+                rMateriaPrima.RecetaLineaProduccionId = rLineaProduccion.RecetaLineaProduccionId;
+                _context.RecetasMateriaPrima.Add(rMateriaPrima);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        // LINEA PRODUCCIÓN - PREPARACION PASTA
+        foreach (var itemLinea in request.RecetaLineaPreparacion)
+        {
+            var rLineaPreparacion = _mapper.Map<RecetaLineaPreparacion>(itemLinea);
+            rLineaPreparacion.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasLineaPreparacion.Add(rLineaPreparacion);
+            await _context.SaveChangesAsync();
+
+            foreach (var itemPreparacionPasta in itemLinea.Parametros)
+            {
+                var rPreparacionPasta = _mapper.Map<RecetaPreparacionPasta>(itemPreparacionPasta);
+                rPreparacionPasta.RecetaLineaPreparacionId = rLineaPreparacion.RecetaLineaPreparacionId;
+                _context.RecetasPreparacionPasta.Add(rPreparacionPasta);
+                await _context.SaveChangesAsync();
+            }
+        }
 
         // LINEA PRODUCCIÓN - MAQUINA PAPELERA
         foreach (var itemLinea in request.RecetaLineaMaquina)
@@ -118,23 +169,6 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             }
         }
 
-        // LINEA PRODUCCIÓN - MATERIA PRIMA
-        foreach (var itemLinea in request.RecetaLineaProduccion)
-        {
-            var rLineaProduccion = _mapper.Map<RecetaLineaProduccion>(itemLinea);
-            rLineaProduccion.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
-            _context.RecetasLineaProduccion.Add(rLineaProduccion);
-            await _context.SaveChangesAsync();
-
-            foreach (var itemMateriaPrima in itemLinea.Variables)
-            {
-                var rMateriaPrima = _mapper.Map<RecetaMateriaPrima>(itemMateriaPrima);
-                rMateriaPrima.RecetaLineaProduccionId = rLineaProduccion.RecetaLineaProduccionId;
-                _context.RecetasMateriaPrima.Add(rMateriaPrima);
-                await _context.SaveChangesAsync();
-            }
-        }
-
         return Unit.Value;
     }
 }
@@ -161,6 +195,26 @@ public class RecetaMateriaPrimaRequestMapper : Profile
             .ForMember(dest => dest.MateriaPrima, act => act.Ignore())
             .ForMember(dest => dest.RecetaLineaProduccion, act => act.Ignore());
 }
+
+//
+public class RecetaLineaPreparacionRequestMapper : Profile
+{
+    public RecetaLineaPreparacionRequestMapper() =>
+        CreateMap<RecetaLineaPreparacionRequest, RecetaLineaPreparacion>()
+            .ForMember(dest => dest.RecetaLineaPreparacionId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore())
+            .ForMember(dest => dest.LineaProduccion, act => act.Ignore());
+}
+
+public class RecetaPreparacionPastaRequestMapper : Profile
+{
+    public RecetaPreparacionPastaRequestMapper() =>
+        CreateMap<RecetaPreparacionPastaRequest, RecetaPreparacionPasta>()
+            .ForMember(dest => dest.RecetaPreparacionPastaId, act => act.Ignore())
+            .ForMember(dest => dest.PreparacionPasta, act => act.Ignore())
+            .ForMember(dest => dest.RecetaLineaPreparacion, act => act.Ignore());
+}
+//
 
 public class RecetaLineaMaquinaRequestMapper : Profile
 {

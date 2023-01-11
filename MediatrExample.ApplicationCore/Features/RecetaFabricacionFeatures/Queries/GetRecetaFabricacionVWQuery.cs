@@ -1,20 +1,15 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Dapper;
 using MediatR;
 using MediatrExample.ApplicationCore.Common.Exceptions;
 using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Domain.View;
-using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Commands;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
-using MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data;
-using System.Drawing.Drawing2D;
-using System.Runtime.Intrinsics.X86;
 
 namespace MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Queries;
 
@@ -49,6 +44,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         // PARAMETROS
         response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).ToList();
         response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).ToList();
+        response.LstPreparacionPasta = _context.PreparacionPastas.Where(o => o.Estado == true).ToList();
         response.LstMaquinaPapelera = _context.MaquinasPapeleras.Where(o => o.Estado == true)
             .AsNoTracking()
             .ProjectTo<MaquinaPapeleraResponse>(_mapper.ConfigurationProvider)
@@ -60,15 +56,6 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
                 .AsNoTracking()
                 .ProjectTo<VariableFormulaResponse>(_mapper.ConfigurationProvider)
                 .ToList();
-
-            //VariableFormulaResponse
-            //foreach (var itemVar in variables)
-            //{
-            //    var aux = _mapper.Map<VariableFormulaResponse>(itemVar);
-            //    aux.NombreVariable = itemVar.Variable.NombreVariable;
-            //    item.Variables.Add(aux);
-            //}
-            
         }
 
         // LINEA PRODUCCIÓN - MATERIA PRIMA
@@ -86,6 +73,22 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
             recetaLineaProduccionExt.Add(linea);
         }
         response.RecetaLineaProduccion = recetaLineaProduccionExt;
+
+        // LINEA PRODUCCIÓN - PREPARACION PASTA
+        var recetaLineaPreparacion = _context.RecetasLineaPreparacion.Where(
+            o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+            ).ToList();
+        List<RecetaLineaPreparacionResponse> recetaLineaPreparacionExt = new();
+        foreach (var itemLinea in recetaLineaPreparacion)
+        {
+            var linea = _mapper.Map<RecetaLineaPreparacionResponse>(itemLinea);
+            linea.Parametros = _context.RecetasPreparacionPasta.Where(o => o.RecetaLineaPreparacionId == itemLinea.RecetaLineaPreparacionId)
+                .AsNoTracking()
+                .ProjectTo<RecetaPreparacionPastaResponse>(_mapper.ConfigurationProvider)
+                .ToList();
+            recetaLineaPreparacionExt.Add(linea);
+        }
+        response.RecetaLineaPreparacion = recetaLineaPreparacionExt;
 
         // LINEA PRODUCCIÓN - MAQUINA PAPELERA
         var recetaLineaMaquina = _context.RecetasLineaMaquina.Where(
@@ -118,7 +121,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
 
 public class GetRecetaFabricacionVWQueryResponse
 {
-    public string RecetaFabricacionId { get; set; }
+    public string RecetaFabricacionId { get; set; } = default!;
     public string TipoPapelId { get; set; } = default!;
     public string TipoPapelCodigo { get; set; } = default!;
     public string TipoPapelNombre { get; set; } = default!;
@@ -146,9 +149,11 @@ public class GetRecetaFabricacionVWQueryResponse
     public string? TerminoVigenciaStr { get; set; }
     public List<LineaProduccion> LstLineaProduccion { get;set; }
     public List<MateriaPrima> LstMateriaPrima { get; set; }
+    public List<PreparacionPasta> LstPreparacionPasta { get; set; }
     public List<MaquinaPapeleraResponse> LstMaquinaPapelera { get; set; }
     public List<RecetaLineaProduccionResponse> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaMaquinaResponse> RecetaLineaMaquina { get; set; }
+    public List<RecetaLineaPreparacionResponse> RecetaLineaPreparacion { get; set; }
 }
 
 public class RecetaLineaProduccionResponse : RecetaLineaProduccion
@@ -157,6 +162,16 @@ public class RecetaLineaProduccionResponse : RecetaLineaProduccion
 }
 
 public class RecetaMateriaPrimaResponse : RecetaMateriaPrima
+{
+
+}
+
+public class RecetaLineaPreparacionResponse : RecetaLineaPreparacion
+{
+    public List<RecetaPreparacionPastaResponse> Parametros { get; set; }
+}
+
+public class RecetaPreparacionPastaResponse : RecetaPreparacionPasta
 {
 
 }
@@ -223,6 +238,24 @@ public class RecetaMateriaPrimaResponseMapper : Profile
             .ForMember(dest => dest.RecetaMateriaPrimaId, act => act.Ignore())
             .ForMember(dest => dest.MateriaPrima, act => act.Ignore())
             .ForMember(dest => dest.RecetaLineaProduccion, act => act.Ignore());
+}
+
+public class RecetaLineaPreparacionResponseMapper : Profile
+{
+    public RecetaLineaPreparacionResponseMapper() =>
+        CreateMap<RecetaLineaPreparacion, RecetaLineaPreparacionResponse>()
+            .ForMember(dest => dest.RecetaLineaPreparacionId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore())
+            .ForMember(dest => dest.LineaProduccion, act => act.Ignore());
+}
+
+public class RecetaPreparacionPastaResponseMapper : Profile
+{
+    public RecetaPreparacionPastaResponseMapper() =>
+        CreateMap<RecetaPreparacionPasta, RecetaPreparacionPastaResponse>()
+            .ForMember(dest => dest.RecetaPreparacionPastaId, act => act.Ignore())
+            .ForMember(dest => dest.PreparacionPasta, act => act.Ignore())
+            .ForMember(dest => dest.RecetaLineaPreparacion, act => act.Ignore());
 }
 
 public class RecetaLineaMaquinaResponseMapper : Profile

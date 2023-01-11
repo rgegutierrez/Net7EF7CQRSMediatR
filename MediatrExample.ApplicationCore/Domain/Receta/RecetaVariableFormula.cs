@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection.Metadata;
-using MediatrExample.ApplicationCore.Domain.Receta;
 
-namespace MediatrExample.ApplicationCore.Domain;
+namespace MediatrExample.ApplicationCore.Domain.Receta;
 
 [Table("RecetaVariableFormula", Schema = "trzreceta")]
 public class RecetaVariableFormula
