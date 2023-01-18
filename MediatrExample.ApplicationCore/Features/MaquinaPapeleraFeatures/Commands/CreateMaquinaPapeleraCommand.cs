@@ -76,7 +76,6 @@ public class CreateMaquinaPapeleraValidator : AbstractValidator<CreateMaquinaPap
     public CreateMaquinaPapeleraValidator()
     {
         RuleFor(r => r.NombreVariable).NotNull().MaximumLength(100);
-        RuleFor(r => r.UnidadMedida).NotNull();
         RuleFor(r => r.ValorMinimo)
             .NotNull()
             .GreaterThanOrEqualTo(0)
