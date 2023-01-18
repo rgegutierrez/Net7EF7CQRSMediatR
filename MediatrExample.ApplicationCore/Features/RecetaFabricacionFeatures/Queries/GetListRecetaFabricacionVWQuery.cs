@@ -36,6 +36,8 @@ public class GetListRecetaFabricacionVWQueryHandler : IRequestHandler<GetListRec
 public class GetListRecetaFabricacionVWQueryResponse
 {
     public string RecetaFabricacionId { get; set; }
+    public int? TipoRecetaId { get; set; }
+    public string? TipoRecetaNombre { get; set; }
     public string TipoPapelId { get; set; } = default!;
     public string TipoPapelCodigo { get; set; } = default!;
     public string TipoPapelNombre { get; set; } = default!;

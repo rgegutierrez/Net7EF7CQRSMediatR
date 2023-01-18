@@ -15,5 +15,7 @@ public class RecetaFabricacion
     public DateTime CreatedAt { get; set; }
     public DateTime? InicioVigencia { get; set; }
     public DateTime? TerminoVigencia { get; set; }
+    public int? TipoRecetaId { get; set; }
+    public TipoReceta TipoReceta { get; set; }
 }
 

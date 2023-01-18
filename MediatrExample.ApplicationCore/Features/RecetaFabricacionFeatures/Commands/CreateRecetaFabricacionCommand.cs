@@ -9,6 +9,7 @@ namespace MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Comm
 public class CreateRecetaFabricacionCommand : IRequest
 {
     public string RecetaFabricacionId { get; set; } = default!;
+    public int? TipoRecetaId { get; set; }
     public List<RecetaLineaProduccionRequest> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaPreparacionRequest> RecetaLineaPreparacion { get; set; }
     public List<RecetaLineaMaquinaRequest> RecetaLineaMaquina { get; set; }
@@ -62,6 +63,9 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
 
     public async Task<Unit> Handle(CreateRecetaFabricacionCommand request, CancellationToken cancellationToken)
     {
+        var oObj = _context.Recetas.Find(request.RecetaFabricacionId.FromHashId());
+        oObj.TipoRecetaId = request.TipoRecetaId;
+
         // LINEA PRODUCCIÓN - MATERIA PRIMA
         _context.RecetasLineaProduccion.RemoveRange(
             _context.RecetasLineaProduccion.Where(

@@ -302,10 +302,15 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("TerminoVigencia")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("TipoRecetaId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
                     b.HasKey("RecetaFabricacionId");
+
+                    b.HasIndex("TipoRecetaId");
 
                     b.ToTable("RecetaFabricacion", "trzreceta");
                 });
@@ -736,6 +741,15 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("RecetaFabricacionVW", (string)null);
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaFabricacion", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.TipoReceta", "TipoReceta")
+                        .WithMany()
+                        .HasForeignKey("TipoRecetaId");
+
+                    b.Navigation("TipoReceta");
                 });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaLineaMaquina", b =>

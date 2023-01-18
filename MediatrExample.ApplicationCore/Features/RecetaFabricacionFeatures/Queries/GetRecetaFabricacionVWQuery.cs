@@ -42,6 +42,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         var response = _mapper.Map<GetRecetaFabricacionVWQueryResponse>(obj);
 
         // PARAMETROS
+        response.LstTipoReceta = _context.TiposReceta.Where(o => o.Estado == true).ToList();
         response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).ToList();
         response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).ToList();
         response.LstPreparacionPasta = _context.PreparacionPastas.Where(o => o.Estado == true).ToList();
@@ -122,6 +123,8 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
 public class GetRecetaFabricacionVWQueryResponse
 {
     public string RecetaFabricacionId { get; set; } = default!;
+    public int? TipoRecetaId { get; set; }
+    public string? TipoRecetaNombre { get; set; }
     public string TipoPapelId { get; set; } = default!;
     public string TipoPapelCodigo { get; set; } = default!;
     public string TipoPapelNombre { get; set; } = default!;
@@ -147,6 +150,7 @@ public class GetRecetaFabricacionVWQueryResponse
     public string? InicioVigenciaStr { get; set; }
     public DateTime? TerminoVigencia { get; set; }
     public string? TerminoVigenciaStr { get; set; }
+    public List<TipoReceta> LstTipoReceta { get; set; }
     public List<LineaProduccion> LstLineaProduccion { get;set; }
     public List<MateriaPrima> LstMateriaPrima { get; set; }
     public List<PreparacionPasta> LstPreparacionPasta { get; set; }
