@@ -124,10 +124,10 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("ValorMaximo")
+                    b.Property<decimal?>("ValorMaximo")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("ValorMinimo")
+                    b.Property<decimal?>("ValorMinimo")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("MaquinaPapeleraId");

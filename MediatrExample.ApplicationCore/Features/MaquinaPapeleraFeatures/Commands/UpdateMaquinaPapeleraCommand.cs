@@ -13,8 +13,8 @@ public class UpdateMaquinaPapeleraCommand : IRequest
     public string NombreVariable { get; set; } = default!;
     public int LineaProduccion { get; set; }
     public string UnidadMedida { get; set; } = default!;
-    public decimal ValorMinimo { get; set; }
-    public decimal ValorMaximo { get; set; }
+    public decimal? ValorMinimo { get; set; }
+    public decimal? ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
@@ -41,10 +41,17 @@ public class UpdateMaquinaPapeleraCommandHandler : IRequestHandler<UpdateMaquina
         oObj.NombreVariable = updObj.NombreVariable;
         oObj.LineaProduccion = updObj.LineaProduccion;
         oObj.UnidadMedida = updObj.UnidadMedida;
-        oObj.ValorMinimo = updObj.ValorMinimo;
-        oObj.ValorMaximo = updObj.ValorMaximo;
         oObj.Obligatoria = updObj.Obligatoria;
         oObj.ModoIngreso = updObj.ModoIngreso;
+        if (request.ModoIngreso)
+        {
+            oObj.ValorMinimo = null;
+            oObj.ValorMaximo = null;
+        } else
+        {
+            oObj.ValorMinimo = updObj.ValorMinimo;
+            oObj.ValorMaximo = updObj.ValorMaximo;
+        }
         oObj.FormulaCalculo = updObj.FormulaCalculo;
 
         if (updObj.Estado != oObj.Estado)
@@ -119,7 +126,7 @@ public class UpdateMaquinaPapeleraValidator : AbstractValidator<UpdateMaquinaPap
             .Must(v => v.ToString().Length <= 10)
             .WithMessage("Valor Máximo no puede tener más de 10 dígitos");
         RuleFor(r => new { r.ValorMinimo, r.ValorMaximo })
-            .Must(v => v.ValorMinimo < v.ValorMaximo)
+            .Must(v => v.ValorMinimo <= v.ValorMaximo)
             .WithMessage("Valor Mínimo debe ser menor que Valor Máximo");
         RuleFor(r => r.Obligatoria).NotNull();
         RuleFor(r => r.Estado).NotNull();

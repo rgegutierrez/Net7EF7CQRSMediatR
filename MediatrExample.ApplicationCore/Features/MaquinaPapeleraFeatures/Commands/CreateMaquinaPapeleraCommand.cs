@@ -11,8 +11,8 @@ public class CreateMaquinaPapeleraCommand : IRequest
     public string NombreVariable { get; set; } = default!;
     public int LineaProduccion { get; set; }
     public string UnidadMedida { get; set; } = default!;
-    public decimal ValorMinimo { get; set; }
-    public decimal ValorMaximo { get; set; }
+    public decimal? ValorMinimo { get; set; }
+    public decimal? ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
@@ -33,6 +33,11 @@ public class CreateMaquinaPapeleraCommandHandler : IRequestHandler<CreateMaquina
 
     public async Task<Unit> Handle(CreateMaquinaPapeleraCommand request, CancellationToken cancellationToken)
     {
+        if(request.ModoIngreso)
+        {
+            request.ValorMinimo = null; 
+            request.ValorMaximo = null;
+        }
         var crtObj = _mapper.Map<MaquinaPapelera>(request);
 
         try
