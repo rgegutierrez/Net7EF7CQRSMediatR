@@ -2,6 +2,7 @@
 using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Domain.View;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace MediatrExample.ApplicationCore.Infrastructure.Persistence;
 public class MyAppDbContext : DbContext
@@ -38,5 +39,10 @@ public class MyAppDbContext : DbContext
            .Entity<RecetaFabricacionVW>()
            .ToView("RecetaFabricacionVW")
            .HasKey(t => t.RecetaFabricacionId);
+
+        modelBuilder
+            .Entity<RecetaFabricacion>()
+            .Property(b => b.Notificacion)
+            .HasDefaultValue(0);
     }
 }

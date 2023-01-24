@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MediatrExample.ApplicationCore.Features.Products.Queries;
 using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Commands;
 using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -43,6 +44,19 @@ public class RecetaFabricacionVWController : ControllerBase
     /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> CreateRecetaFabricacion([FromBody] CreateRecetaFabricacionCommand command)
+    {
+        await _mediator.Send(command);
+
+        return Ok();
+    }
+
+    /// <summary>
+    /// revisa vigencias de las recetas de fabricación
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [HttpPost("checkreceta"), AllowAnonymous]
+    public async Task<IActionResult> CheckRecetaFabricacion([FromBody] CheckRecetaFabricacionCommand command)
     {
         await _mediator.Send(command);
 

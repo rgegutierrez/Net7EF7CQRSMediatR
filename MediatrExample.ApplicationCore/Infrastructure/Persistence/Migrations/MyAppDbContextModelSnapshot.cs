@@ -299,6 +299,11 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("InicioVigencia")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Notificacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
                     b.Property<DateTime?>("TerminoVigencia")
                         .HasColumnType("datetime2");
 
