@@ -50,6 +50,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
             .AsNoTracking()
             .ProjectTo<MaquinaPapeleraResponse>(_mapper.ConfigurationProvider)
             .ToList();
+        response.LstProductoQuimico = _context.ProductosQuimicos.Where(o => o.Estado == true).ToList();
 
         foreach (var item in response.LstMaquinaPapelera)
         {
@@ -116,6 +117,13 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         }
         response.RecetaLineaMaquina = recetaLineaMaquinaExt;
 
+        // PRODUCTO QUIMICO
+        response.RecetaProductoQuimico = _context.RecetasProductoQuimico.Where(
+            o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+            ).AsNoTracking()
+            .ProjectTo<RecetaProductoQuimicoResponse>(_mapper.ConfigurationProvider)
+            .ToList();
+
         return response;
     }
 }
@@ -155,9 +163,11 @@ public class GetRecetaFabricacionVWQueryResponse
     public List<MateriaPrima> LstMateriaPrima { get; set; }
     public List<PreparacionPasta> LstPreparacionPasta { get; set; }
     public List<MaquinaPapeleraResponse> LstMaquinaPapelera { get; set; }
+    public List<ProductoQuimico> LstProductoQuimico { get; set; }
     public List<RecetaLineaProduccionResponse> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaMaquinaResponse> RecetaLineaMaquina { get; set; }
     public List<RecetaLineaPreparacionResponse> RecetaLineaPreparacion { get; set; }
+    public List<RecetaProductoQuimicoResponse> RecetaProductoQuimico { get; set; }
 }
 
 public class RecetaLineaProduccionResponse : RecetaLineaProduccion
@@ -203,6 +213,11 @@ public class MaquinaPapeleraResponse : MaquinaPapelera
 public class VariableFormulaResponse : VariableFormula
 {
     public string NombreVariable { get; set; } = default!;
+}
+
+public class RecetaProductoQuimicoResponse : RecetaProductoQuimico
+{
+
 }
 
 public class GetRecetaFabricacionVWQueryProfile : Profile
@@ -300,4 +315,12 @@ public class VariableFormulaResponseMapper : Profile
             .ForMember(dest => dest.NombreVariable, act => act.MapFrom(mf => mf.Variable.NombreVariable))
             .ForMember(dest => dest.VariableFormulaId, act => act.Ignore())
             .ForMember(dest => dest.MaquinaPapelera, act => act.Ignore());
+}
+
+public class RecetaProductoQuimicoResponseMapper : Profile
+{
+    public RecetaProductoQuimicoResponseMapper() =>
+        CreateMap<RecetaProductoQuimico, RecetaProductoQuimicoResponse>()
+            .ForMember(dest => dest.RecetaProductoQuimicoId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore());
 }

@@ -13,6 +13,7 @@ public class CreateRecetaFabricacionCommand : IRequest
     public List<RecetaLineaProduccionRequest> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaPreparacionRequest> RecetaLineaPreparacion { get; set; }
     public List<RecetaLineaMaquinaRequest> RecetaLineaMaquina { get; set; }
+    public List<RecetaProductoQuimicoRequest> RecetaProductoQuimico { get; set; }
 }
 
 public class RecetaLineaProduccionRequest : RecetaLineaProduccion
@@ -46,6 +47,11 @@ public class RecetaMaquinaPapeleraRequest : RecetaMaquinaPapelera
 }
 
 public class RecetaVariableFormulaRequest : RecetaVariableFormula
+{
+
+}
+
+public class RecetaProductoQuimicoRequest : RecetaProductoQuimico
 {
 
 }
@@ -110,6 +116,14 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             );
         await _context.SaveChangesAsync();
 
+        // PRODUCTO QUIMICO
+        _context.RecetasProductoQuimico.RemoveRange(
+            _context.RecetasProductoQuimico.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
+        await _context.SaveChangesAsync();
+
         // LINEA PRODUCCIÓN - MATERIA PRIMA
         foreach (var itemLinea in request.RecetaLineaProduccion)
         {
@@ -171,6 +185,15 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
                 }
 
             }
+        }
+
+        // PRODUCTO QUIMICO
+        foreach (var itemQuimico in request.RecetaProductoQuimico)
+        {
+            var rProductoQuimico = _mapper.Map<RecetaProductoQuimico>(itemQuimico);
+            rProductoQuimico.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasProductoQuimico.Add(rProductoQuimico);
+            await _context.SaveChangesAsync();
         }
 
         return Unit.Value;
