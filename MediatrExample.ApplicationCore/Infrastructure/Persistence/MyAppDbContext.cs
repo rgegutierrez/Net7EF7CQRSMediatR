@@ -21,6 +21,14 @@ public class MyAppDbContext : DbContext
     public DbSet<ProductoQuimico> ProductosQuimicos => Set<ProductoQuimico>();
     public DbSet<TiroMaquina> TirosMaquina => Set<TiroMaquina>();
     public DbSet<Formacion> Formaciones => Set<Formacion>();
+    public DbSet<TipoIndicadorVacio> TipoIndicadoresVacio => Set<TipoIndicadorVacio>();
+    public DbSet<IndicadorVacio> IndicadoresVacio => Set<IndicadorVacio>();
+    public DbSet<TipoIndicadorPrensa> TipoIndicadoresPrensa => Set<TipoIndicadorPrensa>();
+    public DbSet<IndicadorPrensa> IndicadoresPrensa => Set<IndicadorPrensa>();
+    public DbSet<TipoIndicadorSecador> TipoIndicadoresSecador => Set<TipoIndicadorSecador>();
+    public DbSet<IndicadorSecador> IndicadoresSecador => Set<IndicadorSecador>();
+    public DbSet<ValorFisicoPieMaquina> ValoresFisicoPieMaquina => Set<ValorFisicoPieMaquina>();
+    public DbSet<Estandar> Estandares => Set<Estandar>();
     public DbSet<TipoReceta> TiposReceta => Set<TipoReceta>();
     public DbSet<RecetaFabricacion> Recetas => Set<RecetaFabricacion>();
     public DbSet<RecetaFabricacionVW> RecetasVW => Set<RecetaFabricacionVW>();

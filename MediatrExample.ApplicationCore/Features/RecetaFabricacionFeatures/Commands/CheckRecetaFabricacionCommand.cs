@@ -33,7 +33,7 @@ public class CheckRecetaFabricacionCommandHandler : IRequestHandler<CheckRecetaF
 
     public async Task<Unit> Handle(CheckRecetaFabricacionCommand request, CancellationToken cancellationToken)
     {
-        string url = "http://localhost:8080/#/trazabilidad/receta_fabricacion/crear/";
+        string url = "https://qaserver/trazabilidadRecetaWeb/#/trazabilidad/receta_fabricacion/crear/";
         string displayCaduca = "display:none";
         string bodyCaduca = "";
         string displayAviso = "display:none";
