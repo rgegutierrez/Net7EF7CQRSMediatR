@@ -33,7 +33,8 @@ public class GetIndicadorPrensaQueryHandler : IRequestHandler<GetIndicadorPrensa
         }
 
         var responseIndicadorPrensa = _mapper.Map<GetIndicadorPrensaQueryResponse>(obj);
-        responseIndicadorPrensa.LstTipoIndicadorPrensa = _context.TipoIndicadoresPrensa.ToList();
+        responseIndicadorPrensa.LstTipoIndicadorPrensa = _context.TipoIndicadoresPrensa.OrderBy(o => o.NombreVariable).ToList();
+        responseIndicadorPrensa.Unidades = _context.UnidadesMedida.OrderBy(o => o.NombreVariable).ToList();
 
         return responseIndicadorPrensa;
     }
@@ -50,6 +51,7 @@ public class GetIndicadorPrensaQueryResponse
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; }
     public List<TipoIndicadorPrensa> LstTipoIndicadorPrensa { get; set; }
+    public List<UnidadMedida> Unidades { get; set; }
 }
 
 public class GetIndicadorPrensaQueryProfile : Profile

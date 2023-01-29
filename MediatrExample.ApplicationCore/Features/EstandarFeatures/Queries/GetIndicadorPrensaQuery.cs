@@ -3,6 +3,7 @@ using MediatR;
 using MediatrExample.ApplicationCore.Common.Exceptions;
 using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
+using MediatrExample.ApplicationCore.Domain.View;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 
 
@@ -34,6 +35,8 @@ public class GetEstandarQueryHandler : IRequestHandler<GetEstandarQuery, GetEsta
 
         var responseEstandar = _mapper.Map<GetEstandarQueryResponse>(obj);
         responseEstandar.LstValorFisicoPieMaquina = _context.ValoresFisicoPieMaquina.ToList();
+        responseEstandar.LstRecetaCliente = _context.RecetaClientes.ToList();
+        responseEstandar.LstRecetaTipoPapel = _context.RecetaTipoPapeles.ToList();
 
         return responseEstandar;
     }
@@ -49,6 +52,8 @@ public class GetEstandarQueryResponse
     public decimal ValorPromedio { get; set; }
     public decimal ValorMaximo { get; set; }
     public List<ValorFisicoPieMaquina> LstValorFisicoPieMaquina { get; set; }
+    public List<RecetaCliente> LstRecetaCliente { get; set; }
+    public List<RecetaTipoPapel> LstRecetaTipoPapel { get; set; }
 }
 
 public class GetEstandarQueryProfile : Profile

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using MediatrExample.ApplicationCore.Domain;
+using MediatrExample.ApplicationCore.Domain.View;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 
@@ -27,8 +28,10 @@ public class NewEstandarQueryHandler : IRequestHandler<NewEstandarQuery, NewEsta
     {
         var responseEstandar = new NewEstandarQueryResponse
         {
-            LstValorFisicoPieMaquina = _context.ValoresFisicoPieMaquina.ToList()
-        };
+            LstValorFisicoPieMaquina = _context.ValoresFisicoPieMaquina.ToList(),
+            LstRecetaCliente = _context.RecetaClientes.ToList(),
+            LstRecetaTipoPapel = _context.RecetaTipoPapeles.ToList()
+    };
 
         return responseEstandar;
     }
@@ -43,6 +46,8 @@ public class NewEstandarQueryResponse
     public decimal ValorPromedio { get; set; }
     public decimal ValorMaximo { get; set; }
     public List<ValorFisicoPieMaquina> LstValorFisicoPieMaquina { get;set; }
+    public List<RecetaCliente> LstRecetaCliente { get; set; }
+    public List<RecetaTipoPapel> LstRecetaTipoPapel { get; set; }
 }
 
 public class NewEstandarQueryProfile : Profile

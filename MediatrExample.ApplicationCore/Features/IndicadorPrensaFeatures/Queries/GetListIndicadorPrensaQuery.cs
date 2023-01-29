@@ -25,7 +25,7 @@ public class GetListIndicadorPrensaQueryHandler : IRequestHandler<GetListIndicad
     }
 
     public Task<List<GetListIndicadorPrensaQueryResponse>> Handle(GetListIndicadorPrensaQuery request, CancellationToken cancellationToken) =>
-        _context.IndicadoresVacio
+        _context.IndicadoresPrensa
             .AsNoTracking()
             .ProjectTo<GetListIndicadorPrensaQueryResponse>(_mapper.ConfigurationProvider)
             .ToListAsync();

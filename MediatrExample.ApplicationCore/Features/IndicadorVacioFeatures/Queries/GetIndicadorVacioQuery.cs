@@ -33,7 +33,8 @@ public class GetIndicadorVacioQueryHandler : IRequestHandler<GetIndicadorVacioQu
         }
 
         var responseIndicadorVacio = _mapper.Map<GetIndicadorVacioQueryResponse>(obj);
-        responseIndicadorVacio.LstTipoIndicadorVacio = _context.TipoIndicadoresVacio.ToList();
+        responseIndicadorVacio.LstTipoIndicadorVacio = _context.TipoIndicadoresVacio.OrderBy(o => o.NombreVariable).ToList();
+        responseIndicadorVacio.Unidades = _context.UnidadesMedida.OrderBy(o => o.NombreVariable).ToList();
 
         return responseIndicadorVacio;
     }
@@ -50,6 +51,7 @@ public class GetIndicadorVacioQueryResponse
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; }
     public List<TipoIndicadorVacio> LstTipoIndicadorVacio { get; set; }
+    public List<UnidadMedida> Unidades { get; set; }
 }
 
 public class GetIndicadorVacioQueryProfile : Profile

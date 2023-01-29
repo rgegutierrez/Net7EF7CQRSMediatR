@@ -31,6 +31,9 @@ public class MyAppDbContext : DbContext
     public DbSet<Estandar> Estandares => Set<Estandar>();
     public DbSet<TipoReceta> TiposReceta => Set<TipoReceta>();
     public DbSet<RecetaFabricacion> Recetas => Set<RecetaFabricacion>();
+    public DbSet<RecetaCliente> RecetaClientes => Set<RecetaCliente>();
+    public DbSet<RecetaTipoPapel> RecetaTipoPapeles => Set<RecetaTipoPapel>();
+    public DbSet<UnidadMedida> UnidadesMedida => Set<UnidadMedida>();
     public DbSet<RecetaFabricacionVW> RecetasVW => Set<RecetaFabricacionVW>();
     public DbSet<RecetaLineaProduccion> RecetasLineaProduccion => Set<RecetaLineaProduccion>();
     public DbSet<RecetaMateriaPrima> RecetasMateriaPrima => Set<RecetaMateriaPrima>();
@@ -45,9 +48,24 @@ public class MyAppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder
+           .Entity<UnidadMedida>()
+           .ToView("RecetaUnidadMedida")
+           .HasKey(t => t.UnidadMedidaId);
+
+        modelBuilder
            .Entity<RecetaFabricacionVW>()
            .ToView("RecetaFabricacionVW")
            .HasKey(t => t.RecetaFabricacionId);
+
+        modelBuilder
+           .Entity<RecetaCliente>()
+           .ToView("RecetaCliente")
+           .HasKey(t => t.RecetaClienteId);
+
+        modelBuilder
+           .Entity<RecetaTipoPapel>()
+           .ToView("RecetaTipoPapel")
+           .HasKey(t => t.RecetaTipoPapelId);
 
         modelBuilder
             .Entity<RecetaFabricacion>()

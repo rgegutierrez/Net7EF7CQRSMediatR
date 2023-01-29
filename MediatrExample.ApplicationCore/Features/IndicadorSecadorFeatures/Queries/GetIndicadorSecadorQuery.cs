@@ -33,7 +33,8 @@ public class GetIndicadorSecadorQueryHandler : IRequestHandler<GetIndicadorSecad
         }
 
         var responseIndicadorSecador = _mapper.Map<GetIndicadorSecadorQueryResponse>(obj);
-        responseIndicadorSecador.LstTipoIndicadorSecador = _context.TipoIndicadoresSecador.ToList();
+        responseIndicadorSecador.LstTipoIndicadorSecador = _context.TipoIndicadoresSecador.OrderBy(o => o.NombreVariable).ToList();
+        responseIndicadorSecador.Unidades = _context.UnidadesMedida.OrderBy(o => o.NombreVariable).ToList();
 
         return responseIndicadorSecador;
     }
@@ -50,6 +51,7 @@ public class GetIndicadorSecadorQueryResponse
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; }
     public List<TipoIndicadorSecador> LstTipoIndicadorSecador { get; set; }
+    public List<UnidadMedida> Unidades { get; set; }
 }
 
 public class GetIndicadorSecadorQueryProfile : Profile

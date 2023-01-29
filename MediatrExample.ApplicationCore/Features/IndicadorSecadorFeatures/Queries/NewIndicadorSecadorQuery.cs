@@ -27,7 +27,8 @@ public class NewIndicadorSecadorQueryHandler : IRequestHandler<NewIndicadorSecad
     {
         var responseIndicadorSecador = new NewIndicadorSecadorQueryResponse
         {
-            LstTipoIndicadorSecador = _context.TipoIndicadoresSecador.ToList()
+            LstTipoIndicadorSecador = _context.TipoIndicadoresSecador.OrderBy(o => o.NombreVariable).ToList(),
+            Unidades = _context.UnidadesMedida.OrderBy(o => o.NombreVariable).ToList()
         };
 
         return responseIndicadorSecador;
@@ -44,6 +45,7 @@ public class NewIndicadorSecadorQueryResponse
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; } = true;
     public List<TipoIndicadorSecador> LstTipoIndicadorSecador { get;set; }
+    public List<UnidadMedida> Unidades { get; set; }
 }
 
 public class NewIndicadorSecadorQueryProfile : Profile
