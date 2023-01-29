@@ -2,7 +2,7 @@
 
 public class RecetaCliente
 {
-    public int RecetaClienteId { get; set; }
+    public string ClienteId { get; set; }
     public string Codigo { get; set; } = default!;
     public string Nombre { get; set; } = default!;
 }

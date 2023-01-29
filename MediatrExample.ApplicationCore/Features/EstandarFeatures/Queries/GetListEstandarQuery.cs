@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
+using MediatrExample.ApplicationCore.Domain.View;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +26,7 @@ public class GetListEstandarQueryHandler : IRequestHandler<GetListEstandarQuery,
     }
 
     public Task<List<GetListEstandarQueryResponse>> Handle(GetListEstandarQuery request, CancellationToken cancellationToken) =>
-        _context.Estandares
+        _context.EstandaresVW
             .AsNoTracking()
             .ProjectTo<GetListEstandarQueryResponse>(_mapper.ConfigurationProvider)
             .ToListAsync();
@@ -34,10 +35,12 @@ public class GetListEstandarQueryHandler : IRequestHandler<GetListEstandarQuery,
 public class GetListEstandarQueryResponse
 {
     public string EstandarId { get; set; } = default!;
-    public int ClienteId { get; set; }
-    public int TipoPapelId { get; set; }
+    public string ClienteId { get; set; }
+    public string ClienteNombre { get; set; }
+    public string TipoPapelId { get; set; }
+    public string TipoPapelNombre { get; set; }
     public int ValorFisicoPieMaquinaId { get; set; }
-    public int ValorFisicoPieMaquinaNombre { get; set; }
+    public string ValorFisicoPieMaquinaNombre { get; set; }
     public decimal ValorMinimo { get; set; }
     public decimal ValorPromedio { get; set; }
     public decimal ValorMaximo { get; set; }
@@ -46,12 +49,9 @@ public class GetListEstandarQueryResponse
 public class GetListEstandarQueryProfile : Profile
 {
     public GetListEstandarQueryProfile() =>
-        CreateMap<Estandar, GetListEstandarQueryResponse>()
+        CreateMap<EstandarVW, GetListEstandarQueryResponse>()
             .ForMember(dest =>
                 dest.EstandarId,
-                opt => opt.MapFrom(mf => mf.EstandarId.ToHashId()))
-            .ForMember(dest =>
-                dest.ValorFisicoPieMaquinaNombre,
-                opt => opt.MapFrom(mf => mf.ValorFisicoPieMaquina.NombreVariable));
+                opt => opt.MapFrom(mf => mf.EstandarId.ToHashId()));
 
 }

@@ -31,7 +31,7 @@ public class NewEstandarQueryHandler : IRequestHandler<NewEstandarQuery, NewEsta
             LstValorFisicoPieMaquina = _context.ValoresFisicoPieMaquina.ToList(),
             LstRecetaCliente = _context.RecetaClientes.ToList(),
             LstRecetaTipoPapel = _context.RecetaTipoPapeles.ToList()
-    };
+        };
 
         return responseEstandar;
     }
@@ -39,8 +39,8 @@ public class NewEstandarQueryHandler : IRequestHandler<NewEstandarQuery, NewEsta
 
 public class NewEstandarQueryResponse
 {
-    public int ClienteId { get; set; }
-    public int TipoPapelId { get; set; }
+    public string ClienteId { get; set; }
+    public string TipoPapelId { get; set; }
     public int ValorFisicoPieMaquinaId { get; set; }
     public decimal ValorMinimo { get; set; }
     public decimal ValorPromedio { get; set; }

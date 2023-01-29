@@ -45,8 +45,8 @@ public class GetEstandarQueryHandler : IRequestHandler<GetEstandarQuery, GetEsta
 public class GetEstandarQueryResponse
 {
     public string EstandarId { get; set; } = default!;
-    public int ClienteId { get; set; }
-    public int TipoPapelId { get; set; }
+    public string ClienteId { get; set; }
+    public string TipoPapelId { get; set; }
     public int ValorFisicoPieMaquinaId { get; set; }
     public decimal ValorMinimo { get; set; }
     public decimal ValorPromedio { get; set; }

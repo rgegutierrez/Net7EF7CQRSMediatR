@@ -7,8 +7,8 @@ using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 namespace MediatrExample.ApplicationCore.Features.EstandarFeatures.Commands;
 public class CreateEstandarCommand : IRequest
 {
-    public int ClienteId { get; set; }
-    public int TipoPapelId { get; set; }
+    public string ClienteId { get; set; }
+    public string TipoPapelId { get; set; }
     public int ValorFisicoPieMaquinaId { get; set; }
     public decimal ValorMinimo { get; set; }
     public decimal ValorPromedio { get; set; }
