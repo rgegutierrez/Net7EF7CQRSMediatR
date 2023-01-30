@@ -51,5 +51,11 @@ public class CreateFormacionValidator : AbstractValidator<CreateFormacionCommand
     public CreateFormacionValidator()
     {
         RuleFor(r => r.NombreVariable).NotNull();
+        RuleFor(r => r.UnidadMedidaAngulo).NotNull();
+        RuleFor(r => r.RangoAnguloMinimo).NotNull();
+        RuleFor(r => r.RangoAnguloMaximo).NotNull();
+        RuleFor(r => r.UnidadMedidaAltura).NotNull();
+        RuleFor(r => r.RangoAlturaMinimo).NotNull();
+        RuleFor(r => r.RangoAlturaMaximo).NotNull();
     }
 }

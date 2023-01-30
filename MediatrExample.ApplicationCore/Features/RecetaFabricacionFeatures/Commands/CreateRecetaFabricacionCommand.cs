@@ -2,6 +2,7 @@
 using FluentValidation;
 using MediatR;
 using MediatrExample.ApplicationCore.Common.Helpers;
+using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 
@@ -14,6 +15,7 @@ public class CreateRecetaFabricacionCommand : IRequest
     public List<RecetaLineaPreparacionRequest> RecetaLineaPreparacion { get; set; }
     public List<RecetaLineaMaquinaRequest> RecetaLineaMaquina { get; set; }
     public List<RecetaProductoQuimicoRequest> RecetaProductoQuimico { get; set; }
+    public List<RecetaTiroMaquinaRequest> RecetaTiroMaquina { get; set; }
 }
 
 public class RecetaLineaProduccionRequest : RecetaLineaProduccion
@@ -52,6 +54,11 @@ public class RecetaVariableFormulaRequest : RecetaVariableFormula
 }
 
 public class RecetaProductoQuimicoRequest : RecetaProductoQuimico
+{
+
+}
+
+public class RecetaTiroMaquinaRequest : RecetaTiroMaquina
 {
 
 }
@@ -119,6 +126,14 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
         // PRODUCTO QUIMICO
         _context.RecetasProductoQuimico.RemoveRange(
             _context.RecetasProductoQuimico.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
+        await _context.SaveChangesAsync();
+
+        // TIRO MAQUINA
+        _context.RecetasTiroMaquina.RemoveRange(
+            _context.RecetasTiroMaquina.Where(
                 o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
                 )
             );
@@ -193,6 +208,15 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             var rProductoQuimico = _mapper.Map<RecetaProductoQuimico>(itemQuimico);
             rProductoQuimico.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
             _context.RecetasProductoQuimico.Add(rProductoQuimico);
+            await _context.SaveChangesAsync();
+        }
+
+        // TIRO MAQUINA
+        foreach (var itemTiroMaquina in request.RecetaTiroMaquina)
+        {
+            var rTiroMaquina = _mapper.Map<RecetaTiroMaquina>(itemTiroMaquina);
+            rTiroMaquina.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasTiroMaquina.Add(rTiroMaquina);
             await _context.SaveChangesAsync();
         }
 

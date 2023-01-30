@@ -9,6 +9,7 @@ namespace MediatrExample.ApplicationCore.Features.TiroMaquinaFeatures.Commands;
 public class UpdateTiroMaquinaCommand : IRequest
 {
     public string TiroMaquinaId { get; set; }
+    public string NombreVariable { get; set; } = default!;
     public string UnidadMedida { get; set; } = default!;
     public decimal ValorMinimo { get; set; }
     public decimal ValorMaximo { get; set; }
@@ -32,6 +33,7 @@ public class UpdateTiroMaquinaCommandHandler : IRequestHandler<UpdateTiroMaquina
         var updObj = _mapper.Map<TiroMaquina>(request);
 
         var oObj = _context.TirosMaquina.Find(updObj.TiroMaquinaId);
+        oObj.NombreVariable = updObj.NombreVariable;
         oObj.UnidadMedida = updObj.UnidadMedida;
         oObj.ValorMinimo = updObj.ValorMinimo;
         oObj.ValorMaximo = updObj.ValorMaximo;
@@ -56,6 +58,7 @@ public class UpdateTiroMaquinaValidator : AbstractValidator<UpdateTiroMaquinaCom
 {
     public UpdateTiroMaquinaValidator()
     {
+        RuleFor(r => r.NombreVariable).NotNull();
         RuleFor(r => r.UnidadMedida).NotNull();
         RuleFor(r => r.ValorMinimo).NotNull();
         RuleFor(r => r.ValorMaximo).NotNull();

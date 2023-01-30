@@ -42,15 +42,14 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         var response = _mapper.Map<GetRecetaFabricacionVWQueryResponse>(obj);
 
         // PARAMETROS
-        response.LstTipoReceta = _context.TiposReceta.Where(o => o.Estado == true).ToList();
-        response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).ToList();
-        response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).ToList();
-        response.LstPreparacionPasta = _context.PreparacionPastas.Where(o => o.Estado == true).ToList();
-        response.LstMaquinaPapelera = _context.MaquinasPapeleras.Where(o => o.Estado == true)
+        response.LstTipoReceta = _context.TiposReceta.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
+        response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
+        response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
+        response.LstPreparacionPasta = _context.PreparacionPastas.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
+        response.LstMaquinaPapelera = _context.MaquinasPapeleras.Where(o => o.Estado == true).OrderBy(o => o.Orden)
             .AsNoTracking()
             .ProjectTo<MaquinaPapeleraResponse>(_mapper.ConfigurationProvider)
             .ToList();
-        response.LstProductoQuimico = _context.ProductosQuimicos.Where(o => o.Estado == true).ToList();
 
         foreach (var item in response.LstMaquinaPapelera)
         {
@@ -59,6 +58,8 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
                 .ProjectTo<VariableFormulaResponse>(_mapper.ConfigurationProvider)
                 .ToList();
         }
+        response.LstProductoQuimico = _context.ProductosQuimicos.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
+        response.LstTiroMaquina = _context.TirosMaquina.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
 
         // LINEA PRODUCCIÓN - MATERIA PRIMA
         var recetaLineaProduccion = _context.RecetasLineaProduccion.Where(
@@ -69,6 +70,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         {
             var linea = _mapper.Map<RecetaLineaProduccionResponse>(itemLinea);
             linea.Variables = _context.RecetasMateriaPrima.Where(o => o.RecetaLineaProduccionId == itemLinea.RecetaLineaProduccionId)
+                .OrderBy(o => o.NombreVariable)
                 .AsNoTracking()
                 .ProjectTo<RecetaMateriaPrimaResponse>(_mapper.ConfigurationProvider)
                 .ToList();
@@ -85,6 +87,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         {
             var linea = _mapper.Map<RecetaLineaPreparacionResponse>(itemLinea);
             linea.Parametros = _context.RecetasPreparacionPasta.Where(o => o.RecetaLineaPreparacionId == itemLinea.RecetaLineaPreparacionId)
+                .OrderBy(o => o.NombreVariable)
                 .AsNoTracking()
                 .ProjectTo<RecetaPreparacionPastaResponse>(_mapper.ConfigurationProvider)
                 .ToList();
@@ -101,6 +104,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         {
             var linea = _mapper.Map<RecetaLineaMaquinaResponse>(itemLinea);
             linea.Parametros = _context.RecetasMaquinaPapelera.Where(o => o.RecetaLineaMaquinaId == itemLinea.RecetaLineaMaquinaId)
+                .OrderBy(o => o.Orden)
                 .AsNoTracking()
                 .ProjectTo<RecetaMaquinaPapeleraResponse>(_mapper.ConfigurationProvider)
                 .ToList();
@@ -120,8 +124,17 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         // PRODUCTO QUIMICO
         response.RecetaProductoQuimico = _context.RecetasProductoQuimico.Where(
             o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
-            ).AsNoTracking()
+            ).OrderBy(o => o.NombreVariable)
+            .AsNoTracking()
             .ProjectTo<RecetaProductoQuimicoResponse>(_mapper.ConfigurationProvider)
+            .ToList();
+
+        // TIRO MAQUINA
+        response.RecetaTiroMaquina = _context.RecetasTiroMaquina.Where(
+            o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+            ).OrderBy(o => o.NombreVariable)
+            .AsNoTracking()
+            .ProjectTo<RecetaTiroMaquinaResponse>(_mapper.ConfigurationProvider)
             .ToList();
 
         return response;
@@ -164,10 +177,12 @@ public class GetRecetaFabricacionVWQueryResponse
     public List<PreparacionPasta> LstPreparacionPasta { get; set; }
     public List<MaquinaPapeleraResponse> LstMaquinaPapelera { get; set; }
     public List<ProductoQuimico> LstProductoQuimico { get; set; }
+    public List<TiroMaquina> LstTiroMaquina { get; set; }
     public List<RecetaLineaProduccionResponse> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaMaquinaResponse> RecetaLineaMaquina { get; set; }
     public List<RecetaLineaPreparacionResponse> RecetaLineaPreparacion { get; set; }
     public List<RecetaProductoQuimicoResponse> RecetaProductoQuimico { get; set; }
+    public List<RecetaTiroMaquinaResponse> RecetaTiroMaquina { get; set; }
 }
 
 public class RecetaLineaProduccionResponse : RecetaLineaProduccion
@@ -216,6 +231,11 @@ public class VariableFormulaResponse : VariableFormula
 }
 
 public class RecetaProductoQuimicoResponse : RecetaProductoQuimico
+{
+
+}
+
+public class RecetaTiroMaquinaResponse : RecetaTiroMaquina
 {
 
 }
@@ -322,5 +342,13 @@ public class RecetaProductoQuimicoResponseMapper : Profile
     public RecetaProductoQuimicoResponseMapper() =>
         CreateMap<RecetaProductoQuimico, RecetaProductoQuimicoResponse>()
             .ForMember(dest => dest.RecetaProductoQuimicoId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore());
+}
+
+public class RecetaTiroMaquinaResponseMapper : Profile
+{
+    public RecetaTiroMaquinaResponseMapper() =>
+        CreateMap<RecetaTiroMaquina, RecetaTiroMaquinaResponse>()
+            .ForMember(dest => dest.RecetaTiroMaquinaId, act => act.Ignore())
             .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore());
 }
