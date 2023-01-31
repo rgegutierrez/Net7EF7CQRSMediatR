@@ -43,7 +43,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
 
         // PARAMETROS
         response.LstTipoReceta = _context.TiposReceta.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
-        response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
+        response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).ToList();
         response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
         response.LstPreparacionPasta = _context.PreparacionPastas.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
         response.LstMaquinaPapelera = _context.MaquinasPapeleras.Where(o => o.Estado == true).OrderBy(o => o.Orden)
