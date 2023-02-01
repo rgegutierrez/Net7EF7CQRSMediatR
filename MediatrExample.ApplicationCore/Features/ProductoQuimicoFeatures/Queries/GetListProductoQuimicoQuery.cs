@@ -48,8 +48,8 @@ public class GetListProductoQuimicoQueryResponse
     public bool Certificacion { get; set; }
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; }
-    public string StrValorMinimo { get; set; } = default!;
-    public string StrValorMaximo { get; set; } = default!;
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
 }
 
 public class GetListProductoQuimicoQueryProfile : Profile
@@ -57,11 +57,11 @@ public class GetListProductoQuimicoQueryProfile : Profile
     public GetListProductoQuimicoQueryProfile() =>
         CreateMap<ProductoQuimico, GetListProductoQuimicoQueryResponse>()
             .ForMember(dest =>
-                dest.StrValorMinimo,
-                opt => opt.MapFrom(mf => $"{mf.ValorMinimo}{mf.UnidadMedida}"))
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
             .ForMember(dest =>
-                dest.StrValorMaximo,
-                opt => opt.MapFrom(mf => $"{mf.ValorMaximo}{mf.UnidadMedida}"))
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
             .ForMember(dest =>
                 dest.ProductoQuimicoId,
                 opt => opt.MapFrom(mf => mf.ProductoQuimicoId.ToHashId()));

@@ -40,8 +40,8 @@ public class GetListPreparacionPastaQueryResponse
     public decimal ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; }
-    public string StrValorMinimo { get; set; } = default!;
-    public string StrValorMaximo { get; set; } = default!;
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
 }
 
 public class GetListPreparacionPastaQueryProfile : Profile
@@ -49,11 +49,11 @@ public class GetListPreparacionPastaQueryProfile : Profile
     public GetListPreparacionPastaQueryProfile() =>
         CreateMap<PreparacionPasta, GetListPreparacionPastaQueryResponse>()
             .ForMember(dest =>
-                dest.StrValorMinimo,
-                opt => opt.MapFrom(mf => $"{mf.ValorMinimo}{mf.UnidadMedida}"))
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
             .ForMember(dest =>
-                dest.StrValorMaximo,
-                opt => opt.MapFrom(mf => $"{mf.ValorMaximo}{mf.UnidadMedida}"))
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
             .ForMember(dest =>
                 dest.PreparacionPastaId,
                 opt => opt.MapFrom(mf => mf.PreparacionPastaId.ToHashId()));

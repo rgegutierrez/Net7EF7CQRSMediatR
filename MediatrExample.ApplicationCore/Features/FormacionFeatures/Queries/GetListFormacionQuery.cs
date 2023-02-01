@@ -58,15 +58,15 @@ public class GetListFormacionQueryProfile : Profile
                 opt => opt.MapFrom(mf => mf.FormacionId.ToHashId()))
             .ForMember(dest =>
                 dest.AnguloMinimoUnidad,
-                opt => opt.MapFrom(mf => $"{mf.RangoAnguloMinimo}{mf.UnidadMedidaAngulo}"))
+                opt => opt.MapFrom(mf => $"{mf.RangoAnguloMinimo.FromDotToComma()}{mf.UnidadMedidaAngulo}"))
             .ForMember(dest =>
                 dest.AnguloMaximoUnidad,
-                opt => opt.MapFrom(mf => $"{mf.RangoAnguloMaximo}{mf.UnidadMedidaAngulo}"))
+                opt => opt.MapFrom(mf => $"{mf.RangoAnguloMaximo.FromDotToComma()}{mf.UnidadMedidaAngulo}"))
             .ForMember(dest =>
                 dest.AlturaMinimoUnidad,
-                opt => opt.MapFrom(mf => $"{mf.RangoAlturaMinimo}{mf.UnidadMedidaAltura}"))
+                opt => opt.MapFrom(mf => $"{mf.RangoAlturaMinimo.FromDotToComma()}{mf.UnidadMedidaAltura}"))
             .ForMember(dest =>
                 dest.AlturaMaximoUnidad,
-                opt => opt.MapFrom(mf => $"{mf.RangoAlturaMaximo}{mf.UnidadMedidaAltura}"));
+                opt => opt.MapFrom(mf => $"{mf.RangoAlturaMaximo.FromDotToComma()}{mf.UnidadMedidaAltura}"));
 
 }

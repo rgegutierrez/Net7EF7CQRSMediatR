@@ -42,6 +42,8 @@ public class GetListIndicadorSecadorQueryResponse
     public decimal ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; }
+    public string ValorMinimoStr { get; set; }
+    public string ValorMaximoStr { get; set; }
 }
 
 public class GetListIndicadorSecadorQueryProfile : Profile
@@ -53,6 +55,12 @@ public class GetListIndicadorSecadorQueryProfile : Profile
                 opt => opt.MapFrom(mf => mf.IndicadorSecadorId.ToHashId()))
             .ForMember(dest =>
                 dest.TipoIndicadorSecadorNombre,
-                opt => opt.MapFrom(mf => mf.TipoIndicadorSecador.NombreVariable));
+                opt => opt.MapFrom(mf => mf.TipoIndicadorSecador.NombreVariable))
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
 
 }

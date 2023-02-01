@@ -68,8 +68,8 @@ public class GetListMaquinaPapeleraQueryResponse
     public bool ModoIngreso { get; set; }
     public string FormulaCalculo { get; set; } = default!;
     public bool Estado { get; set; }
-    public string StrValorMinimo { get; set; } = default!;
-    public string StrValorMaximo { get; set; } = default!;
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
 }
 
 public class GetListMaquinaPapeleraQueryProfile : Profile
@@ -77,11 +77,11 @@ public class GetListMaquinaPapeleraQueryProfile : Profile
     public GetListMaquinaPapeleraQueryProfile() =>
         CreateMap<MaquinaPapelera, GetListMaquinaPapeleraQueryResponse>()
             .ForMember(dest =>
-                dest.StrValorMinimo,
-                opt => opt.MapFrom(mf => $"{mf.ValorMinimo}{mf.UnidadMedida}"))
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => $"{mf.ValorMinimo.FromDotToComma()}{mf.UnidadMedida}"))
             .ForMember(dest =>
-                dest.StrValorMaximo,
-                opt => opt.MapFrom(mf => $"{mf.ValorMaximo}{mf.UnidadMedida}"))
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => $"{mf.ValorMaximo.FromDotToComma()}{mf.UnidadMedida}"))
             .ForMember(dest =>
                 dest.MaquinaPapeleraId,
                 opt => opt.MapFrom(mf => mf.MaquinaPapeleraId.ToHashId()));

@@ -44,6 +44,9 @@ public class GetListEstandarQueryResponse
     public decimal ValorMinimo { get; set; }
     public decimal ValorPromedio { get; set; }
     public decimal ValorMaximo { get; set; }
+    public string ValorMinimoStr { get; set; }
+    public string ValorPromedioStr { get; set; }
+    public string ValorMaximoStr { get; set; }
 }
 
 public class GetListEstandarQueryProfile : Profile
@@ -52,6 +55,15 @@ public class GetListEstandarQueryProfile : Profile
         CreateMap<EstandarVW, GetListEstandarQueryResponse>()
             .ForMember(dest =>
                 dest.EstandarId,
-                opt => opt.MapFrom(mf => mf.EstandarId.ToHashId()));
+                opt => opt.MapFrom(mf => mf.EstandarId.ToHashId()))
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorPromedioStr,
+                opt => opt.MapFrom(mf => mf.ValorPromedio.FromDotToComma()));
 
 }

@@ -42,6 +42,8 @@ public class GetListIndicadorVacioQueryResponse
     public decimal ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; }
+    public string ValorMinimoStr { get; set; }
+    public string ValorMaximoStr { get; set; }
 }
 
 public class GetListIndicadorVacioQueryProfile : Profile
@@ -53,6 +55,12 @@ public class GetListIndicadorVacioQueryProfile : Profile
                 opt => opt.MapFrom(mf => mf.IndicadorVacioId.ToHashId()))
             .ForMember(dest =>
                 dest.TipoIndicadorVacioNombre,
-                opt => opt.MapFrom(mf => mf.TipoIndicadorVacio.NombreVariable));
+                opt => opt.MapFrom(mf => mf.TipoIndicadorVacio.NombreVariable))
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
 
 }

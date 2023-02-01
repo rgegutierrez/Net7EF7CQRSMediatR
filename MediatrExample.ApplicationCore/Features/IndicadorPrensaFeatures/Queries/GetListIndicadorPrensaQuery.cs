@@ -42,6 +42,8 @@ public class GetListIndicadorPrensaQueryResponse
     public decimal ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
     public bool Estado { get; set; }
+    public string ValorMinimoStr { get; set; }
+    public string ValorMaximoStr { get; set; }
 }
 
 public class GetListIndicadorPrensaQueryProfile : Profile
@@ -53,6 +55,12 @@ public class GetListIndicadorPrensaQueryProfile : Profile
                 opt => opt.MapFrom(mf => mf.IndicadorPrensaId.ToHashId()))
             .ForMember(dest =>
                 dest.TipoIndicadorPrensaNombre,
-                opt => opt.MapFrom(mf => mf.TipoIndicadorPrensa.NombreVariable));
+                opt => opt.MapFrom(mf => mf.TipoIndicadorPrensa.NombreVariable))
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
 
 }

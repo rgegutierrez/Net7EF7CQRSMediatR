@@ -6,6 +6,7 @@ using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Domain.View;
+using MediatrExample.ApplicationCore.Features.EstandarFeatures.Queries;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,9 +45,16 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         // PARAMETROS
         response.LstTipoReceta = _context.TiposReceta.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
         response.LstLineaProduccion = _context.LineasProduccion.Where(o => o.Estado == true).ToList();
-        response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
-        response.LstPreparacionPasta = _context.PreparacionPastas.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
-        response.LstMaquinaPapelera = _context.MaquinasPapeleras.Where(o => o.Estado == true).OrderBy(o => o.Orden)
+        response.LstMateriaPrima = _context.MateriasPrimas.Where(o => o.Estado == true)
+            .AsNoTracking()
+            .ProjectTo<MateriaPrimaResponse>(_mapper.ConfigurationProvider)
+            .OrderBy(o => o.NombreVariable).ToList();
+        response.LstPreparacionPasta = _context.PreparacionPastas.Where(o => o.Estado == true)
+            .AsNoTracking()
+            .ProjectTo<PreparacionPastaResponse>(_mapper.ConfigurationProvider)
+            .OrderBy(o => o.NombreVariable).ToList();
+        response.LstMaquinaPapelera = _context.MaquinasPapeleras.Where(o => o.Estado == true)
+            .OrderBy(o => o.Orden)
             .AsNoTracking()
             .ProjectTo<MaquinaPapeleraResponse>(_mapper.ConfigurationProvider)
             .ToList();
@@ -58,8 +66,14 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
                 .ProjectTo<VariableFormulaResponse>(_mapper.ConfigurationProvider)
                 .ToList();
         }
-        response.LstProductoQuimico = _context.ProductosQuimicos.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
-        response.LstTiroMaquina = _context.TirosMaquina.Where(o => o.Estado == true).OrderBy(o => o.NombreVariable).ToList();
+        response.LstProductoQuimico = _context.ProductosQuimicos.Where(o => o.Estado == true)
+            .AsNoTracking()
+            .ProjectTo<ProductoQuimicoResponse>(_mapper.ConfigurationProvider)
+            .OrderBy(o => o.NombreVariable).ToList();
+        response.LstTiroMaquina = _context.TirosMaquina.Where(o => o.Estado == true)
+            .AsNoTracking()
+            .ProjectTo<TiroMaquinaResponse>(_mapper.ConfigurationProvider)
+            .OrderBy(o => o.NombreVariable).ToList();
 
         // LINEA PRODUCCIÓN - MATERIA PRIMA
         var recetaLineaProduccion = _context.RecetasLineaProduccion.Where(
@@ -173,16 +187,36 @@ public class GetRecetaFabricacionVWQueryResponse
     public string? TerminoVigenciaStr { get; set; }
     public List<TipoReceta> LstTipoReceta { get; set; }
     public List<LineaProduccion> LstLineaProduccion { get;set; }
-    public List<MateriaPrima> LstMateriaPrima { get; set; }
-    public List<PreparacionPasta> LstPreparacionPasta { get; set; }
+    public List<MateriaPrimaResponse> LstMateriaPrima { get; set; }
+    public List<PreparacionPastaResponse> LstPreparacionPasta { get; set; }
     public List<MaquinaPapeleraResponse> LstMaquinaPapelera { get; set; }
-    public List<ProductoQuimico> LstProductoQuimico { get; set; }
-    public List<TiroMaquina> LstTiroMaquina { get; set; }
+    public List<ProductoQuimicoResponse> LstProductoQuimico { get; set; }
+    public List<TiroMaquinaResponse> LstTiroMaquina { get; set; }
     public List<RecetaLineaProduccionResponse> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaMaquinaResponse> RecetaLineaMaquina { get; set; }
     public List<RecetaLineaPreparacionResponse> RecetaLineaPreparacion { get; set; }
     public List<RecetaProductoQuimicoResponse> RecetaProductoQuimico { get; set; }
     public List<RecetaTiroMaquinaResponse> RecetaTiroMaquina { get; set; }
+}
+
+public class MateriaPrimaResponse : MateriaPrima {
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
+public class PreparacionPastaResponse : PreparacionPasta {
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
+public class ProductoQuimicoResponse : ProductoQuimico {
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
+public class TiroMaquinaResponse : TiroMaquina {
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
 }
 
 public class RecetaLineaProduccionResponse : RecetaLineaProduccion
@@ -192,7 +226,8 @@ public class RecetaLineaProduccionResponse : RecetaLineaProduccion
 
 public class RecetaMateriaPrimaResponse : RecetaMateriaPrima
 {
-
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
 }
 
 public class RecetaLineaPreparacionResponse : RecetaLineaPreparacion
@@ -202,7 +237,8 @@ public class RecetaLineaPreparacionResponse : RecetaLineaPreparacion
 
 public class RecetaPreparacionPastaResponse : RecetaPreparacionPasta
 {
-
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
 }
 
 public class RecetaLineaMaquinaResponse : RecetaLineaMaquina
@@ -211,7 +247,9 @@ public class RecetaLineaMaquinaResponse : RecetaLineaMaquina
 }
 
 public class RecetaMaquinaPapeleraResponse : RecetaMaquinaPapelera 
-{ 
+{
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
     public List<RecetaVariableFormulaResponse> Variables { get; set; }
 }
 
@@ -222,6 +260,8 @@ public class RecetaVariableFormulaResponse : RecetaVariableFormula
 
 public class MaquinaPapeleraResponse : MaquinaPapelera
 {
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
     public List<VariableFormulaResponse> Variables { get; set; }
 }
 
@@ -232,12 +272,62 @@ public class VariableFormulaResponse : VariableFormula
 
 public class RecetaProductoQuimicoResponse : RecetaProductoQuimico
 {
-
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
 }
 
 public class RecetaTiroMaquinaResponse : RecetaTiroMaquina
 {
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
 
+public class MateriaPrimaResponseMapper : Profile
+{
+    public MateriaPrimaResponseMapper() =>
+        CreateMap<MateriaPrima, MateriaPrimaResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
+}
+
+public class PreparacionPastaResponseMapper : Profile
+{
+    public PreparacionPastaResponseMapper() =>
+        CreateMap<PreparacionPasta, PreparacionPastaResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
+}
+
+public class ProductoQuimicoResponseMapper : Profile
+{
+    public ProductoQuimicoResponseMapper() =>
+        CreateMap<ProductoQuimico, ProductoQuimicoResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
+}
+
+public class TiroMaquinaResponseMapper : Profile
+{
+    public TiroMaquinaResponseMapper() =>
+        CreateMap<TiroMaquina, TiroMaquinaResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
 }
 
 public class GetRecetaFabricacionVWQueryProfile : Profile
@@ -274,6 +364,12 @@ public class RecetaMateriaPrimaResponseMapper : Profile
 {
     public RecetaMateriaPrimaResponseMapper() =>
         CreateMap<RecetaMateriaPrima, RecetaMateriaPrimaResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
             .ForMember(dest => dest.RecetaMateriaPrimaId, act => act.Ignore())
             .ForMember(dest => dest.MateriaPrima, act => act.Ignore())
             .ForMember(dest => dest.RecetaLineaProduccion, act => act.Ignore());
@@ -292,6 +388,12 @@ public class RecetaPreparacionPastaResponseMapper : Profile
 {
     public RecetaPreparacionPastaResponseMapper() =>
         CreateMap<RecetaPreparacionPasta, RecetaPreparacionPastaResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
             .ForMember(dest => dest.RecetaPreparacionPastaId, act => act.Ignore())
             .ForMember(dest => dest.PreparacionPasta, act => act.Ignore())
             .ForMember(dest => dest.RecetaLineaPreparacion, act => act.Ignore());
@@ -310,6 +412,12 @@ public class RecetaMaquinaPapeleraResponseMapper : Profile
 {
     public RecetaMaquinaPapeleraResponseMapper() =>
         CreateMap<RecetaMaquinaPapelera, RecetaMaquinaPapeleraResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
             .ForMember(dest => dest.RecetaLineaMaquina, act => act.Ignore())
             .ForMember(dest => dest.MaquinaPapelera, act => act.Ignore());
 }
@@ -325,7 +433,13 @@ public class RecetaVariableFormulaResponseMapper : Profile
 public class MaquinaPapeleraResponseMapper : Profile
 {
     public MaquinaPapeleraResponseMapper() =>
-        CreateMap<MaquinaPapelera, MaquinaPapeleraResponse>();
+        CreateMap<MaquinaPapelera, MaquinaPapeleraResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
 }
 
 public class VariableFormulaResponseMapper : Profile
@@ -341,6 +455,12 @@ public class RecetaProductoQuimicoResponseMapper : Profile
 {
     public RecetaProductoQuimicoResponseMapper() =>
         CreateMap<RecetaProductoQuimico, RecetaProductoQuimicoResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
             .ForMember(dest => dest.RecetaProductoQuimicoId, act => act.Ignore())
             .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore());
 }
@@ -349,6 +469,12 @@ public class RecetaTiroMaquinaResponseMapper : Profile
 {
     public RecetaTiroMaquinaResponseMapper() =>
         CreateMap<RecetaTiroMaquina, RecetaTiroMaquinaResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
             .ForMember(dest => dest.RecetaTiroMaquinaId, act => act.Ignore())
             .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore());
 }
