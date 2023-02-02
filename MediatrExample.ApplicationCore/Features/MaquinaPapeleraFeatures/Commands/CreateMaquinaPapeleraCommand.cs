@@ -92,7 +92,7 @@ public class CreateMaquinaPapeleraValidator : AbstractValidator<CreateMaquinaPap
             .Must(v => v.ToString().Length <= 10)
             .WithMessage("Valor Máximo no puede tener más de 10 dígitos");
         RuleFor(r => new { r.ValorMinimo, r.ValorMaximo })
-            .Must(v => v.ValorMinimo < v.ValorMaximo)
+            .Must(v => v.ValorMinimo <= v.ValorMaximo)
             .WithMessage("Valor Mínimo debe ser menor que Valor Máximo");
         RuleFor(r => r.Obligatoria).NotNull();
         RuleFor(r => r.Estado).NotNull();

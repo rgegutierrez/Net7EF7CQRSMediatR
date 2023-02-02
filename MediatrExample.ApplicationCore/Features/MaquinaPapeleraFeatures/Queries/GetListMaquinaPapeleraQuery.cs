@@ -78,10 +78,10 @@ public class GetListMaquinaPapeleraQueryProfile : Profile
         CreateMap<MaquinaPapelera, GetListMaquinaPapeleraQueryResponse>()
             .ForMember(dest =>
                 dest.ValorMinimoStr,
-                opt => opt.MapFrom(mf => $"{mf.ValorMinimo.FromDotToComma()}{mf.UnidadMedida}"))
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
             .ForMember(dest =>
                 dest.ValorMaximoStr,
-                opt => opt.MapFrom(mf => $"{mf.ValorMaximo.FromDotToComma()}{mf.UnidadMedida}"))
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
             .ForMember(dest =>
                 dest.MaquinaPapeleraId,
                 opt => opt.MapFrom(mf => mf.MaquinaPapeleraId.ToHashId()));
