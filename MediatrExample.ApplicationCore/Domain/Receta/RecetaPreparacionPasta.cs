@@ -15,5 +15,5 @@ public class RecetaPreparacionPasta
     public decimal ValorMinimo { get; set; }
     public decimal ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }
-    public decimal Valor { get; set; }
+    public decimal? Valor { get; set; }
 }

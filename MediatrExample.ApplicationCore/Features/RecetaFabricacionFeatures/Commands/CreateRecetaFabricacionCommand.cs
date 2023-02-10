@@ -10,6 +10,7 @@ namespace MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Comm
 public class CreateRecetaFabricacionCommand : IRequest
 {
     public string RecetaFabricacionId { get; set; } = default!;
+    public bool Validate { get; set; }
     public int? TipoRecetaId { get; set; }
     public List<RecetaLineaProduccionRequest> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaPreparacionRequest> RecetaLineaPreparacion { get; set; }
@@ -297,6 +298,8 @@ public class CreateRecetaFabricacionValidator : AbstractValidator<CreateRecetaFa
 {
     public CreateRecetaFabricacionValidator()
     {
-
+        When(receta => !receta.Validate, () => {
+            RuleFor(receta => receta.TipoRecetaId).NotNull();
+        });
     }
 }

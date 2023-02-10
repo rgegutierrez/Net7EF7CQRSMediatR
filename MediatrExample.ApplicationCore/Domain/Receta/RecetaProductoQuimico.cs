@@ -16,5 +16,5 @@ public class RecetaProductoQuimico
     public string Funcion { get; set; } = default!;
     public bool Certificacion { get; set; }
     public bool Obligatoria { get; set; }
-    public decimal Valor { get; set; }
+    public decimal? Valor { get; set; }
 }
