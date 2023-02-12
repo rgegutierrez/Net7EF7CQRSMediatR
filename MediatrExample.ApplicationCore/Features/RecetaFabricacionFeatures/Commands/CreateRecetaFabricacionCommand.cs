@@ -298,7 +298,7 @@ public class CreateRecetaFabricacionValidator : AbstractValidator<CreateRecetaFa
 {
     public CreateRecetaFabricacionValidator()
     {
-        When(receta => !receta.Validate, () => {
+        When(receta => receta.Validate, () => {
             RuleFor(receta => receta.TipoRecetaId).NotNull();
         });
     }
