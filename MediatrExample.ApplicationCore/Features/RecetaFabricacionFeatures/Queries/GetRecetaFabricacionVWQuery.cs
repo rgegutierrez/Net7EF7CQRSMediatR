@@ -6,7 +6,6 @@ using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Domain.View;
-using MediatrExample.ApplicationCore.Features.EstandarFeatures.Queries;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -73,6 +72,10 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         response.LstTiroMaquina = _context.TirosMaquina.Where(o => o.Estado == true)
             .AsNoTracking()
             .ProjectTo<TiroMaquinaResponse>(_mapper.ConfigurationProvider)
+            .OrderBy(o => o.NombreVariable).ToList();
+        response.LstFormacion = _context.Formaciones.Where(o => o.Estado == true)
+            .AsNoTracking()
+            .ProjectTo<FormacionResponse>(_mapper.ConfigurationProvider)
             .OrderBy(o => o.NombreVariable).ToList();
 
         // LINEA PRODUCCIÓN - MATERIA PRIMA
@@ -151,6 +154,24 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
             .ProjectTo<RecetaTiroMaquinaResponse>(_mapper.ConfigurationProvider)
             .ToList();
 
+        // FORMACION
+        var recetaFormacion = _context.RecetasFormacion.Where(
+            o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+            ).OrderBy(o => o.NombreVariable)
+            .AsNoTracking()
+            .ToList();
+        List<RecetaFormacionResponse> recetaFormacionExt = new();
+        foreach (var item in recetaFormacion)
+        {
+            var formacion = _mapper.Map<RecetaFormacionResponse>(item);
+            formacion.Valores = _context.RecetasFormacionValor
+                .Where(o => o.RecetaFormacionId == item.RecetaFormacionId)
+                .OrderBy(o => o.Foil)
+                .ProjectTo<RecetaFormacionValorResponse>(_mapper.ConfigurationProvider)
+                .ToList();
+            recetaFormacionExt.Add(formacion);
+        }
+        response.RecetaFormacion = recetaFormacionExt;
         return response;
     }
 }
@@ -192,11 +213,13 @@ public class GetRecetaFabricacionVWQueryResponse
     public List<MaquinaPapeleraResponse> LstMaquinaPapelera { get; set; }
     public List<ProductoQuimicoResponse> LstProductoQuimico { get; set; }
     public List<TiroMaquinaResponse> LstTiroMaquina { get; set; }
+    public List<FormacionResponse> LstFormacion { get; set; }
     public List<RecetaLineaProduccionResponse> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaMaquinaResponse> RecetaLineaMaquina { get; set; }
     public List<RecetaLineaPreparacionResponse> RecetaLineaPreparacion { get; set; }
     public List<RecetaProductoQuimicoResponse> RecetaProductoQuimico { get; set; }
     public List<RecetaTiroMaquinaResponse> RecetaTiroMaquina { get; set; }
+    public List<RecetaFormacionResponse> RecetaFormacion { get; set; }
 }
 
 public class MateriaPrimaResponse : MateriaPrima {
@@ -217,6 +240,14 @@ public class ProductoQuimicoResponse : ProductoQuimico {
 public class TiroMaquinaResponse : TiroMaquina {
     public string ValorMinimoStr { get; set; } = default!;
     public string ValorMaximoStr { get; set; } = default!;
+}
+
+public class FormacionResponse : Formacion
+{
+    public string AnguloMinimoStr { get; set; } = default!;
+    public string AnguloMaximoStr { get; set; } = default!;
+    public string AlturaMinimoStr { get; set; } = default!;
+    public string AlturaMaximoStr { get; set; } = default!;
 }
 
 public class RecetaLineaProduccionResponse : RecetaLineaProduccion
@@ -282,6 +313,20 @@ public class RecetaTiroMaquinaResponse : RecetaTiroMaquina
     public string ValorMaximoStr { get; set; } = default!;
 }
 
+public class RecetaFormacionResponse : RecetaFormacion
+{
+    public string AnguloMinimoStr { get; set; } = default!;
+    public string AnguloMaximoStr { get; set; } = default!;
+    public string AlturaMinimoStr { get; set; } = default!;
+    public string AlturaMaximoStr { get; set; } = default!;
+    public List<RecetaFormacionValorResponse> Valores { get; set; }
+}
+
+public class RecetaFormacionValorResponse : RecetaFormacionValor
+{
+
+}
+
 public class MateriaPrimaResponseMapper : Profile
 {
     public MateriaPrimaResponseMapper() =>
@@ -328,6 +373,24 @@ public class TiroMaquinaResponseMapper : Profile
             .ForMember(dest =>
                 dest.ValorMaximoStr,
                 opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
+}
+
+public class FormacionResponseMapper : Profile
+{
+    public FormacionResponseMapper() =>
+        CreateMap<Formacion, FormacionResponse>()
+            .ForMember(dest =>
+                dest.AnguloMinimoStr,
+                opt => opt.MapFrom(mf => mf.RangoAnguloMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.AnguloMaximoStr,
+                opt => opt.MapFrom(mf => mf.RangoAnguloMaximo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.AlturaMinimoStr,
+                opt => opt.MapFrom(mf => mf.RangoAlturaMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.AlturaMaximoStr,
+                opt => opt.MapFrom(mf => mf.RangoAlturaMaximo.FromDotToComma()));
 }
 
 public class GetRecetaFabricacionVWQueryProfile : Profile
@@ -477,4 +540,32 @@ public class RecetaTiroMaquinaResponseMapper : Profile
                 opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
             .ForMember(dest => dest.RecetaTiroMaquinaId, act => act.Ignore())
             .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore());
+}
+
+public class RecetaFormacionResponseMapper : Profile
+{
+    public RecetaFormacionResponseMapper() =>
+        CreateMap<RecetaFormacion, RecetaFormacionResponse>()
+            .ForMember(dest =>
+                dest.AnguloMinimoStr,
+                opt => opt.MapFrom(mf => mf.RangoAnguloMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.AnguloMaximoStr,
+                opt => opt.MapFrom(mf => mf.RangoAnguloMaximo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.AlturaMinimoStr,
+                opt => opt.MapFrom(mf => mf.RangoAlturaMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.AlturaMaximoStr,
+                opt => opt.MapFrom(mf => mf.RangoAlturaMaximo.FromDotToComma()))
+            .ForMember(dest => dest.RecetaFormacionId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore());
+}
+
+public class RecetaFormacionValorResponseMapper : Profile
+{
+    public RecetaFormacionValorResponseMapper() =>
+        CreateMap<RecetaFormacionValor, RecetaFormacionValorResponse>()
+            .ForMember(dest => dest.RecetaFormacionValorId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFormacion, act => act.Ignore());
 }

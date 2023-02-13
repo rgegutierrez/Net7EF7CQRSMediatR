@@ -17,6 +17,7 @@ public class CreateRecetaFabricacionCommand : IRequest
     public List<RecetaLineaMaquinaRequest> RecetaLineaMaquina { get; set; }
     public List<RecetaProductoQuimicoRequest> RecetaProductoQuimico { get; set; }
     public List<RecetaTiroMaquinaRequest> RecetaTiroMaquina { get; set; }
+    public List<RecetaFormacionRequest> RecetaFormacion { get; set; }
 }
 
 public class RecetaLineaProduccionRequest : RecetaLineaProduccion
@@ -60,6 +61,16 @@ public class RecetaProductoQuimicoRequest : RecetaProductoQuimico
 }
 
 public class RecetaTiroMaquinaRequest : RecetaTiroMaquina
+{
+
+}
+
+public class RecetaFormacionRequest : RecetaFormacion
+{
+    public List<RecetaFormacionValorRequest> Valores { get; set; }
+}
+
+public class RecetaFormacionValorRequest : RecetaFormacionValor
 {
 
 }
@@ -135,6 +146,14 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
         // TIRO MAQUINA
         _context.RecetasTiroMaquina.RemoveRange(
             _context.RecetasTiroMaquina.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
+        await _context.SaveChangesAsync();
+
+        // FORMACION
+        _context.RecetasFormacion.RemoveRange(
+            _context.RecetasFormacion.Where(
                 o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
                 )
             );
@@ -219,6 +238,23 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             rTiroMaquina.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
             _context.RecetasTiroMaquina.Add(rTiroMaquina);
             await _context.SaveChangesAsync();
+        }
+
+        // FORMACION
+        foreach (var itemFormacion in request.RecetaFormacion)
+        {
+            var rFormacion = _mapper.Map<RecetaFormacion>(itemFormacion);
+            rFormacion.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasFormacion.Add(rFormacion);
+            await _context.SaveChangesAsync();
+
+            foreach (var itemValor in itemFormacion.Valores.OrderBy(o => o.Foil))
+            {
+                var rFormacionValor = _mapper.Map<RecetaFormacionValor>(itemValor);
+                rFormacionValor.RecetaFormacionId = rFormacion.RecetaFormacionId;
+                _context.RecetasFormacionValor.Add(rFormacionValor);
+                await _context.SaveChangesAsync();
+            }
         }
 
         return Unit.Value;
