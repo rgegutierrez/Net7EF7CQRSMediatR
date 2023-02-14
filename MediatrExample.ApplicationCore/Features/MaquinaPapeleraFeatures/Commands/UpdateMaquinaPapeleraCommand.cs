@@ -56,22 +56,6 @@ public class UpdateMaquinaPapeleraCommandHandler : IRequestHandler<UpdateMaquina
 
         if (updObj.Estado != oObj.Estado)
         {
-            if (updObj.Estado == false)
-            {
-                oObj.Orden = 0;
-            }
-            else
-            {
-                try
-                {
-                    oObj.Orden = (from item in _context.MaquinasPapeleras select item.Orden).Max();
-                    oObj.Orden += 1;
-                }
-                catch (Exception)
-                {
-
-                }
-            }
             oObj.Estado = updObj.Estado;
         }
 
