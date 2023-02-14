@@ -8,6 +8,7 @@ public class RecetaProductoQuimico
     public int RecetaProductoQuimicoId { get; set; }
     public int RecetaFabricacionId { get; set; }
     public RecetaFabricacion RecetaFabricacion { get; set; }
+    public int ProductoQuimicoId { get; set; }
     public string CodigoSap { get; set; } = default!;
     public string NombreVariable { get; set; } = default!;
     public string UnidadMedida { get; set; } = default!;

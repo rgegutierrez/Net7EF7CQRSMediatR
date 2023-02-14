@@ -9,6 +9,7 @@ public class RecetaFormacion
     public int RecetaFormacionId { get; set; }
     public int RecetaFabricacionId { get; set; }
     public RecetaFabricacion RecetaFabricacion { get; set; }
+    public int FormacionId { get; set; }
     public string NombreVariable { get; set; } = default!;
     public string UnidadMedidaAngulo { get; set; } = default!;
     public decimal RangoAnguloMinimo { get; set; }

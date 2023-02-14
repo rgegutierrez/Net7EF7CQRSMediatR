@@ -9,6 +9,7 @@ public class RecetaTiroMaquina
     public int RecetaTiroMaquinaId { get; set; }
     public int RecetaFabricacionId { get; set; }
     public RecetaFabricacion RecetaFabricacion { get; set; }
+    public int TiroMaquinaId { get; set; }
     public string NombreVariable { get; set; } = default!;
     public string UnidadMedida { get; set; } = default!;
     public decimal ValorMinimo { get; set; }

@@ -766,6 +766,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Property<bool>("Obligatoria")
                         .HasColumnType("bit");
 
+                    b.Property<int>("ProductoQuimicoId")
+                        .HasColumnType("int");
+
                     b.Property<int>("RecetaFabricacionId")
                         .HasColumnType("int");
 
@@ -822,6 +825,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaFormacionId"));
+
+                    b.Property<int>("FormacionId")
+                        .HasColumnType("int");
 
                     b.Property<string>("NombreVariable")
                         .IsRequired()
@@ -906,6 +912,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int>("RecetaFabricacionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TiroMaquinaId")
                         .HasColumnType("int");
 
                     b.Property<string>("UnidadMedida")
