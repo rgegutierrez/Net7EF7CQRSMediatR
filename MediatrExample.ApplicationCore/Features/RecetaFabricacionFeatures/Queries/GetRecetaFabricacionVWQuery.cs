@@ -77,6 +77,10 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
             .AsNoTracking()
             .ProjectTo<FormacionResponse>(_mapper.ConfigurationProvider)
             .OrderBy(o => o.NombreVariable).ToList();
+        response.LstTipoIndicadorVacio = _context.TipoIndicadoresVacio
+            .AsNoTracking()
+            .ProjectTo<TipoIndicadorVacioResponse>(_mapper.ConfigurationProvider)
+            .OrderBy(o => o.NombreVariable).ToList();
 
         // LINEA PRODUCCIÓN - MATERIA PRIMA
         var recetaLineaProduccion = _context.RecetasLineaProduccion.Where(
@@ -208,6 +212,7 @@ public class GetRecetaFabricacionVWQueryResponse
     public List<ProductoQuimicoResponse> LstProductoQuimico { get; set; }
     public List<TiroMaquinaResponse> LstTiroMaquina { get; set; }
     public List<FormacionResponse> LstFormacion { get; set; }
+    public List<TipoIndicadorVacioResponse> LstTipoIndicadorVacio { get; set; }
     public List<RecetaLineaProduccionResponse> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaMaquinaResponse> RecetaLineaMaquina { get; set; }
     public List<RecetaLineaPreparacionResponse> RecetaLineaPreparacion { get; set; }
@@ -242,6 +247,11 @@ public class FormacionResponse : Formacion
     public string AnguloMaximoStr { get; set; } = default!;
     public string AlturaMinimoStr { get; set; } = default!;
     public string AlturaMaximoStr { get; set; } = default!;
+}
+
+public class TipoIndicadorVacioResponse : TipoIndicadorVacio
+{
+
 }
 
 public class RecetaLineaProduccionResponse : RecetaLineaProduccion
@@ -385,6 +395,12 @@ public class FormacionResponseMapper : Profile
             .ForMember(dest =>
                 dest.AlturaMaximoStr,
                 opt => opt.MapFrom(mf => mf.RangoAlturaMaximo.FromDotToComma()));
+}
+
+public class TipoIndicadorVacioResponseMapper : Profile
+{
+    public TipoIndicadorVacioResponseMapper() =>
+        CreateMap<TipoIndicadorVacio, TipoIndicadorVacioResponse>();
 }
 
 public class GetRecetaFabricacionVWQueryProfile : Profile
