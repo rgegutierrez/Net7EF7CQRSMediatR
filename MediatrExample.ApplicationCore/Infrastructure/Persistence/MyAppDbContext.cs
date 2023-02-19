@@ -47,6 +47,8 @@ public class MyAppDbContext : DbContext
     public DbSet<RecetaTiroMaquina> RecetasTiroMaquina => Set<RecetaTiroMaquina>();
     public DbSet<RecetaFormacion> RecetasFormacion => Set<RecetaFormacion>();
     public DbSet<RecetaFormacionValor> RecetasFormacionValor => Set<RecetaFormacionValor>();
+    public DbSet<RecetaTipoIndicadorVacio> RecetasTipoIndicadorVacio => Set<RecetaTipoIndicadorVacio>();
+    public DbSet<RecetaIndicadorVacio> RecetasIndicadorVacio => Set<RecetaIndicadorVacio>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

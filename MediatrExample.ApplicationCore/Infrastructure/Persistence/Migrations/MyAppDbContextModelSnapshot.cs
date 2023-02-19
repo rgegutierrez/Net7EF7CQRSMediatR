@@ -513,6 +513,49 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.ToTable("RecetaFabricacion", "trzreceta");
                 });
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaIndicadorVacio", b =>
+                {
+                    b.Property<int>("RecetaIndicadorVacioId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaIndicadorVacioId"));
+
+                    b.Property<int>("IndicadorVacioId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Obligatoria")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RecetaTipoIndicadorVacioId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedida")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMaximo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMinimo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("RecetaIndicadorVacioId");
+
+                    b.HasIndex("IndicadorVacioId");
+
+                    b.HasIndex("RecetaTipoIndicadorVacioId");
+
+                    b.ToTable("RecetaIndicadorVacio", "trzreceta");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaLineaMaquina", b =>
                 {
                     b.Property<int>("RecetaLineaMaquinaId")
@@ -790,6 +833,33 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.HasIndex("RecetaFabricacionId");
 
                     b.ToTable("RecetaProductoQuimico", "trzreceta");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorVacio", b =>
+                {
+                    b.Property<int>("RecetaTipoIndicadorVacioId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaTipoIndicadorVacioId"));
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecetaFabricacionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoIndicadorVacioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RecetaTipoIndicadorVacioId");
+
+                    b.HasIndex("RecetaFabricacionId");
+
+                    b.HasIndex("TipoIndicadorVacioId");
+
+                    b.ToTable("RecetaTipoIndicadorVacio", "trzreceta");
                 });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaVariableFormula", b =>
@@ -1315,6 +1385,25 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Navigation("TipoReceta");
                 });
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaIndicadorVacio", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.IndicadorVacio", "IndicadorVacio")
+                        .WithMany()
+                        .HasForeignKey("IndicadorVacioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorVacio", "RecetaTipoIndicadorVacio")
+                        .WithMany()
+                        .HasForeignKey("RecetaTipoIndicadorVacioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IndicadorVacio");
+
+                    b.Navigation("RecetaTipoIndicadorVacio");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaLineaMaquina", b =>
                 {
                     b.HasOne("MediatrExample.ApplicationCore.Domain.LineaProduccion", "LineaProduccion")
@@ -1438,6 +1527,25 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("RecetaFabricacion");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorVacio", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.Receta.RecetaFabricacion", "RecetaFabricacion")
+                        .WithMany()
+                        .HasForeignKey("RecetaFabricacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.TipoIndicadorVacio", "TipoIndicadorVacio")
+                        .WithMany()
+                        .HasForeignKey("TipoIndicadorVacioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RecetaFabricacion");
+
+                    b.Navigation("TipoIndicadorVacio");
                 });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaVariableFormula", b =>

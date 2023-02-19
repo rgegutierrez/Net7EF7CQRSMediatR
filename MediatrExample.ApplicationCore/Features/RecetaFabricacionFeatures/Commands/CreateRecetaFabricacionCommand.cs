@@ -18,6 +18,7 @@ public class CreateRecetaFabricacionCommand : IRequest
     public List<RecetaProductoQuimicoRequest> RecetaProductoQuimico { get; set; }
     public List<RecetaTiroMaquinaRequest> RecetaTiroMaquina { get; set; }
     public List<RecetaFormacionRequest> RecetaFormacion { get; set; }
+    public List<RecetaTipoIndicadorVacioRequest> RecetaTipoIndicadorVacio { get; set; }
 }
 
 public class RecetaLineaProduccionRequest : RecetaLineaProduccion
@@ -71,6 +72,16 @@ public class RecetaFormacionRequest : RecetaFormacion
 }
 
 public class RecetaFormacionValorRequest : RecetaFormacionValor
+{
+
+}
+
+public class RecetaTipoIndicadorVacioRequest : RecetaTipoIndicadorVacio
+{
+    public List<RecetaIndicadorVacioRequest> RecetaIndicadorVacio { get; set; }
+}
+
+public class RecetaIndicadorVacioRequest : RecetaIndicadorVacio
 {
 
 }
@@ -154,6 +165,14 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
         // FORMACION
         _context.RecetasFormacion.RemoveRange(
             _context.RecetasFormacion.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
+        await _context.SaveChangesAsync();
+
+        // INDICADOR VACIO
+        _context.RecetasTipoIndicadorVacio.RemoveRange(
+            _context.RecetasTipoIndicadorVacio.Where(
                 o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
                 )
             );
@@ -257,6 +276,23 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             }
         }
 
+        // INDICADOR VACIO
+        foreach (var itemTipoIndicadorVacio in request.RecetaTipoIndicadorVacio)
+        {
+            var rTipoIndicadorVacio = _mapper.Map<RecetaTipoIndicadorVacio>(itemTipoIndicadorVacio);
+            rTipoIndicadorVacio.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasTipoIndicadorVacio.Add(rTipoIndicadorVacio);
+            await _context.SaveChangesAsync();
+
+            foreach (var itemIndicadorVacio in itemTipoIndicadorVacio.RecetaIndicadorVacio)
+            {
+                var rIndicadorVacio = _mapper.Map<RecetaIndicadorVacio>(itemIndicadorVacio);
+                rIndicadorVacio.RecetaTipoIndicadorVacioId = rTipoIndicadorVacio.RecetaTipoIndicadorVacioId;
+                _context.RecetasIndicadorVacio.Add(rIndicadorVacio);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         return Unit.Value;
     }
 }
@@ -328,6 +364,24 @@ public class RecetaVariableFormulaRequestMapper : Profile
         CreateMap<RecetaVariableFormulaRequest, RecetaVariableFormula>()
             .ForMember(dest => dest.RecetaVariableFormulaId, act => act.Ignore())
             .ForMember(dest => dest.RecetaMaquinaPapelera, act => act.Ignore());
+}
+
+public class RecetaTipoIndicadorVacioRequestMapper : Profile
+{
+    public RecetaTipoIndicadorVacioRequestMapper() =>
+        CreateMap<RecetaTipoIndicadorVacioRequest, RecetaTipoIndicadorVacio>()
+            .ForMember(dest => dest.RecetaTipoIndicadorVacioId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore())
+            .ForMember(dest => dest.TipoIndicadorVacio, act => act.Ignore());
+}
+
+public class RecetaIndicadorVacioRequestMapper : Profile
+{
+    public RecetaIndicadorVacioRequestMapper() =>
+        CreateMap<RecetaIndicadorVacioRequest, RecetaIndicadorVacio>()
+            .ForMember(dest => dest.RecetaIndicadorVacioId, act => act.Ignore())
+            .ForMember(dest => dest.IndicadorVacio, act => act.Ignore())
+            .ForMember(dest => dest.RecetaTipoIndicadorVacio, act => act.Ignore());
 }
 
 public class CreateRecetaFabricacionValidator : AbstractValidator<CreateRecetaFabricacionCommand>

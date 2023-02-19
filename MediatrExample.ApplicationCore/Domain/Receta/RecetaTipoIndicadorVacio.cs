@@ -1,0 +1,14 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MediatrExample.ApplicationCore.Domain.Receta;
+
+[Table("RecetaTipoIndicadorVacio", Schema = "trzreceta")]
+public class RecetaTipoIndicadorVacio
+{
+    public int RecetaTipoIndicadorVacioId { get; set; }
+    public int RecetaFabricacionId { get; set; }
+    public RecetaFabricacion? RecetaFabricacion { get; set; }
+    public int TipoIndicadorVacioId { get; set; }
+    public string NombreVariable { get; set; } = default!;
+    public TipoIndicadorVacio? TipoIndicadorVacio { get; set; }
+}

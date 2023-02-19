@@ -6,6 +6,7 @@ using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Domain.View;
+using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Commands;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -81,6 +82,15 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
             .AsNoTracking()
             .ProjectTo<TipoIndicadorVacioResponse>(_mapper.ConfigurationProvider)
             .OrderBy(o => o.NombreVariable).ToList();
+
+        foreach (var item in response.LstTipoIndicadorVacio)
+        {
+            item.LstIndicadorVacio = _context.IndicadoresVacio
+                .Where(o => o.Estado == true && o.TipoIndicadorVacioId == item.TipoIndicadorVacioId)
+                .AsNoTracking()
+                .ProjectTo<IndicadorVacioResponse>(_mapper.ConfigurationProvider)
+                .ToList();
+        }
 
         // LINEA PRODUCCIÓN - MATERIA PRIMA
         var recetaLineaProduccion = _context.RecetasLineaProduccion.Where(
@@ -170,6 +180,25 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
             recetaFormacionExt.Add(formacion);
         }
         response.RecetaFormacion = recetaFormacionExt;
+
+        // INDICADOR VACIO
+        var recetaTipoIndicadorVacio = _context.RecetasTipoIndicadorVacio.Where(
+            o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+            ).ToList();
+        List<RecetaTipoIndicadorVacioResponse> recetaTipoIndicadorVacioExt = new();
+        foreach (var itemTipoIndicadorVacio in recetaTipoIndicadorVacio)
+        {
+            var lstTipoIndicador = _mapper.Map<RecetaTipoIndicadorVacioResponse>(itemTipoIndicadorVacio);
+            lstTipoIndicador.RecetaIndicadorVacio = _context.RecetasIndicadorVacio
+                .Where(o => o.RecetaTipoIndicadorVacioId == itemTipoIndicadorVacio.RecetaTipoIndicadorVacioId)
+                .AsNoTracking()
+                .ProjectTo<RecetaIndicadorVacioResponse>(_mapper.ConfigurationProvider)
+                .ToList();
+
+            recetaTipoIndicadorVacioExt.Add(lstTipoIndicador);
+        }
+        response.RecetaTipoIndicadorVacio = recetaTipoIndicadorVacioExt;
+
         return response;
     }
 }
@@ -219,6 +248,7 @@ public class GetRecetaFabricacionVWQueryResponse
     public List<RecetaProductoQuimicoResponse> RecetaProductoQuimico { get; set; }
     public List<RecetaTiroMaquinaResponse> RecetaTiroMaquina { get; set; }
     public List<RecetaFormacionResponse> RecetaFormacion { get; set; }
+    public List<RecetaTipoIndicadorVacioResponse> RecetaTipoIndicadorVacio { get; set; }
 }
 
 public class MateriaPrimaResponse : MateriaPrima {
@@ -251,7 +281,13 @@ public class FormacionResponse : Formacion
 
 public class TipoIndicadorVacioResponse : TipoIndicadorVacio
 {
+    public List<IndicadorVacioResponse> LstIndicadorVacio { get; set; }
+}
 
+public class IndicadorVacioResponse : IndicadorVacio
+{
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
 }
 
 public class RecetaLineaProduccionResponse : RecetaLineaProduccion
@@ -331,6 +367,17 @@ public class RecetaFormacionValorResponse : RecetaFormacionValor
 
 }
 
+public class RecetaTipoIndicadorVacioResponse : RecetaTipoIndicadorVacio
+{
+    public List<RecetaIndicadorVacioResponse> RecetaIndicadorVacio { get; set; }
+}
+
+public class RecetaIndicadorVacioResponse : RecetaIndicadorVacio
+{
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
 public class MateriaPrimaResponseMapper : Profile
 {
     public MateriaPrimaResponseMapper() =>
@@ -401,6 +448,18 @@ public class TipoIndicadorVacioResponseMapper : Profile
 {
     public TipoIndicadorVacioResponseMapper() =>
         CreateMap<TipoIndicadorVacio, TipoIndicadorVacioResponse>();
+}
+
+public class IndicadorVacioResponseMapper : Profile
+{
+    public IndicadorVacioResponseMapper() =>
+        CreateMap<IndicadorVacio, IndicadorVacioResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
 }
 
 public class GetRecetaFabricacionVWQueryProfile : Profile
@@ -578,4 +637,28 @@ public class RecetaFormacionValorResponseMapper : Profile
         CreateMap<RecetaFormacionValor, RecetaFormacionValorResponse>()
             .ForMember(dest => dest.RecetaFormacionValorId, act => act.Ignore())
             .ForMember(dest => dest.RecetaFormacion, act => act.Ignore());
+}
+
+public class RecetaTipoIndicadorVacioResponseMapper : Profile
+{
+    public RecetaTipoIndicadorVacioResponseMapper() =>
+        CreateMap<RecetaTipoIndicadorVacio, RecetaTipoIndicadorVacioResponse>()
+            .ForMember(dest => dest.RecetaTipoIndicadorVacioId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore())
+            .ForMember(dest => dest.TipoIndicadorVacio, act => act.Ignore());
+}
+
+public class RecetaIndicadorVacioResponseMapper : Profile
+{
+    public RecetaIndicadorVacioResponseMapper() =>
+        CreateMap<RecetaIndicadorVacio, RecetaIndicadorVacioResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
+            .ForMember(dest => dest.RecetaIndicadorVacioId, act => act.Ignore())
+            .ForMember(dest => dest.IndicadorVacio, act => act.Ignore())
+            .ForMember(dest => dest.RecetaTipoIndicadorVacio, act => act.Ignore());
 }
