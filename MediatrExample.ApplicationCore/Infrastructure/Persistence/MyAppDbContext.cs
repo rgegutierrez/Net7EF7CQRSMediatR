@@ -49,6 +49,10 @@ public class MyAppDbContext : DbContext
     public DbSet<RecetaFormacionValor> RecetasFormacionValor => Set<RecetaFormacionValor>();
     public DbSet<RecetaTipoIndicadorVacio> RecetasTipoIndicadorVacio => Set<RecetaTipoIndicadorVacio>();
     public DbSet<RecetaIndicadorVacio> RecetasIndicadorVacio => Set<RecetaIndicadorVacio>();
+    public DbSet<RecetaTipoIndicadorPrensa> RecetasTipoIndicadorPrensa => Set<RecetaTipoIndicadorPrensa>();
+    public DbSet<RecetaIndicadorPrensa> RecetasIndicadorPrensa => Set<RecetaIndicadorPrensa>();
+    public DbSet<RecetaTipoIndicadorSecador> RecetasTipoIndicadorSecador => Set<RecetaTipoIndicadorSecador>();
+    public DbSet<RecetaIndicadorSecador> RecetasIndicadorSecador => Set<RecetaIndicadorSecador>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

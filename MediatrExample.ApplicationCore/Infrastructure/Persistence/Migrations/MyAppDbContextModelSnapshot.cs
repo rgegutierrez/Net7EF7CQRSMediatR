@@ -513,6 +513,92 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.ToTable("RecetaFabricacion", "trzreceta");
                 });
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaIndicadorPrensa", b =>
+                {
+                    b.Property<int>("RecetaIndicadorPrensaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaIndicadorPrensaId"));
+
+                    b.Property<int>("IndicadorPrensaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Obligatoria")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RecetaTipoIndicadorPrensaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedida")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMaximo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMinimo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("RecetaIndicadorPrensaId");
+
+                    b.HasIndex("IndicadorPrensaId");
+
+                    b.HasIndex("RecetaTipoIndicadorPrensaId");
+
+                    b.ToTable("RecetaIndicadorPrensa", "trzreceta");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaIndicadorSecador", b =>
+                {
+                    b.Property<int>("RecetaIndicadorSecadorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaIndicadorSecadorId"));
+
+                    b.Property<int>("IndicadorSecadorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Obligatoria")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RecetaTipoIndicadorSecadorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedida")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMaximo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorMinimo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("RecetaIndicadorSecadorId");
+
+                    b.HasIndex("IndicadorSecadorId");
+
+                    b.HasIndex("RecetaTipoIndicadorSecadorId");
+
+                    b.ToTable("RecetaIndicadorSecador", "trzreceta");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaIndicadorVacio", b =>
                 {
                     b.Property<int>("RecetaIndicadorVacioId")
@@ -835,6 +921,74 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.ToTable("RecetaProductoQuimico", "trzreceta");
                 });
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorPrensa", b =>
+                {
+                    b.Property<int>("RecetaTipoIndicadorPrensaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaTipoIndicadorPrensaId"));
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Orden")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecetaFabricacionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoIndicadorPrensaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedidad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RecetaTipoIndicadorPrensaId");
+
+                    b.HasIndex("RecetaFabricacionId");
+
+                    b.HasIndex("TipoIndicadorPrensaId");
+
+                    b.ToTable("RecetaTipoIndicadorPrensa", "trzreceta");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorSecador", b =>
+                {
+                    b.Property<int>("RecetaTipoIndicadorSecadorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaTipoIndicadorSecadorId"));
+
+                    b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Orden")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecetaFabricacionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoIndicadorSecadorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedidad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RecetaTipoIndicadorSecadorId");
+
+                    b.HasIndex("RecetaFabricacionId");
+
+                    b.HasIndex("TipoIndicadorSecadorId");
+
+                    b.ToTable("RecetaTipoIndicadorSecador", "trzreceta");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorVacio", b =>
                 {
                     b.Property<int>("RecetaTipoIndicadorVacioId")
@@ -847,11 +1001,18 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Orden")
+                        .HasColumnType("int");
+
                     b.Property<int>("RecetaFabricacionId")
                         .HasColumnType("int");
 
                     b.Property<int>("TipoIndicadorVacioId")
                         .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedidad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecetaTipoIndicadorVacioId");
 
@@ -1019,6 +1180,13 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Orden")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedida")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("TipoIndicadorPrensaId");
 
                     b.ToTable("TipoIndicadorPrensa", "trzreceta");
@@ -1036,6 +1204,13 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Orden")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedida")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("TipoIndicadorSecadorId");
 
                     b.ToTable("TipoIndicadorSecador", "trzreceta");
@@ -1050,6 +1225,13 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoIndicadorVacioId"));
 
                     b.Property<string>("NombreVariable")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Orden")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnidadMedida")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1385,6 +1567,44 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Navigation("TipoReceta");
                 });
 
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaIndicadorPrensa", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.IndicadorPrensa", "IndicadorPrensa")
+                        .WithMany()
+                        .HasForeignKey("IndicadorPrensaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorPrensa", "RecetaTipoIndicadorPrensa")
+                        .WithMany()
+                        .HasForeignKey("RecetaTipoIndicadorPrensaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IndicadorPrensa");
+
+                    b.Navigation("RecetaTipoIndicadorPrensa");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaIndicadorSecador", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.IndicadorSecador", "IndicadorSecador")
+                        .WithMany()
+                        .HasForeignKey("IndicadorSecadorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorSecador", "RecetaTipoIndicadorSecador")
+                        .WithMany()
+                        .HasForeignKey("RecetaTipoIndicadorSecadorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IndicadorSecador");
+
+                    b.Navigation("RecetaTipoIndicadorSecador");
+                });
+
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaIndicadorVacio", b =>
                 {
                     b.HasOne("MediatrExample.ApplicationCore.Domain.IndicadorVacio", "IndicadorVacio")
@@ -1527,6 +1747,44 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("RecetaFabricacion");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorPrensa", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.Receta.RecetaFabricacion", "RecetaFabricacion")
+                        .WithMany()
+                        .HasForeignKey("RecetaFabricacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.TipoIndicadorPrensa", "TipoIndicadorPrensa")
+                        .WithMany()
+                        .HasForeignKey("TipoIndicadorPrensaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RecetaFabricacion");
+
+                    b.Navigation("TipoIndicadorPrensa");
+                });
+
+            modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorSecador", b =>
+                {
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.Receta.RecetaFabricacion", "RecetaFabricacion")
+                        .WithMany()
+                        .HasForeignKey("RecetaFabricacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediatrExample.ApplicationCore.Domain.TipoIndicadorSecador", "TipoIndicadorSecador")
+                        .WithMany()
+                        .HasForeignKey("TipoIndicadorSecadorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RecetaFabricacion");
+
+                    b.Navigation("TipoIndicadorSecador");
                 });
 
             modelBuilder.Entity("MediatrExample.ApplicationCore.Domain.Receta.RecetaTipoIndicadorVacio", b =>

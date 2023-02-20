@@ -11,4 +11,6 @@ public class RecetaTipoIndicadorVacio
     public int TipoIndicadorVacioId { get; set; }
     public string NombreVariable { get; set; } = default!;
     public TipoIndicadorVacio? TipoIndicadorVacio { get; set; }
+    public string UnidadMedidad { get; set; } = default!;
+    public int? Orden { get; set; }
 }

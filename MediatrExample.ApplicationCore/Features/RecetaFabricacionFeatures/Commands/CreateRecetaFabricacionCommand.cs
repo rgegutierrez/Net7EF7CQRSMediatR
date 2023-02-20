@@ -19,6 +19,8 @@ public class CreateRecetaFabricacionCommand : IRequest
     public List<RecetaTiroMaquinaRequest> RecetaTiroMaquina { get; set; }
     public List<RecetaFormacionRequest> RecetaFormacion { get; set; }
     public List<RecetaTipoIndicadorVacioRequest> RecetaTipoIndicadorVacio { get; set; }
+    public List<RecetaTipoIndicadorPrensaRequest> RecetaTipoIndicadorPrensa { get; set; }
+    public List<RecetaTipoIndicadorSecadorRequest> RecetaTipoIndicadorSecador { get; set; }
 }
 
 public class RecetaLineaProduccionRequest : RecetaLineaProduccion
@@ -82,6 +84,26 @@ public class RecetaTipoIndicadorVacioRequest : RecetaTipoIndicadorVacio
 }
 
 public class RecetaIndicadorVacioRequest : RecetaIndicadorVacio
+{
+
+}
+
+public class RecetaTipoIndicadorPrensaRequest : RecetaTipoIndicadorPrensa
+{
+    public List<RecetaIndicadorPrensaRequest> RecetaIndicadorPrensa { get; set; }
+}
+
+public class RecetaIndicadorPrensaRequest : RecetaIndicadorPrensa
+{
+
+}
+
+public class RecetaTipoIndicadorSecadorRequest : RecetaTipoIndicadorSecador
+{
+    public List<RecetaIndicadorSecadorRequest> RecetaIndicadorSecador { get; set; }
+}
+
+public class RecetaIndicadorSecadorRequest : RecetaIndicadorSecador
 {
 
 }
@@ -170,9 +192,17 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             );
         await _context.SaveChangesAsync();
 
-        // INDICADOR VACIO
-        _context.RecetasTipoIndicadorVacio.RemoveRange(
-            _context.RecetasTipoIndicadorVacio.Where(
+        // INDICADOR PRENSA
+        _context.RecetasTipoIndicadorPrensa.RemoveRange(
+            _context.RecetasTipoIndicadorPrensa.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
+        await _context.SaveChangesAsync();
+
+        // INDICADOR SECADOR
+        _context.RecetasTipoIndicadorSecador.RemoveRange(
+            _context.RecetasTipoIndicadorSecador.Where(
                 o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
                 )
             );
@@ -293,6 +323,40 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             }
         }
 
+        // INDICADOR PRENSA
+        foreach (var itemTipoIndicadorPrensa in request.RecetaTipoIndicadorPrensa)
+        {
+            var rTipoIndicadorPrensa = _mapper.Map<RecetaTipoIndicadorPrensa>(itemTipoIndicadorPrensa);
+            rTipoIndicadorPrensa.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasTipoIndicadorPrensa.Add(rTipoIndicadorPrensa);
+            await _context.SaveChangesAsync();
+
+            foreach (var itemIndicadorPrensa in itemTipoIndicadorPrensa.RecetaIndicadorPrensa)
+            {
+                var rIndicadorPrensa = _mapper.Map<RecetaIndicadorPrensa>(itemIndicadorPrensa);
+                rIndicadorPrensa.RecetaTipoIndicadorPrensaId = rTipoIndicadorPrensa.RecetaTipoIndicadorPrensaId;
+                _context.RecetasIndicadorPrensa.Add(rIndicadorPrensa);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        // INDICADOR SECADOR
+        foreach (var itemTipoIndicadorSecador in request.RecetaTipoIndicadorSecador)
+        {
+            var rTipoIndicadorSecador = _mapper.Map<RecetaTipoIndicadorSecador>(itemTipoIndicadorSecador);
+            rTipoIndicadorSecador.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasTipoIndicadorSecador.Add(rTipoIndicadorSecador);
+            await _context.SaveChangesAsync();
+
+            foreach (var itemIndicadorSecador in itemTipoIndicadorSecador.RecetaIndicadorSecador)
+            {
+                var rIndicadorSecador = _mapper.Map<RecetaIndicadorSecador>(itemIndicadorSecador);
+                rIndicadorSecador.RecetaTipoIndicadorSecadorId = rTipoIndicadorSecador.RecetaTipoIndicadorSecadorId;
+                _context.RecetasIndicadorSecador.Add(rIndicadorSecador);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         return Unit.Value;
     }
 }
@@ -382,6 +446,42 @@ public class RecetaIndicadorVacioRequestMapper : Profile
             .ForMember(dest => dest.RecetaIndicadorVacioId, act => act.Ignore())
             .ForMember(dest => dest.IndicadorVacio, act => act.Ignore())
             .ForMember(dest => dest.RecetaTipoIndicadorVacio, act => act.Ignore());
+}
+
+public class RecetaTipoIndicadorPrensaRequestMapper : Profile
+{
+    public RecetaTipoIndicadorPrensaRequestMapper() =>
+        CreateMap<RecetaTipoIndicadorPrensaRequest, RecetaTipoIndicadorPrensa>()
+            .ForMember(dest => dest.RecetaTipoIndicadorPrensaId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore())
+            .ForMember(dest => dest.TipoIndicadorPrensa, act => act.Ignore());
+}
+
+public class RecetaIndicadorPrensaRequestMapper : Profile
+{
+    public RecetaIndicadorPrensaRequestMapper() =>
+        CreateMap<RecetaIndicadorPrensaRequest, RecetaIndicadorPrensa>()
+            .ForMember(dest => dest.RecetaIndicadorPrensaId, act => act.Ignore())
+            .ForMember(dest => dest.IndicadorPrensa, act => act.Ignore())
+            .ForMember(dest => dest.RecetaTipoIndicadorPrensa, act => act.Ignore());
+}
+
+public class RecetaTipoIndicadorSecadorRequestMapper : Profile
+{
+    public RecetaTipoIndicadorSecadorRequestMapper() =>
+        CreateMap<RecetaTipoIndicadorSecadorRequest, RecetaTipoIndicadorSecador>()
+            .ForMember(dest => dest.RecetaTipoIndicadorSecadorId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore())
+            .ForMember(dest => dest.TipoIndicadorSecador, act => act.Ignore());
+}
+
+public class RecetaIndicadorSecadorRequestMapper : Profile
+{
+    public RecetaIndicadorSecadorRequestMapper() =>
+        CreateMap<RecetaIndicadorSecadorRequest, RecetaIndicadorSecador>()
+            .ForMember(dest => dest.RecetaIndicadorSecadorId, act => act.Ignore())
+            .ForMember(dest => dest.IndicadorSecador, act => act.Ignore())
+            .ForMember(dest => dest.RecetaTipoIndicadorSecador, act => act.Ignore());
 }
 
 public class CreateRecetaFabricacionValidator : AbstractValidator<CreateRecetaFabricacionCommand>

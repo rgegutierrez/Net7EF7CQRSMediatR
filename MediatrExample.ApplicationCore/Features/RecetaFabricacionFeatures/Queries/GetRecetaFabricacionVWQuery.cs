@@ -6,7 +6,6 @@ using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.Receta;
 using MediatrExample.ApplicationCore.Domain.View;
-using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Commands;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -89,6 +88,34 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
                 .Where(o => o.Estado == true && o.TipoIndicadorVacioId == item.TipoIndicadorVacioId)
                 .AsNoTracking()
                 .ProjectTo<IndicadorVacioResponse>(_mapper.ConfigurationProvider)
+                .ToList();
+        }
+
+        response.LstTipoIndicadorPrensa = _context.TipoIndicadoresPrensa
+            .AsNoTracking()
+            .ProjectTo<TipoIndicadorPrensaResponse>(_mapper.ConfigurationProvider)
+            .OrderBy(o => o.NombreVariable).ToList();
+
+        foreach (var item in response.LstTipoIndicadorPrensa)
+        {
+            item.LstIndicadorPrensa = _context.IndicadoresPrensa
+                .Where(o => o.Estado == true && o.TipoIndicadorPrensaId == item.TipoIndicadorPrensaId)
+                .AsNoTracking()
+                .ProjectTo<IndicadorPrensaResponse>(_mapper.ConfigurationProvider)
+                .ToList();
+        }
+
+        response.LstTipoIndicadorSecador = _context.TipoIndicadoresSecador
+            .AsNoTracking()
+            .ProjectTo<TipoIndicadorSecadorResponse>(_mapper.ConfigurationProvider)
+            .OrderBy(o => o.NombreVariable).ToList();
+
+        foreach (var item in response.LstTipoIndicadorSecador)
+        {
+            item.LstIndicadorSecador = _context.IndicadoresSecador
+                .Where(o => o.Estado == true && o.TipoIndicadorSecadorId == item.TipoIndicadorSecadorId)
+                .AsNoTracking()
+                .ProjectTo<IndicadorSecadorResponse>(_mapper.ConfigurationProvider)
                 .ToList();
         }
 
@@ -199,6 +226,42 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         }
         response.RecetaTipoIndicadorVacio = recetaTipoIndicadorVacioExt;
 
+        // INDICADOR PRENSA
+        var recetaTipoIndicadorPrensa = _context.RecetasTipoIndicadorPrensa.Where(
+            o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+            ).ToList();
+        List<RecetaTipoIndicadorPrensaResponse> recetaTipoIndicadorPrensaExt = new();
+        foreach (var itemTipoIndicadorPrensa in recetaTipoIndicadorPrensa)
+        {
+            var lstTipoIndicador = _mapper.Map<RecetaTipoIndicadorPrensaResponse>(itemTipoIndicadorPrensa);
+            lstTipoIndicador.RecetaIndicadorPrensa = _context.RecetasIndicadorPrensa
+                .Where(o => o.RecetaTipoIndicadorPrensaId == itemTipoIndicadorPrensa.RecetaTipoIndicadorPrensaId)
+                .AsNoTracking()
+                .ProjectTo<RecetaIndicadorPrensaResponse>(_mapper.ConfigurationProvider)
+                .ToList();
+
+            recetaTipoIndicadorPrensaExt.Add(lstTipoIndicador);
+        }
+        response.RecetaTipoIndicadorPrensa = recetaTipoIndicadorPrensaExt;
+
+        // INDICADOR SECADOR
+        var recetaTipoIndicadorSecador = _context.RecetasTipoIndicadorSecador.Where(
+            o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+            ).ToList();
+        List<RecetaTipoIndicadorSecadorResponse> recetaTipoIndicadorSecadorExt = new();
+        foreach (var itemTipoIndicadorSecador in recetaTipoIndicadorSecador)
+        {
+            var lstTipoIndicador = _mapper.Map<RecetaTipoIndicadorSecadorResponse>(itemTipoIndicadorSecador);
+            lstTipoIndicador.RecetaIndicadorSecador = _context.RecetasIndicadorSecador
+                .Where(o => o.RecetaTipoIndicadorSecadorId == itemTipoIndicadorSecador.RecetaTipoIndicadorSecadorId)
+                .AsNoTracking()
+                .ProjectTo<RecetaIndicadorSecadorResponse>(_mapper.ConfigurationProvider)
+                .ToList();
+
+            recetaTipoIndicadorSecadorExt.Add(lstTipoIndicador);
+        }
+        response.RecetaTipoIndicadorSecador = recetaTipoIndicadorSecadorExt;
+
         return response;
     }
 }
@@ -242,6 +305,8 @@ public class GetRecetaFabricacionVWQueryResponse
     public List<TiroMaquinaResponse> LstTiroMaquina { get; set; }
     public List<FormacionResponse> LstFormacion { get; set; }
     public List<TipoIndicadorVacioResponse> LstTipoIndicadorVacio { get; set; }
+    public List<TipoIndicadorPrensaResponse> LstTipoIndicadorPrensa { get; set; }
+    public List<TipoIndicadorSecadorResponse> LstTipoIndicadorSecador { get; set; }
     public List<RecetaLineaProduccionResponse> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaMaquinaResponse> RecetaLineaMaquina { get; set; }
     public List<RecetaLineaPreparacionResponse> RecetaLineaPreparacion { get; set; }
@@ -249,6 +314,8 @@ public class GetRecetaFabricacionVWQueryResponse
     public List<RecetaTiroMaquinaResponse> RecetaTiroMaquina { get; set; }
     public List<RecetaFormacionResponse> RecetaFormacion { get; set; }
     public List<RecetaTipoIndicadorVacioResponse> RecetaTipoIndicadorVacio { get; set; }
+    public List<RecetaTipoIndicadorPrensaResponse> RecetaTipoIndicadorPrensa { get; set; }
+    public List<RecetaTipoIndicadorSecadorResponse> RecetaTipoIndicadorSecador { get; set; }
 }
 
 public class MateriaPrimaResponse : MateriaPrima {
@@ -285,6 +352,28 @@ public class TipoIndicadorVacioResponse : TipoIndicadorVacio
 }
 
 public class IndicadorVacioResponse : IndicadorVacio
+{
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
+public class TipoIndicadorPrensaResponse : TipoIndicadorPrensa
+{
+    public List<IndicadorPrensaResponse> LstIndicadorPrensa { get; set; }
+}
+
+public class IndicadorPrensaResponse : IndicadorPrensa
+{
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
+public class TipoIndicadorSecadorResponse : TipoIndicadorSecador
+{
+    public List<IndicadorSecadorResponse> LstIndicadorSecador { get; set; }
+}
+
+public class IndicadorSecadorResponse : IndicadorSecador
 {
     public string ValorMinimoStr { get; set; } = default!;
     public string ValorMaximoStr { get; set; } = default!;
@@ -378,6 +467,28 @@ public class RecetaIndicadorVacioResponse : RecetaIndicadorVacio
     public string ValorMaximoStr { get; set; } = default!;
 }
 
+public class RecetaTipoIndicadorPrensaResponse : RecetaTipoIndicadorPrensa
+{
+    public List<RecetaIndicadorPrensaResponse> RecetaIndicadorPrensa { get; set; }
+}
+
+public class RecetaIndicadorPrensaResponse : RecetaIndicadorPrensa
+{
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
+public class RecetaTipoIndicadorSecadorResponse : RecetaTipoIndicadorSecador
+{
+    public List<RecetaIndicadorSecadorResponse> RecetaIndicadorSecador { get; set; }
+}
+
+public class RecetaIndicadorSecadorResponse : RecetaIndicadorSecador
+{
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
 public class MateriaPrimaResponseMapper : Profile
 {
     public MateriaPrimaResponseMapper() =>
@@ -454,6 +565,42 @@ public class IndicadorVacioResponseMapper : Profile
 {
     public IndicadorVacioResponseMapper() =>
         CreateMap<IndicadorVacio, IndicadorVacioResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
+}
+
+public class TipoIndicadorPrensaResponseMapper : Profile
+{
+    public TipoIndicadorPrensaResponseMapper() =>
+        CreateMap<TipoIndicadorPrensa, TipoIndicadorPrensaResponse>();
+}
+
+public class IndicadorPrensaResponseMapper : Profile
+{
+    public IndicadorPrensaResponseMapper() =>
+        CreateMap<IndicadorPrensa, IndicadorPrensaResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
+}
+
+public class TipoIndicadorSecadorResponseMapper : Profile
+{
+    public TipoIndicadorSecadorResponseMapper() =>
+        CreateMap<TipoIndicadorSecador, TipoIndicadorSecadorResponse>();
+}
+
+public class IndicadorSecadorResponseMapper : Profile
+{
+    public IndicadorSecadorResponseMapper() =>
+        CreateMap<IndicadorSecador, IndicadorSecadorResponse>()
             .ForMember(dest =>
                 dest.ValorMinimoStr,
                 opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
@@ -661,4 +808,52 @@ public class RecetaIndicadorVacioResponseMapper : Profile
             .ForMember(dest => dest.RecetaIndicadorVacioId, act => act.Ignore())
             .ForMember(dest => dest.IndicadorVacio, act => act.Ignore())
             .ForMember(dest => dest.RecetaTipoIndicadorVacio, act => act.Ignore());
+}
+
+public class RecetaTipoIndicadorPrensaResponseMapper : Profile
+{
+    public RecetaTipoIndicadorPrensaResponseMapper() =>
+        CreateMap<RecetaTipoIndicadorPrensa, RecetaTipoIndicadorPrensaResponse>()
+            .ForMember(dest => dest.RecetaTipoIndicadorPrensaId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore())
+            .ForMember(dest => dest.TipoIndicadorPrensa, act => act.Ignore());
+}
+
+public class RecetaIndicadorPrensaResponseMapper : Profile
+{
+    public RecetaIndicadorPrensaResponseMapper() =>
+        CreateMap<RecetaIndicadorPrensa, RecetaIndicadorPrensaResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
+            .ForMember(dest => dest.RecetaIndicadorPrensaId, act => act.Ignore())
+            .ForMember(dest => dest.IndicadorPrensa, act => act.Ignore())
+            .ForMember(dest => dest.RecetaTipoIndicadorPrensa, act => act.Ignore());
+}
+
+public class RecetaTipoIndicadorSecadorResponseMapper : Profile
+{
+    public RecetaTipoIndicadorSecadorResponseMapper() =>
+        CreateMap<RecetaTipoIndicadorSecador, RecetaTipoIndicadorSecadorResponse>()
+            .ForMember(dest => dest.RecetaTipoIndicadorSecadorId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore())
+            .ForMember(dest => dest.TipoIndicadorSecador, act => act.Ignore());
+}
+
+public class RecetaIndicadorSecadorResponseMapper : Profile
+{
+    public RecetaIndicadorSecadorResponseMapper() =>
+        CreateMap<RecetaIndicadorSecador, RecetaIndicadorSecadorResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
+            .ForMember(dest => dest.RecetaIndicadorSecadorId, act => act.Ignore())
+            .ForMember(dest => dest.IndicadorSecador, act => act.Ignore())
+            .ForMember(dest => dest.RecetaTipoIndicadorSecador, act => act.Ignore());
 }
