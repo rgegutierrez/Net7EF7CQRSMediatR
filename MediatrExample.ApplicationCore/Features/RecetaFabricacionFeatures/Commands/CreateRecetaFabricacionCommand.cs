@@ -192,6 +192,14 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             );
         await _context.SaveChangesAsync();
 
+        // INDICADOR VACIO
+        _context.RecetasTipoIndicadorVacio.RemoveRange(
+            _context.RecetasTipoIndicadorVacio.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
+        await _context.SaveChangesAsync();
+
         // INDICADOR PRENSA
         _context.RecetasTipoIndicadorPrensa.RemoveRange(
             _context.RecetasTipoIndicadorPrensa.Where(

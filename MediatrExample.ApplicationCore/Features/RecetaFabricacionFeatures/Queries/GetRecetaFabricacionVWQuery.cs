@@ -80,7 +80,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         response.LstTipoIndicadorVacio = _context.TipoIndicadoresVacio
             .AsNoTracking()
             .ProjectTo<TipoIndicadorVacioResponse>(_mapper.ConfigurationProvider)
-            .OrderBy(o => o.NombreVariable).ToList();
+            .OrderBy(o => o.Orden).ToList();
 
         foreach (var item in response.LstTipoIndicadorVacio)
         {
@@ -94,7 +94,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         response.LstTipoIndicadorPrensa = _context.TipoIndicadoresPrensa
             .AsNoTracking()
             .ProjectTo<TipoIndicadorPrensaResponse>(_mapper.ConfigurationProvider)
-            .OrderBy(o => o.NombreVariable).ToList();
+            .OrderBy(o => o.Orden).ToList();
 
         foreach (var item in response.LstTipoIndicadorPrensa)
         {
@@ -108,7 +108,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         response.LstTipoIndicadorSecador = _context.TipoIndicadoresSecador
             .AsNoTracking()
             .ProjectTo<TipoIndicadorSecadorResponse>(_mapper.ConfigurationProvider)
-            .OrderBy(o => o.NombreVariable).ToList();
+            .OrderBy(o => o.Orden).ToList();
 
         foreach (var item in response.LstTipoIndicadorSecador)
         {
@@ -211,7 +211,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         // INDICADOR VACIO
         var recetaTipoIndicadorVacio = _context.RecetasTipoIndicadorVacio.Where(
             o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
-            ).ToList();
+            ).OrderBy(o => o.Orden).ToList();
         List<RecetaTipoIndicadorVacioResponse> recetaTipoIndicadorVacioExt = new();
         foreach (var itemTipoIndicadorVacio in recetaTipoIndicadorVacio)
         {
@@ -229,7 +229,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         // INDICADOR PRENSA
         var recetaTipoIndicadorPrensa = _context.RecetasTipoIndicadorPrensa.Where(
             o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
-            ).ToList();
+            ).OrderBy(o => o.Orden).ToList();
         List<RecetaTipoIndicadorPrensaResponse> recetaTipoIndicadorPrensaExt = new();
         foreach (var itemTipoIndicadorPrensa in recetaTipoIndicadorPrensa)
         {
@@ -247,7 +247,7 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         // INDICADOR SECADOR
         var recetaTipoIndicadorSecador = _context.RecetasTipoIndicadorSecador.Where(
             o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
-            ).ToList();
+            ).OrderBy(o => o.Orden).ToList();
         List<RecetaTipoIndicadorSecadorResponse> recetaTipoIndicadorSecadorExt = new();
         foreach (var itemTipoIndicadorSecador in recetaTipoIndicadorSecador)
         {

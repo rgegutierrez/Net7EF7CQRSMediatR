@@ -11,6 +11,7 @@ public class RecetaTipoIndicadorPrensa
     public int TipoIndicadorPrensaId { get; set; }
     public string NombreVariable { get; set; } = default!;
     public TipoIndicadorPrensa? TipoIndicadorPrensa { get; set; }
-    public string UnidadMedidad { get; set; } = default!;
+    public string? UnidadMedida { get; set; } = default!;
     public int? Orden { get; set; }
+    public bool? MostrarUnidad { get; set; }
 }

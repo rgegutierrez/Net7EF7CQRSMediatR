@@ -929,6 +929,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaTipoIndicadorPrensaId"));
 
+                    b.Property<bool?>("MostrarUnidad")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NombreVariable")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -942,8 +945,7 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Property<int>("TipoIndicadorPrensaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UnidadMedidad")
-                        .IsRequired()
+                    b.Property<string>("UnidadMedida")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecetaTipoIndicadorPrensaId");
@@ -963,6 +965,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaTipoIndicadorSecadorId"));
 
+                    b.Property<bool?>("MostrarUnidad")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NombreVariable")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -976,8 +981,7 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Property<int>("TipoIndicadorSecadorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UnidadMedidad")
-                        .IsRequired()
+                    b.Property<string>("UnidadMedida")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecetaTipoIndicadorSecadorId");
@@ -997,6 +1001,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaTipoIndicadorVacioId"));
 
+                    b.Property<bool?>("MostrarUnidad")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NombreVariable")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1010,8 +1017,7 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Property<int>("TipoIndicadorVacioId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UnidadMedidad")
-                        .IsRequired()
+                    b.Property<string>("UnidadMedida")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecetaTipoIndicadorVacioId");
@@ -1176,6 +1182,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoIndicadorPrensaId"));
 
+                    b.Property<bool?>("MostrarUnidad")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NombreVariable")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1184,7 +1193,6 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UnidadMedida")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TipoIndicadorPrensaId");
@@ -1200,6 +1208,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoIndicadorSecadorId"));
 
+                    b.Property<bool?>("MostrarUnidad")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NombreVariable")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1208,7 +1219,6 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UnidadMedida")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TipoIndicadorSecadorId");
@@ -1224,6 +1234,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoIndicadorVacioId"));
 
+                    b.Property<bool?>("MostrarUnidad")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NombreVariable")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1232,7 +1245,6 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UnidadMedida")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TipoIndicadorVacioId");
