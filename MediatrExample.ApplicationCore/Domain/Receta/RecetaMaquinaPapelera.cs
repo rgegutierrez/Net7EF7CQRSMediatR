@@ -12,7 +12,7 @@ public class RecetaMaquinaPapelera
     public MaquinaPapelera MaquinaPapelera { get; set; }
     public int Orden { get; set; }
     public string NombreVariable { get; set; } = default!;
-    public string UnidadMedida { get; set; } = default!;
+    public string? UnidadMedida { get; set; } = default!;
     public decimal? ValorMinimo { get; set; }
     public decimal? ValorMaximo { get; set; }
     public bool Obligatoria { get; set; }

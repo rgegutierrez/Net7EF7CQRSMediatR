@@ -119,6 +119,11 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
                 .ToList();
         }
 
+        response.LstValorFisicoPieMaquina = _context.ValoresFisicoPieMaquina.Where(o => o.Estado == true)
+            .AsNoTracking()
+            .ProjectTo<ValorFisicoPieMaquinaResponse>(_mapper.ConfigurationProvider)
+            .OrderBy(o => o.NombreVariable).ToList();
+
         // LINEA PRODUCCIÓN - MATERIA PRIMA
         var recetaLineaProduccion = _context.RecetasLineaProduccion.Where(
             o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
@@ -262,6 +267,13 @@ public class GetRecetaFabricacionVWQueryHandler : IRequestHandler<GetRecetaFabri
         }
         response.RecetaTipoIndicadorSecador = recetaTipoIndicadorSecadorExt;
 
+        // VALOR FISICO
+        response.RecetaValorFisicoPieMaquina = _context.RecetasValorFisicoPieMaquina.Where(
+            o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+            ).AsNoTracking()
+            .ProjectTo<RecetaValorFisicoPieMaquinaResponse>(_mapper.ConfigurationProvider)
+            .ToList();
+
         return response;
     }
 }
@@ -307,6 +319,7 @@ public class GetRecetaFabricacionVWQueryResponse
     public List<TipoIndicadorVacioResponse> LstTipoIndicadorVacio { get; set; }
     public List<TipoIndicadorPrensaResponse> LstTipoIndicadorPrensa { get; set; }
     public List<TipoIndicadorSecadorResponse> LstTipoIndicadorSecador { get; set; }
+    public List<ValorFisicoPieMaquinaResponse> LstValorFisicoPieMaquina { get; set; }
     public List<RecetaLineaProduccionResponse> RecetaLineaProduccion { get; set; }
     public List<RecetaLineaMaquinaResponse> RecetaLineaMaquina { get; set; }
     public List<RecetaLineaPreparacionResponse> RecetaLineaPreparacion { get; set; }
@@ -316,6 +329,7 @@ public class GetRecetaFabricacionVWQueryResponse
     public List<RecetaTipoIndicadorVacioResponse> RecetaTipoIndicadorVacio { get; set; }
     public List<RecetaTipoIndicadorPrensaResponse> RecetaTipoIndicadorPrensa { get; set; }
     public List<RecetaTipoIndicadorSecadorResponse> RecetaTipoIndicadorSecador { get; set; }
+    public List<RecetaValorFisicoPieMaquinaResponse> RecetaValorFisicoPieMaquina { get; set; }
 }
 
 public class MateriaPrimaResponse : MateriaPrima {
@@ -374,6 +388,12 @@ public class TipoIndicadorSecadorResponse : TipoIndicadorSecador
 }
 
 public class IndicadorSecadorResponse : IndicadorSecador
+{
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
+public class ValorFisicoPieMaquinaResponse : ValorFisicoPieMaquina
 {
     public string ValorMinimoStr { get; set; } = default!;
     public string ValorMaximoStr { get; set; } = default!;
@@ -484,6 +504,12 @@ public class RecetaTipoIndicadorSecadorResponse : RecetaTipoIndicadorSecador
 }
 
 public class RecetaIndicadorSecadorResponse : RecetaIndicadorSecador
+{
+    public string ValorMinimoStr { get; set; } = default!;
+    public string ValorMaximoStr { get; set; } = default!;
+}
+
+public class RecetaValorFisicoPieMaquinaResponse : RecetaValorFisicoPieMaquina
 {
     public string ValorMinimoStr { get; set; } = default!;
     public string ValorMaximoStr { get; set; } = default!;
@@ -601,6 +627,18 @@ public class IndicadorSecadorResponseMapper : Profile
 {
     public IndicadorSecadorResponseMapper() =>
         CreateMap<IndicadorSecador, IndicadorSecadorResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()));
+}
+
+public class ValorFisicoPieMaquinaResponseMapper : Profile
+{
+    public ValorFisicoPieMaquinaResponseMapper() =>
+        CreateMap<ValorFisicoPieMaquina, ValorFisicoPieMaquinaResponse>()
             .ForMember(dest =>
                 dest.ValorMinimoStr,
                 opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
@@ -856,4 +894,20 @@ public class RecetaIndicadorSecadorResponseMapper : Profile
             .ForMember(dest => dest.RecetaIndicadorSecadorId, act => act.Ignore())
             .ForMember(dest => dest.IndicadorSecador, act => act.Ignore())
             .ForMember(dest => dest.RecetaTipoIndicadorSecador, act => act.Ignore());
+}
+
+
+public class RecetaValorFisicoPieMaquinaResponseMapper : Profile
+{
+    public RecetaValorFisicoPieMaquinaResponseMapper() =>
+        CreateMap<RecetaValorFisicoPieMaquina, RecetaValorFisicoPieMaquinaResponse>()
+            .ForMember(dest =>
+                dest.ValorMinimoStr,
+                opt => opt.MapFrom(mf => mf.ValorMinimo.FromDotToComma()))
+            .ForMember(dest =>
+                dest.ValorMaximoStr,
+                opt => opt.MapFrom(mf => mf.ValorMaximo.FromDotToComma()))
+            .ForMember(dest => dest.RecetaValorFisicoPieMaquinaId, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore())
+            .ForMember(dest => dest.ValorFisicoPieMaquina, act => act.Ignore());
 }

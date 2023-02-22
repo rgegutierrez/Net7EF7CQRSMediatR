@@ -4,6 +4,7 @@ using MediatR;
 using MediatrExample.ApplicationCore.Common.Helpers;
 using MediatrExample.ApplicationCore.Domain;
 using MediatrExample.ApplicationCore.Domain.Receta;
+using MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Queries;
 using MediatrExample.ApplicationCore.Infrastructure.Persistence;
 
 namespace MediatrExample.ApplicationCore.Features.RecetaFabricacionFeatures.Commands;
@@ -21,6 +22,7 @@ public class CreateRecetaFabricacionCommand : IRequest
     public List<RecetaTipoIndicadorVacioRequest> RecetaTipoIndicadorVacio { get; set; }
     public List<RecetaTipoIndicadorPrensaRequest> RecetaTipoIndicadorPrensa { get; set; }
     public List<RecetaTipoIndicadorSecadorRequest> RecetaTipoIndicadorSecador { get; set; }
+    public List<RecetaValorFisicoPieMaquinaRequest> RecetaValorFisicoPieMaquina { get; set; }
 }
 
 public class RecetaLineaProduccionRequest : RecetaLineaProduccion
@@ -104,6 +106,11 @@ public class RecetaTipoIndicadorSecadorRequest : RecetaTipoIndicadorSecador
 }
 
 public class RecetaIndicadorSecadorRequest : RecetaIndicadorSecador
+{
+
+}
+
+public class RecetaValorFisicoPieMaquinaRequest : RecetaValorFisicoPieMaquina
 {
 
 }
@@ -211,6 +218,14 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
         // INDICADOR SECADOR
         _context.RecetasTipoIndicadorSecador.RemoveRange(
             _context.RecetasTipoIndicadorSecador.Where(
+                o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
+                )
+            );
+        await _context.SaveChangesAsync();
+
+        // VALOR FISICO
+        _context.RecetasValorFisicoPieMaquina.RemoveRange(
+            _context.RecetasValorFisicoPieMaquina.Where(
                 o => o.RecetaFabricacionId == request.RecetaFabricacionId.FromHashId()
                 )
             );
@@ -365,6 +380,15 @@ public class CreateRecetaFabricacionCommandHandler : IRequestHandler<CreateRecet
             }
         }
 
+        // VALOR FISICO
+        foreach (var itemValorFisico in request.RecetaValorFisicoPieMaquina)
+        {
+            var rValorFisico = _mapper.Map<RecetaValorFisicoPieMaquina>(itemValorFisico);
+            rValorFisico.RecetaFabricacionId = request.RecetaFabricacionId.FromHashId();
+            _context.RecetasValorFisicoPieMaquina.Add(rValorFisico);
+            await _context.SaveChangesAsync();
+        }
+
         return Unit.Value;
     }
 }
@@ -490,6 +514,15 @@ public class RecetaIndicadorSecadorRequestMapper : Profile
             .ForMember(dest => dest.RecetaIndicadorSecadorId, act => act.Ignore())
             .ForMember(dest => dest.IndicadorSecador, act => act.Ignore())
             .ForMember(dest => dest.RecetaTipoIndicadorSecador, act => act.Ignore());
+}
+
+public class RecetaValorFisicoPieMaquinaRequestMapper : Profile
+{
+    public RecetaValorFisicoPieMaquinaRequestMapper() =>
+        CreateMap<RecetaValorFisicoPieMaquinaRequest, RecetaValorFisicoPieMaquina>()
+            .ForMember(dest => dest.RecetaValorFisicoPieMaquinaId, act => act.Ignore())
+            .ForMember(dest => dest.ValorFisicoPieMaquina, act => act.Ignore())
+            .ForMember(dest => dest.RecetaFabricacion, act => act.Ignore());
 }
 
 public class CreateRecetaFabricacionValidator : AbstractValidator<CreateRecetaFabricacionCommand>
