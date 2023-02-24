@@ -35,6 +35,7 @@ public class UpdatePreparacionPastaCommandHandler : IRequestHandler<UpdatePrepar
         var updObj = _mapper.Map<PreparacionPasta>(request);
 
         var oObj = _context.PreparacionPastas.Find(updObj.PreparacionPastaId);
+        oObj.NombreVariable = updObj.NombreVariable;
         oObj.UnidadMedida = updObj.UnidadMedida;
         oObj.ValorMinimo = updObj.ValorMinimo;
         oObj.ValorMaximo = updObj.ValorMaximo;

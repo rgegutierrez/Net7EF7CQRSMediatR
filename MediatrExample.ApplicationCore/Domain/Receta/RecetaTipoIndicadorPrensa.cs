@@ -14,4 +14,5 @@ public class RecetaTipoIndicadorPrensa
     public string? UnidadMedida { get; set; } = default!;
     public int? Orden { get; set; }
     public bool? MostrarUnidad { get; set; }
+    public int? Factor { get; set; }
 }

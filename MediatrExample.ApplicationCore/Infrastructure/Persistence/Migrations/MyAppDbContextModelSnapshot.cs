@@ -927,6 +927,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaTipoIndicadorPrensaId"));
 
+                    b.Property<int?>("Factor")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("MostrarUnidad")
                         .HasColumnType("bit");
 
@@ -963,6 +966,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaTipoIndicadorSecadorId"));
 
+                    b.Property<int?>("Factor")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("MostrarUnidad")
                         .HasColumnType("bit");
 
@@ -998,6 +1004,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecetaTipoIndicadorVacioId"));
+
+                    b.Property<int?>("Factor")
+                        .HasColumnType("int");
 
                     b.Property<bool?>("MostrarUnidad")
                         .HasColumnType("bit");
@@ -1228,6 +1237,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoIndicadorPrensaId"));
 
+                    b.Property<int?>("Factor")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("MostrarUnidad")
                         .HasColumnType("bit");
 
@@ -1254,6 +1266,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoIndicadorSecadorId"));
 
+                    b.Property<int?>("Factor")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("MostrarUnidad")
                         .HasColumnType("bit");
 
@@ -1279,6 +1294,9 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoIndicadorVacioId"));
+
+                    b.Property<int?>("Factor")
+                        .HasColumnType("int");
 
                     b.Property<bool?>("MostrarUnidad")
                         .HasColumnType("bit");
