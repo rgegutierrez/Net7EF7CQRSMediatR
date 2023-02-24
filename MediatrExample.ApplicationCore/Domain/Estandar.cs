@@ -12,6 +12,6 @@ public class Estandar
     public ValorFisicoPieMaquina ValorFisicoPieMaquina { get; set; }
     public decimal ValorMinimo { get; set; }
     public decimal ValorPromedio { get; set; }
-    public decimal ValorMaximo { get; set; }
+    public decimal? ValorMaximo { get; set; }
 }
 

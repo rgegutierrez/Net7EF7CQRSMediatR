@@ -41,7 +41,7 @@ namespace MediatrExample.ApplicationCore.Infrastructure.Persistence.Migrations
                     b.Property<int>("ValorFisicoPieMaquinaId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ValorMaximo")
+                    b.Property<decimal?>("ValorMaximo")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("ValorMinimo")

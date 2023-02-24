@@ -42,7 +42,7 @@ public static class DependencyInjection
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidateLifetime = true,
+                    ValidateLifetime = false,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = config["Jwt:Issuer"],
                     ValidAudience = config["Jwt:Audience"],

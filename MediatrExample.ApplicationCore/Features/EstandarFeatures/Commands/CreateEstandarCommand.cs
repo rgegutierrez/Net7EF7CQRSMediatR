@@ -12,7 +12,7 @@ public class CreateEstandarCommand : IRequest
     public int ValorFisicoPieMaquinaId { get; set; }
     public decimal ValorMinimo { get; set; }
     public decimal ValorPromedio { get; set; }
-    public decimal ValorMaximo { get; set; }
+    public decimal? ValorMaximo { get; set; }
 }
 
 public class CreateEstandarCommandHandler : IRequestHandler<CreateEstandarCommand>
@@ -52,9 +52,5 @@ public class CreateEstandarValidator : AbstractValidator<CreateEstandarCommand>
         RuleFor(r => r.ValorFisicoPieMaquinaId).NotNull();
         RuleFor(r => r.ValorMinimo).NotNull();
         RuleFor(r => r.ValorPromedio).NotNull();
-        RuleFor(r => r.ValorMaximo).NotNull();
-        RuleFor(r => new { r.ValorMinimo, r.ValorMaximo })
-            .Must(v => v.ValorMinimo < v.ValorMaximo)
-            .WithMessage("Valor Mínimo debe ser menor que Valor Máximo");
     }
 }

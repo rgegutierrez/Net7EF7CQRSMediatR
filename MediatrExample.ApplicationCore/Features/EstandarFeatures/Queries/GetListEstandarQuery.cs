@@ -43,7 +43,7 @@ public class GetListEstandarQueryResponse
     public string ValorFisicoPieMaquinaNombre { get; set; }
     public decimal ValorMinimo { get; set; }
     public decimal ValorPromedio { get; set; }
-    public decimal ValorMaximo { get; set; }
+    public decimal? ValorMaximo { get; set; }
     public string ValorMinimoStr { get; set; }
     public string ValorPromedioStr { get; set; }
     public string ValorMaximoStr { get; set; }
